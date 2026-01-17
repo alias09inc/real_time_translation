@@ -1,0 +1,12 @@
+source_term,target_term,notes
+API,API,そのまま使用
+machine learning,機械学習,
+deep learning,深層学習,
+neural network,ニューラルネットワーク,
+transformer,トランスフォーマー,モデルアーキテクチャ
+fine-tuning,ファインチューニング,
+inference,推論,
+latency,レイテンシー,遅延
+throughput,スループット,
+real-time,リアルタイム,
+transcription,文字起こし,
