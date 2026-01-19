@@ -42,6 +42,7 @@ class DeepgramTranscriber:
         smart_format: bool = True,
         interim_results: bool = True,
         endpointing: int | None = 500,
+        utterance_end_ms: int | None = None,
         keepalive_interval: float = 5.0,
     ) -> None:
         """Initialize Deepgram transcriber.
@@ -54,6 +55,8 @@ class DeepgramTranscriber:
             smart_format: Whether to use Deepgram smart formatting
             interim_results: Whether to receive interim (non-final) results
             endpointing: Silence timeout in ms to finalize transcription
+            utterance_end_ms: Model-based end-of-speech timeout in ms
+            keepalive_interval: Keepalive interval in seconds
         """
         self._api_key = api_key
         self._language = language
@@ -62,6 +65,7 @@ class DeepgramTranscriber:
         self._smart_format = smart_format
         self._interim_results = interim_results
         self._endpointing = endpointing
+        self._utterance_end_ms = utterance_end_ms
         self._keepalive_interval = keepalive_interval
 
         self._client: AsyncDeepgramClient | None = None
@@ -70,6 +74,9 @@ class DeepgramTranscriber:
         self._listener_task: asyncio.Task[None] | None = None
         self._keepalive_task: asyncio.Task[None] | None = None
         self._last_audio_at = 0.0
+        self._pending_result: TranscriptionResult | None = None
+        self._last_emitted_text: str | None = None
+        self._last_emitted_at = 0.0
         self._running = False
         self._result_queue: asyncio.Queue[TranscriptionResult] = asyncio.Queue()
         self._on_transcript: Callable[[TranscriptionResult], None] | None = None
@@ -93,6 +100,8 @@ class DeepgramTranscriber:
         }
         if self._endpointing is not None:
             options["endpointing"] = str(self._endpointing)
+        if self._utterance_end_ms is not None:
+            options["utterance_end_ms"] = str(self._utterance_end_ms)
 
         self._connection_cm = self._client.listen.v1.connect(**options)
         self._connection = await self._connection_cm.__aenter__()
@@ -185,7 +194,11 @@ class DeepgramTranscriber:
             result: Deepgram transcription result
         """
         try:
-            if getattr(result, "type", None) != "Results":
+            message_type = getattr(result, "type", None)
+            if message_type == "UtteranceEnd":
+                self._handle_utterance_end(result)
+                return
+            if message_type != "Results":
                 return
 
             channel = result.channel
@@ -202,16 +215,53 @@ class DeepgramTranscriber:
                 end_time=float(result.start + result.duration),
             )
 
-            # Put result in queue for async iteration
-            with contextlib.suppress(asyncio.QueueFull):
-                self._result_queue.put_nowait(transcript_result)
-
-            # Call callback if set
-            if self._on_transcript:
-                self._on_transcript(transcript_result)
+            if transcript_result.is_final:
+                self._pending_result = None
+                self._emit_result(transcript_result)
+            else:
+                self._pending_result = transcript_result
 
         except (AttributeError, IndexError):
             pass  # Ignore malformed results
+
+    def _handle_utterance_end(self, result: Any) -> None:
+        pending = self._pending_result
+        if not pending or not pending.text:
+            return
+
+        now = time.monotonic()
+        if (
+            self._last_emitted_text == pending.text
+            and now - self._last_emitted_at < 1.0
+        ):
+            self._pending_result = None
+            return
+
+        last_word_end = getattr(result, "last_word_end", None)
+        end_time = (
+            float(last_word_end)
+            if isinstance(last_word_end, (int, float))
+            else pending.end_time
+        )
+        final_result = TranscriptionResult(
+            text=pending.text,
+            is_final=True,
+            confidence=pending.confidence,
+            start_time=pending.start_time,
+            end_time=end_time,
+        )
+        self._pending_result = None
+        self._emit_result(final_result)
+
+    def _emit_result(self, transcript_result: TranscriptionResult) -> None:
+        self._last_emitted_text = transcript_result.text
+        self._last_emitted_at = time.monotonic()
+
+        with contextlib.suppress(asyncio.QueueFull):
+            self._result_queue.put_nowait(transcript_result)
+
+        if self._on_transcript:
+            self._on_transcript(transcript_result)
 
     def _on_error(self, error: Any) -> None:
         """Handle error from Deepgram.

@@ -28,6 +28,7 @@ cp .env.example .env
 | `DEEPGRAM_API_KEY` | Deepgram APIキー            | ✓            |
 | `DEEPGRAM_MODEL`   | Deepgramモデル名            |              |
 | `DEEPGRAM_ENDPOINTING` | 無音検知の確定(ms)      |              |
+| `DEEPGRAM_UTTERANCE_END_MS` | 発話終了検知(ms) |              |
 | `DEEPGRAM_INTERIM_RESULTS` | Interim出力有無    |              |
 | `DEEPGRAM_SMART_FORMAT` | smart_format有無     |              |
 | `LLM_PROVIDER`     | `gemini` または `openai`    | ✓            |
@@ -38,6 +39,9 @@ cp .env.example .env
 | `CONTEXT_WINDOW_SIZE` | 文脈保持の文数           |              |
 | `TRANSLATION_QUEUE_SIZE` | 翻訳キューサイズ     |              |
 | `DICTIONARY_PATH`  | 用語辞書CSVパス             |              |
+
+`DEEPGRAM_UTTERANCE_END_MS` を設定すると、UtteranceEndイベントで
+直近のinterim結果を確定として扱い、文脈のまとまりを優先できます。
 
 ## 使い方
 
