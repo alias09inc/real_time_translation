@@ -28,7 +28,7 @@ class Config:
     deepgram_endpointing: int = 500
     zoom_webhook_port: int = 8080
     zoom_webhook_path: str = "/webhook"
-    
+
     # Gemini
     google_api_key: str | None = None
     gemini_model: str = "gemini-2.0-flash"
@@ -42,7 +42,7 @@ class Config:
     target_language: str = "ja"
     context_window_size: int = 3
     translation_queue_size: int = 10
-    
+
     # Dictionary
     dictionary_path: Path | None = None
 
@@ -51,11 +51,11 @@ class Config:
         cls, env_file: Path | None = None, *, require_zoom: bool = True
     ) -> "Config":
         """Load configuration from environment variables.
-        
+
         Args:
             env_file: Optional path to .env file
             require_zoom: Whether Zoom RTMS credentials are required
-            
+
         Returns:
             Config instance
         """
@@ -81,7 +81,7 @@ class Config:
             raise ValueError("ZOOM_CLIENT_ID and ZOOM_CLIENT_SECRET are required")
 
         llm_provider = os.getenv("LLM_PROVIDER", "gemini").lower()
-        
+
         google_api_key = os.getenv("GOOGLE_API_KEY")
         openai_api_key = os.getenv("OPENAI_API_KEY")
 
@@ -97,9 +97,7 @@ class Config:
         return cls(
             deepgram_api_key=deepgram_api_key,
             deepgram_model=os.getenv("DEEPGRAM_MODEL", "nova-2-general"),
-            deepgram_interim_results=_get_bool_env(
-                "DEEPGRAM_INTERIM_RESULTS", True
-            ),
+            deepgram_interim_results=_get_bool_env("DEEPGRAM_INTERIM_RESULTS", True),
             deepgram_smart_format=_get_bool_env("DEEPGRAM_SMART_FORMAT", True),
             deepgram_endpointing=int(os.getenv("DEEPGRAM_ENDPOINTING", "500")),
             llm_provider=llm_provider,

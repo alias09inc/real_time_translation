@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import asyncio
-import audioop
 import contextlib
 from dataclasses import dataclass, field
 from typing import Any
 
+import audioop
 import gradio as gr
 import numpy as np
 
@@ -26,6 +26,7 @@ class DemoSession:
     pipeline: TranslationPipeline
     capture: QueueAudioCapture
     results_queue: asyncio.Queue[TranslationResult]
+    window_size: int
     transcript_lines: list[str] = field(default_factory=list)
     translation_lines: list[str] = field(default_factory=list)
 
@@ -97,10 +98,8 @@ async def start_session(
     )
 
     def on_result(result: TranslationResult) -> None:
-        try:
+        with contextlib.suppress(asyncio.QueueFull):
             results_queue.put_nowait(result)
-        except asyncio.QueueFull:
-            pass
 
     pipeline.set_callback(on_result)
     try:
@@ -115,6 +114,7 @@ async def start_session(
             pipeline=pipeline,
             capture=capture,
             results_queue=results_queue,
+            window_size=config.context_window_size,
         ),
         _status("running"),
         "",
@@ -140,9 +140,7 @@ async def clear_logs(state: DemoSession | None) -> tuple[str, str]:
     return "", ""
 
 
-async def handle_audio(
-    chunk: Any, state: DemoSession | None
-) -> tuple[str, str, str]:
+async def handle_audio(chunk: Any, state: DemoSession | None) -> tuple[str, str, str]:
     if state is None:
         return "", "", _status("click Start to initialize")
 
@@ -150,6 +148,7 @@ async def handle_audio(
     if audio_bytes:
         state.capture.push_audio(audio_bytes)
 
+    latest_slide_window: list[str] | None = None
     while True:
         try:
             result = state.results_queue.get_nowait()
@@ -161,14 +160,19 @@ async def handle_audio(
 
         state.transcript_lines.append(result.original_text)
         state.translation_lines.append(result.translated_text)
+        if result.slide_window:
+            latest_slide_window = result.slide_window
 
         if len(state.transcript_lines) > MAX_DISPLAY_LINES:
             state.transcript_lines = state.transcript_lines[-MAX_DISPLAY_LINES:]
         if len(state.translation_lines) > MAX_DISPLAY_LINES:
             state.translation_lines = state.translation_lines[-MAX_DISPLAY_LINES:]
 
-    transcript = "\n".join(state.transcript_lines)
-    translation = "\n".join(state.translation_lines)
+    transcript = "\n".join(state.transcript_lines[-state.window_size :])
+    if latest_slide_window is not None:
+        translation = "\n".join(latest_slide_window)
+    else:
+        translation = "\n".join(state.translation_lines[-state.window_size :])
     return transcript, translation, _status("running")
 
 

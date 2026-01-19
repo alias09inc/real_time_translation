@@ -53,6 +53,8 @@ graph LR
 - **Sliding Window:**
   - 直近 `N` 文（デフォルト3）をFIFOバッファで保持。
   - 翻訳後にバッファへ現在文を追加する（自己参照を回避）。
+- **曖昧語/固有名詞:**
+  - 人名・組織名・製品名・地名・略語・コード識別子、または曖昧/未知語は「そのまま残す」。
 
 ### 4.4 MT Engine: Gemini 3.0 Flash / OpenAI
 
@@ -60,6 +62,9 @@ graph LR
   - システムプロンプト + 辞書をContext Cacheへ登録。
   - 翻訳リクエストはキャッシュ参照 + `<context>` `<target>` を送信。
   - 辞書更新時はキャッシュを破棄・再生成。
+- **Structured Output:**
+  - LangChainのStructured Outputで `latest_slide`（最新の翻訳結果）と `kept_terms`
+    （固有名詞/曖昧語として保持した語）を返す。
 - **OpenAI:**
   - LangChain経由でシステムプロンプトを送信（キャッシュは不要）。
 
@@ -96,15 +101,15 @@ async def collect_transcriptions():
 async def translation_worker():
     while True:
         result, masked = await queue.get()
-        translated = await translator.translate(masked)
-        emit(result.text, translated)
+        output = await translator.translate(masked)  # structured output
+        emit(result.text, output.latest_slide, output.kept_terms, output.slide_window)
 ```
 
 ## 6. Webデモ (Gradio)
 
 - **入力:** ブラウザのマイク音声（ストリーミング）
 - **処理:** `QueueAudioCapture` → `TranslationPipeline`
-- **出力:** 文字起こしと翻訳のログをリアルタイム表示
+- **出力:** スライドウィンド（直近N文）の文字起こし/翻訳をリアルタイム表示
 - **起動:** `uv run real-time-translation-demo`
 
 ## 7. エッジケースと対策

@@ -48,7 +48,7 @@ class AudioCapture(ABC):
     @abstractmethod
     def stream(self) -> AsyncIterator[bytes]:
         """Stream audio data as async iterator.
-        
+
         Yields:
             Audio data chunks as bytes (PCM 16-bit, 16kHz mono)
         """
@@ -57,16 +57,16 @@ class AudioCapture(ABC):
 
 class ZoomRTMSCapture(AudioCapture):
     """Audio capture from Zoom RTMS SDK.
-    
+
     Uses the Zoom RTMS SDK to receive real-time audio streams
     from Zoom meetings via webhook events.
-    
+
     See: https://github.com/zoom/rtms
     """
 
     def __init__(self, config: ZoomRTMSConfig) -> None:
         """Initialize Zoom RTMS capture.
-        
+
         Args:
             config: RTMS configuration with credentials
         """
@@ -80,10 +80,10 @@ class ZoomRTMSCapture(AudioCapture):
         """Start capturing audio from Zoom meeting."""
         self._running = True
         self._loop = asyncio.get_running_loop()
-        
+
         # Initialize RTMS client
         self._client = rtms.Client()
-        
+
         # Register webhook handler
         @self._client.on_webhook_event()
         def handle_webhook(payload: dict) -> None:
@@ -101,9 +101,7 @@ class ZoomRTMSCapture(AudioCapture):
         def on_audio(data: bytes, size: int, timestamp: int, metadata: object) -> None:
             # Put audio data into queue for async processing
             if self._loop and self._running:
-                self._loop.call_soon_threadsafe(
-                    self._queue.put_nowait, data
-                )
+                self._loop.call_soon_threadsafe(self._queue.put_nowait, data)
 
         @self._client.onJoinConfirm
         def on_join(reason: str) -> None:
@@ -137,7 +135,7 @@ class ZoomRTMSCapture(AudioCapture):
 
     async def stream(self) -> AsyncIterator[bytes]:
         """Stream audio data from Zoom meeting.
-        
+
         Yields:
             Audio data chunks as bytes
         """
@@ -151,7 +149,7 @@ class ZoomRTMSCapture(AudioCapture):
 
 class MicrophoneCapture(AudioCapture):
     """Audio capture from system microphone.
-    
+
     This can be used for testing or for capturing system audio
     (e.g., from Zoom via virtual audio device).
     """
@@ -163,7 +161,7 @@ class MicrophoneCapture(AudioCapture):
         chunk_size: int = 1024,
     ) -> None:
         """Initialize microphone capture.
-        
+
         Args:
             sample_rate: Audio sample rate in Hz
             channels: Number of audio channels
@@ -187,7 +185,7 @@ class MicrophoneCapture(AudioCapture):
 
     async def stream(self) -> AsyncIterator[bytes]:
         """Stream audio data from microphone.
-        
+
         Yields:
             Audio data chunks as bytes
         """

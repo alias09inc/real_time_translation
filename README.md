@@ -52,8 +52,15 @@ uv run real-time-translation-demo
 WebデモはZoom認証なしで動作します。`DEEPGRAM_API_KEY` と
 `LLM_PROVIDER` に応じたAPIキーのみ設定してください。
 
-Gemini利用時はシステムプロンプト/辞書をContext Cachingへ登録するため、
-`google-generativeai` がContext Caching対応版であることを前提とします。
+Gemini利用時は `google.genai` (google-genai) のContext Cachingで
+システムプロンプト/辞書をキャッシュし、LangChainの
+`ChatGoogleGenerativeAI(cached_content=...)` 経由で参照します。
+Context Cacheは最小トークン数の制約があるため、プロンプトが小さい場合は
+自動的に `<cache_padding>` を付与してキャッシュを作成します。
+
+翻訳はStructured Outputで `latest_slide`（最新の翻訳）と `kept_terms`
+（固有名詞/曖昧語として保持した語）を返し、Webデモでは直近
+`CONTEXT_WINDOW_SIZE` 文のスライドウィンド表示を行います。
 
 ## 開発
 

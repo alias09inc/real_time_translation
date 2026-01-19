@@ -3,7 +3,7 @@
 import asyncio
 import contextlib
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 from real_time_translation.audio.capture import AudioCapture
@@ -23,6 +23,8 @@ class TranslationResult:
     translated_text: str
     is_final: bool
     confidence: float
+    kept_terms: list[str] = field(default_factory=list)
+    slide_window: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -35,7 +37,7 @@ class QueuedTranscription:
 
 class TranslationPipeline:
     """Pipeline for real-time audio translation.
-    
+
     Coordinates audio capture, transcription, and translation.
     """
 
@@ -45,14 +47,14 @@ class TranslationPipeline:
         audio_capture: AudioCapture,
     ) -> None:
         """Initialize translation pipeline.
-        
+
         Args:
             config: Application configuration
             audio_capture: Audio capture instance
         """
         self._config = config
         self._audio_capture = audio_capture
-        
+
         # Initialize transcriber
         self._transcriber = DeepgramTranscriber(
             api_key=config.deepgram_api_key,
@@ -62,19 +64,19 @@ class TranslationPipeline:
             smart_format=config.deepgram_smart_format,
             endpointing=config.deepgram_endpointing,
         )
-        
+
         # Initialize translator
         api_key = (
-            config.google_api_key 
-            if config.llm_provider == "gemini" 
+            config.google_api_key
+            if config.llm_provider == "gemini"
             else config.openai_api_key
         )
         model = (
-            config.gemini_model 
-            if config.llm_provider == "gemini" 
+            config.gemini_model
+            if config.llm_provider == "gemini"
             else config.openai_model
         )
-        
+
         self._translator = LLMTranslator(
             provider=config.llm_provider,  # type: ignore
             api_key=api_key or "",
@@ -84,21 +86,21 @@ class TranslationPipeline:
             dictionary_path=config.dictionary_path,
             context_window_size=config.context_window_size,
         )
-        
+
         self._running = False
         self._on_result: Callable[[TranslationResult], None] | None = None
         self._tasks: list[asyncio.Task[Any]] = []
-        self._transcription_queue: asyncio.Queue[QueuedTranscription] = (
-            asyncio.Queue(maxsize=config.translation_queue_size)
+        self._transcription_queue: asyncio.Queue[QueuedTranscription] = asyncio.Queue(
+            maxsize=config.translation_queue_size
         )
 
     @staticmethod
     def _language_name(code: str) -> str:
         """Convert language code to language name.
-        
+
         Args:
             code: Language code (e.g., "en", "ja")
-            
+
         Returns:
             Language name
         """
@@ -113,11 +115,9 @@ class TranslationPipeline:
         }
         return names.get(code, code)
 
-    def set_callback(
-        self, callback: Callable[[TranslationResult], None]
-    ) -> None:
+    def set_callback(self, callback: Callable[[TranslationResult], None]) -> None:
         """Set callback for translation results.
-        
+
         Args:
             callback: Function to call with results
         """
@@ -129,13 +129,13 @@ class TranslationPipeline:
 
         # Initialize translator (e.g., Gemini context cache)
         await self._translator.prepare()
-        
+
         # Connect to Deepgram
         await self._transcriber.connect()
-        
+
         # Start audio capture
         await self._audio_capture.start()
-        
+
         # Start processing tasks
         self._tasks = [
             asyncio.create_task(self._audio_to_transcription()),
@@ -146,15 +146,15 @@ class TranslationPipeline:
     async def stop(self) -> None:
         """Stop the translation pipeline."""
         self._running = False
-        
+
         # Cancel all tasks
         for task in self._tasks:
             task.cancel()
-        
+
         # Wait for tasks to complete
         await asyncio.gather(*self._tasks, return_exceptions=True)
         self._tasks.clear()
-        
+
         # Stop components
         await self._audio_capture.stop()
         await self._transcriber.disconnect()
@@ -207,14 +207,14 @@ class TranslationPipeline:
         try:
             while self._running:
                 queued = await self._transcription_queue.get()
-                translated = await self._translator.translate(
-                    queued.text_for_translation
-                )
+                output = await self._translator.translate(queued.text_for_translation)
                 translation_result = TranslationResult(
                     original_text=queued.original.text,
-                    translated_text=translated,
+                    translated_text=output.latest_slide,
                     is_final=queued.original.is_final,
                     confidence=queued.original.confidence,
+                    kept_terms=output.kept_terms,
+                    slide_window=output.slide_window,
                 )
                 if self._on_result:
                     self._on_result(translation_result)

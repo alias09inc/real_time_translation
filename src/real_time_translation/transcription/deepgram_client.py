@@ -6,7 +6,7 @@ from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass
 from typing import Any
 
-from deepgram import DeepgramClient
+from deepgram import AsyncDeepgramClient
 
 
 @dataclass
@@ -27,7 +27,7 @@ class TranscriptionResult:
 
 class DeepgramTranscriber:
     """Deepgram WebSocket client for real-time transcription.
-    
+
     Uses Deepgram's streaming API to transcribe audio in real-time.
     """
 
@@ -42,7 +42,7 @@ class DeepgramTranscriber:
         endpointing: int | None = 500,
     ) -> None:
         """Initialize Deepgram transcriber.
-        
+
         Args:
             api_key: Deepgram API key
             language: Language code for transcription
@@ -59,61 +59,64 @@ class DeepgramTranscriber:
         self._smart_format = smart_format
         self._interim_results = interim_results
         self._endpointing = endpointing
-        
-        self._client: DeepgramClient | None = None
+
+        self._client: AsyncDeepgramClient | None = None
+        self._connection_cm: Any = None
         self._connection: Any = None
+        self._listener_task: asyncio.Task[None] | None = None
         self._running = False
         self._result_queue: asyncio.Queue[TranscriptionResult] = asyncio.Queue()
         self._on_transcript: Callable[[TranscriptionResult], None] | None = None
 
     async def connect(self) -> None:
         """Establish WebSocket connection to Deepgram."""
-        self._client = DeepgramClient(api_key=self._api_key)
-        
-        # Deepgram SDK v5 uses different API
+        self._client = AsyncDeepgramClient(api_key=self._api_key)
+
+        def _bool_str(value: bool) -> str:
+            return "true" if value else "false"
+
         options = {
             "model": self._model,
             "language": self._language,
-            "punctuate": self._punctuate,
-            "smart_format": self._smart_format,
-            "interim_results": self._interim_results,
+            "punctuate": _bool_str(self._punctuate),
+            "smart_format": _bool_str(self._smart_format),
+            "interim_results": _bool_str(self._interim_results),
             "encoding": "linear16",
-            "sample_rate": 16000,
-            "channels": 1,
+            "sample_rate": "16000",
+            "channels": "1",
         }
         if self._endpointing is not None:
-            options["endpointing"] = self._endpointing
+            options["endpointing"] = str(self._endpointing)
 
-        self._connection = self._client.listen.websocket.v("1")
-        
-        # Register event handlers
-        self._connection.on("Results", self._on_message)
-        self._connection.on("Error", self._on_error)
-        
-        await self._connection.start(options)
+        self._connection_cm = self._client.listen.v1.connect(**options)
+        self._connection = await self._connection_cm.__aenter__()
         self._running = True
+        self._listener_task = asyncio.create_task(self._listen())
 
     async def disconnect(self) -> None:
         """Close WebSocket connection."""
         self._running = False
-        if self._connection:
-            await self._connection.finish()
+        if self._listener_task:
+            self._listener_task.cancel()
+            await asyncio.gather(self._listener_task, return_exceptions=True)
+            self._listener_task = None
+        if self._connection_cm:
+            await self._connection_cm.__aexit__(None, None, None)
+            self._connection_cm = None
             self._connection = None
 
     async def send_audio(self, audio_data: bytes) -> None:
         """Send audio data to Deepgram for transcription.
-        
+
         Args:
             audio_data: Raw PCM audio data (16-bit, 16kHz, mono)
         """
         if self._connection and self._running:
-            await self._connection.send(audio_data)
+            await self._connection.send_media(audio_data)
 
-    def set_callback(
-        self, callback: Callable[[TranscriptionResult], None]
-    ) -> None:
+    def set_callback(self, callback: Callable[[TranscriptionResult], None]) -> None:
         """Set callback for transcription results.
-        
+
         Args:
             callback: Function to call with transcription results
         """
@@ -121,38 +124,50 @@ class DeepgramTranscriber:
 
     async def results(self) -> AsyncIterator[TranscriptionResult]:
         """Async iterator for transcription results.
-        
+
         Yields:
             TranscriptionResult objects
         """
         while self._running:
             try:
-                result = await asyncio.wait_for(
-                    self._result_queue.get(), timeout=1.0
-                )
+                result = await asyncio.wait_for(self._result_queue.get(), timeout=1.0)
                 yield result
             except TimeoutError:
                 continue
 
-    def _on_message(self, _self: Any, result: Any, **_kwargs: Any) -> None:
+    async def _listen(self) -> None:
+        if not self._connection:
+            return
+        try:
+            async for result in self._connection:
+                self._handle_message(result)
+        except asyncio.CancelledError:
+            pass
+        except Exception as exc:  # noqa: BLE001
+            self._on_error(exc)
+
+    def _handle_message(self, result: Any) -> None:
         """Handle transcription message from Deepgram.
-        
+
         Args:
             result: Deepgram transcription result
         """
         try:
+            if getattr(result, "type", None) != "Results":
+                return
+
             channel = result.channel
             alternative = channel.alternatives[0]
-            
+
             if not alternative.transcript:
                 return
 
             transcript_result = TranscriptionResult(
                 text=alternative.transcript,
-                is_final=result.is_final,
-                confidence=alternative.confidence,
-                start_time=result.start,
-                end_time=result.start + result.duration,
+                is_final=bool(result.is_final),
+                confidence=float(alternative.confidence),
+                start_time=float(result.start),
+                end_time=float(result.start + result.duration),
             )
 
             # Put result in queue for async iteration
@@ -166,9 +181,9 @@ class DeepgramTranscriber:
         except (AttributeError, IndexError):
             pass  # Ignore malformed results
 
-    def _on_error(self, _self: Any, error: Any, **_kwargs: Any) -> None:
+    def _on_error(self, error: Any) -> None:
         """Handle error from Deepgram.
-        
+
         Args:
             error: Error information
         """

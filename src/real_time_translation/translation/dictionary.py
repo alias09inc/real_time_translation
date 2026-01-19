@@ -16,7 +16,7 @@ class DictionaryEntry:
 
 class TermDictionary:
     """Dictionary for domain-specific terminology.
-    
+
     Manages terminology mappings loaded from CSV files.
     CSV format: source_term,target_term,notes (optional)
     """
@@ -27,19 +27,19 @@ class TermDictionary:
 
     def load_csv(self, path: Path | str) -> int:
         """Load dictionary entries from CSV file.
-        
+
         Args:
             path: Path to CSV file
-            
+
         Returns:
             Number of entries loaded
         """
         path = Path(path)
         count = 0
-        
+
         with path.open(encoding="utf-8") as f:
             reader = csv.reader(f)
-            
+
             # Skip header if present
             first_row = next(reader, None)
             header_values = ("source", "source_term", "原語")
@@ -47,32 +47,32 @@ class TermDictionary:
                 # Not a header, process as data
                 self._add_row(first_row)
                 count += 1
-            
+
             for row in reader:
                 if self._add_row(row):
                     count += 1
-        
+
         return count
 
     def _add_row(self, row: list[str]) -> bool:
         """Add a row from CSV.
-        
+
         Args:
             row: CSV row data
-            
+
         Returns:
             True if entry was added
         """
         if len(row) < 2:
             return False
-        
+
         source_term = row[0].strip()
         target_term = row[1].strip()
         notes = row[2].strip() if len(row) > 2 else ""
-        
+
         if not source_term or not target_term:
             return False
-        
+
         self._entries[source_term.lower()] = DictionaryEntry(
             source_term=source_term,
             target_term=target_term,
@@ -80,11 +80,9 @@ class TermDictionary:
         )
         return True
 
-    def add_entry(
-        self, source_term: str, target_term: str, notes: str = ""
-    ) -> None:
+    def add_entry(self, source_term: str, target_term: str, notes: str = "") -> None:
         """Add a dictionary entry.
-        
+
         Args:
             source_term: Term in source language
             target_term: Term in target language
@@ -98,10 +96,10 @@ class TermDictionary:
 
     def get(self, term: str) -> DictionaryEntry | None:
         """Look up a term.
-        
+
         Args:
             term: Term to look up
-            
+
         Returns:
             Dictionary entry or None if not found
         """
@@ -109,20 +107,20 @@ class TermDictionary:
 
     def format_for_prompt(self) -> str:
         """Format dictionary for inclusion in LLM prompt.
-        
+
         Returns:
             Formatted dictionary string
         """
         if not self._entries:
             return ""
-        
+
         lines = ["[Terminology Dictionary - Use these exact translations:]"]
         for entry in self._entries.values():
             line = f"- {entry.source_term} → {entry.target_term}"
             if entry.notes:
                 line += f" ({entry.notes})"
             lines.append(line)
-        
+
         return "\n".join(lines)
 
     def __len__(self) -> int:
