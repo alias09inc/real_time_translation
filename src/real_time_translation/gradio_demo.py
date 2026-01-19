@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import contextlib
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Any
 
 import audioop
@@ -33,6 +34,10 @@ class DemoSession:
 
 def _status(message: str) -> str:
     return f"Status: {message}"
+
+
+def _timestamp() -> str:
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 def _normalize_audio_chunk(chunk: Any) -> bytes | None:
@@ -98,6 +103,12 @@ async def start_session(
     )
 
     def on_result(result: TranslationResult) -> None:
+        timestamp = _timestamp()
+        print(f"[{timestamp}] ASR: {result.original_text}")
+        print(f"[{timestamp}] MT: {result.translated_text}")
+        if result.kept_terms:
+            kept = ", ".join(result.kept_terms)
+            print(f"[{timestamp}] Kept terms: {kept}")
         with contextlib.suppress(asyncio.QueueFull):
             results_queue.put_nowait(result)
 

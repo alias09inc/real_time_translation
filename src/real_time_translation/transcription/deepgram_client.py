@@ -2,11 +2,13 @@
 
 import asyncio
 import contextlib
+import time
 from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass
 from typing import Any
 
 from deepgram import AsyncDeepgramClient
+from deepgram.listen.v1.types import ListenV1KeepAlive
 
 
 @dataclass
@@ -40,6 +42,7 @@ class DeepgramTranscriber:
         smart_format: bool = True,
         interim_results: bool = True,
         endpointing: int | None = 500,
+        keepalive_interval: float = 5.0,
     ) -> None:
         """Initialize Deepgram transcriber.
 
@@ -59,11 +62,14 @@ class DeepgramTranscriber:
         self._smart_format = smart_format
         self._interim_results = interim_results
         self._endpointing = endpointing
+        self._keepalive_interval = keepalive_interval
 
         self._client: AsyncDeepgramClient | None = None
         self._connection_cm: Any = None
         self._connection: Any = None
         self._listener_task: asyncio.Task[None] | None = None
+        self._keepalive_task: asyncio.Task[None] | None = None
+        self._last_audio_at = 0.0
         self._running = False
         self._result_queue: asyncio.Queue[TranscriptionResult] = asyncio.Queue()
         self._on_transcript: Callable[[TranscriptionResult], None] | None = None
@@ -91,7 +97,9 @@ class DeepgramTranscriber:
         self._connection_cm = self._client.listen.v1.connect(**options)
         self._connection = await self._connection_cm.__aenter__()
         self._running = True
+        self._last_audio_at = time.monotonic()
         self._listener_task = asyncio.create_task(self._listen())
+        self._keepalive_task = asyncio.create_task(self._keepalive_loop())
 
     async def disconnect(self) -> None:
         """Close WebSocket connection."""
@@ -100,6 +108,10 @@ class DeepgramTranscriber:
             self._listener_task.cancel()
             await asyncio.gather(self._listener_task, return_exceptions=True)
             self._listener_task = None
+        if self._keepalive_task:
+            self._keepalive_task.cancel()
+            await asyncio.gather(self._keepalive_task, return_exceptions=True)
+            self._keepalive_task = None
         if self._connection_cm:
             await self._connection_cm.__aexit__(None, None, None)
             self._connection_cm = None
@@ -112,6 +124,7 @@ class DeepgramTranscriber:
             audio_data: Raw PCM audio data (16-bit, 16kHz, mono)
         """
         if self._connection and self._running:
+            self._last_audio_at = time.monotonic()
             await self._connection.send_media(audio_data)
 
     def set_callback(self, callback: Callable[[TranscriptionResult], None]) -> None:
@@ -141,6 +154,25 @@ class DeepgramTranscriber:
         try:
             async for result in self._connection:
                 self._handle_message(result)
+        except asyncio.CancelledError:
+            pass
+        except Exception as exc:  # noqa: BLE001
+            self._on_error(exc)
+
+    async def _keepalive_loop(self) -> None:
+        if not self._connection:
+            return
+        try:
+            while self._running:
+                await asyncio.sleep(self._keepalive_interval)
+                if not self._connection or not self._running:
+                    continue
+                idle_time = time.monotonic() - self._last_audio_at
+                if idle_time < self._keepalive_interval:
+                    continue
+                await self._connection.send_keep_alive(
+                    ListenV1KeepAlive(type="KeepAlive")
+                )
         except asyncio.CancelledError:
             pass
         except Exception as exc:  # noqa: BLE001
