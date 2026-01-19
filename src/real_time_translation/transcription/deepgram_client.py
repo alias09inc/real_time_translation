@@ -35,9 +35,11 @@ class DeepgramTranscriber:
         self,
         api_key: str,
         language: str = "en",
-        model: str = "nova-2",
+        model: str = "nova-2-general",
         punctuate: bool = True,
+        smart_format: bool = True,
         interim_results: bool = True,
+        endpointing: int | None = 500,
     ) -> None:
         """Initialize Deepgram transcriber.
         
@@ -46,13 +48,17 @@ class DeepgramTranscriber:
             language: Language code for transcription
             model: Deepgram model to use
             punctuate: Whether to add punctuation
+            smart_format: Whether to use Deepgram smart formatting
             interim_results: Whether to receive interim (non-final) results
+            endpointing: Silence timeout in ms to finalize transcription
         """
         self._api_key = api_key
         self._language = language
         self._model = model
         self._punctuate = punctuate
+        self._smart_format = smart_format
         self._interim_results = interim_results
+        self._endpointing = endpointing
         
         self._client: DeepgramClient | None = None
         self._connection: Any = None
@@ -69,11 +75,14 @@ class DeepgramTranscriber:
             "model": self._model,
             "language": self._language,
             "punctuate": self._punctuate,
+            "smart_format": self._smart_format,
             "interim_results": self._interim_results,
             "encoding": "linear16",
             "sample_rate": 16000,
             "channels": 1,
         }
+        if self._endpointing is not None:
+            options["endpointing"] = self._endpointing
 
         self._connection = self._client.listen.websocket.v("1")
         

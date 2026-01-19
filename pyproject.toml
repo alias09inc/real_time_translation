@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "deepgram-sdk>=3.0.0",
+    "google-genai>=1.58.0",
+    "gradio>=6.3.0",
     "langchain>=1.2.6",
     "langchain-google-genai>=4.2.0",
     "langchain-openai>=0.2.0",
@@ -26,6 +28,7 @@ dev = ["pytest>=8.0.0", "pytest-asyncio>=0.24.0", "ruff>=0.8.0"]
 
 [project.scripts]
 real-time-translation = "real_time_translation.main:main"
+real-time-translation-demo = "real_time_translation.gradio_demo:main"
 
 [build-system]
 requires = ["hatchling"]

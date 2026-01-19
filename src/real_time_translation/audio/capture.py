@@ -1,6 +1,7 @@
 """Audio capture from various sources."""
 
 import asyncio
+import contextlib
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
@@ -196,3 +197,54 @@ class MicrophoneCapture(AudioCapture):
                 yield chunk
             except TimeoutError:
                 continue
+
+
+class QueueAudioCapture(AudioCapture):
+    """Audio capture backed by an in-memory queue.
+
+    This is useful for web demos where audio chunks are pushed from
+    an external source (e.g., Gradio streaming audio).
+    """
+
+    def __init__(self, max_queue_size: int = 50) -> None:
+        """Initialize queue-based audio capture.
+
+        Args:
+            max_queue_size: Maximum number of audio chunks to buffer
+        """
+        self._running = False
+        self._queue: asyncio.Queue[bytes] = asyncio.Queue(maxsize=max_queue_size)
+
+    async def start(self) -> None:
+        """Start capturing audio."""
+        self._running = True
+
+    async def stop(self) -> None:
+        """Stop capturing audio."""
+        self._running = False
+        with contextlib.suppress(asyncio.QueueEmpty):
+            while True:
+                self._queue.get_nowait()
+
+    async def stream(self) -> AsyncIterator[bytes]:
+        """Stream audio data from the internal queue."""
+        while self._running:
+            try:
+                chunk = await asyncio.wait_for(self._queue.get(), timeout=1.0)
+                yield chunk
+            except TimeoutError:
+                continue
+
+    def push_audio(self, audio_data: bytes) -> None:
+        """Push audio data into the queue.
+
+        Args:
+            audio_data: Raw PCM audio data
+        """
+        if not self._running:
+            return
+        if self._queue.full():
+            with contextlib.suppress(asyncio.QueueEmpty):
+                self._queue.get_nowait()
+        with contextlib.suppress(asyncio.QueueFull):
+            self._queue.put_nowait(audio_data)

@@ -2,146 +2,121 @@
 
 ## 1. 概要
 
-本システムは、Zoomの音声をリアルタイムに文字起こしし、文脈を加味して翻訳し、
-低遅延で表示するSimulST（Simultaneous Speech Translation）パイプラインである。
-Deepgramによる低レイテンシASRと、Gemini 3.0 Flashによる文脈指向翻訳を組み合わせる。
+本システムは、Zoom RTMSもしくはWebマイク入力をリアルタイムに文字起こしし、
+文脈を加味して翻訳し、低遅延で表示するSimulSTパイプラインである。Deepgramによる
+低レイテンシASRと、Gemini 3.0 Flash/OpenAIによる文脈指向翻訳を組み合わせる。
 
 ## 2. 設計目標
 
 1. **Low Latency:** 非同期パイプラインでブロッキングを排除し、遅延を最小化する。
 2. **Context Awareness:** 直近の会話履歴を参照し、断片入力でも高精度に翻訳する。
+3. **Operational Simplicity:** 起動時のキャッシュ生成と明確な再生成トリガーで運用を安定化。
 
 ## 3. システム構成図 (Data Flow)
 
 ```mermaid
 graph LR
-    A[Audio Input] -->|Stream| B(Deepgram ASR)
+    A[Audio Input<br/>Zoom RTMS / Web Mic] -->|Stream| B(Deepgram ASR)
 
-    subgraph "Producer (Async Loop)"
-        B -->|is_final: true| C{Event Trigger}
-        C -->|Enqueue Text| D[asyncio.Queue]
-        C -->|Update History| E[Context Buffer]
+    subgraph "Producer"
+        B -->|is_final| C{Filter + Mask}
+        C -->|Enqueue| D[Transcription Queue]
     end
 
-    subgraph "Consumer (Translation Worker)"
-        D -->|Dequeue| F[Prompt Builder]
-        E -.->|Inject Context| F
-        F -->|Request| G[Gemini 3.0 Flash]
+    subgraph "Consumer"
+        D -->|Dequeue| E[Prompt Builder]
+        E -->|Request| F[Gemini / OpenAI]
     end
 
-    G -->|Stream Response| H[UI / Frontend]
+    F -->|Translation| G[UI / Frontend]
 ```
 
 ## 4. コンポーネント詳細設計
 
 ### 4.1 Audio Input
 
-- Zoom RTMS SDKからPCMフレームを取得し、Deepgram WebSocketへストリーミング送信する。
+- **Zoom RTMS:** SDKからPCMフレームを取得し、Deepgram WebSocketへ送信。
+- **Web Demo:** Gradioのマイク入力を`QueueAudioCapture`へ流し込み、同一パイプラインで処理。
 
 ### 4.2 ASR: Deepgram Settings
 
-- **Model:** `nova-2-general` (推奨) または `enhanced`
+- **Model:** `nova-2-general` (推奨)
 - **Key Parameters:**
   - `smart_format=true`: 句読点・数値整形を有効化し、翻訳精度を向上。
-  - `endpointing=500`: 発話終了後500msの無音検知で強制的に `is_final` を発行。
+  - `endpointing=500`: 発話終了後500msの無音検知で `is_final` を発行。
   - `interim_results=true`: UI向けの体感速度改善に利用するが、翻訳トリガーには使わない。
 
 ### 4.3 MT Strategy: Contextual Sliding Window
 
-- **Trigger:** Deepgramから `is_final: true` を受信したタイミング。
+- **Trigger:** `is_final: true` のみを翻訳対象とする。
 - **Prompt Structure:** `<context>` と `<target>` を分離し、文脈と翻訳対象を明示。
 - **Sliding Window:**
-  - 直近 3〜5文をFIFOバッファで保持。
-  - 新しい文の確定ごとにバッファを更新。
+  - 直近 `N` 文（デフォルト3）をFIFOバッファで保持。
+  - 翻訳後にバッファへ現在文を追加する（自己参照を回避）。
 
-### 4.4 MT Engine: Gemini 3.0 Flash
+### 4.4 MT Engine: Gemini 3.0 Flash / OpenAI
 
-- **Mode:** `stream=true` (Streaming Generation)
-- **System Instruction Example:**
-  - "You are a professional simultaneous interpreter. Translate the following text
-    into Japanese appropriately for the context. Output ONLY the translated text."
-- **Context Caching (必須):**
-  - システムプロンプトや辞書（`dictionary.csv` 等）はGeminiのContext Cachingに登録し、
-    翻訳リクエストではキャッシュ参照を利用する。
-  - 辞書が更新された場合は、キャッシュを破棄・再作成する。
-  - 運用上は「起動時にキャッシュ生成」「更新検知で再生成」を基本とする。
+- **Gemini (Context Caching必須):**
+  - システムプロンプト + 辞書をContext Cacheへ登録。
+  - 翻訳リクエストはキャッシュ参照 + `<context>` `<target>` を送信。
+  - 辞書更新時はキャッシュを破棄・再生成。
+- **OpenAI:**
+  - LangChain経由でシステムプロンプトを送信（キャッシュは不要）。
 
-### 4.5 ワークフロー制御
+### 4.5 キュー/バックプレッシャー
 
-- LangChainは各APIの連携・エラーハンドリング・リトライ制御に利用する。
+- 翻訳処理はASR受信ループから独立したConsumerタスクで実行。
+- `translation_queue_size` を超過した場合は古い文を破棄し、最新文優先。
 
 ## 5. 実装ロジック (Python Asyncio)
 
 ```python
-import asyncio
-from collections import deque
+async def start():
+    await translator.prepare()  # Gemini cache作成
+    await transcriber.connect()
+    await audio_capture.start()
+    tasks = [
+        asyncio.create_task(audio_to_transcription()),
+        asyncio.create_task(collect_transcriptions()),
+        asyncio.create_task(translation_worker()),
+    ]
 
-CONTEXT_WINDOW_SIZE = 3
-QUEUE_MAX_SIZE = 10
+async def collect_transcriptions():
+    async for result in transcriber.results():
+        if not result.is_final:
+            continue
+        text = result.text.strip()
+        if not text:
+            continue
+        masked = f"[uncertain: {text}]" if result.is_low_confidence else text
+        if queue.full():
+            queue.get_nowait()  # drop oldest
+        queue.put_nowait((result, masked))
 
-class TranslationSystem:
-    def __init__(self):
-        self.queue = asyncio.Queue(maxsize=QUEUE_MAX_SIZE)
-        self.context_buffer = deque(maxlen=CONTEXT_WINDOW_SIZE)
-        self.cached_context_id = None
-
-    async def start(self):
-        # GeminiのContext Cachingを初期化（辞書＋システムプロンプト）
-        self.cached_context_id = await self.create_gemini_cache()
-        await asyncio.gather(self.run_asr_producer(), self.run_mt_consumer())
-
-    async def run_asr_producer(self):
-        async with deepgram.connect(...) as socket:
-            async for message in socket:
-                if message.is_final:
-                    transcript = message.channel.alternatives[0].transcript
-                    if transcript.strip():
-                        if self.queue.full():
-                            try:
-                                self.queue.get_nowait()
-                            except asyncio.QueueEmpty:
-                                pass
-                        await self.queue.put(transcript)
-                        self.context_buffer.append(transcript)
-
-    async def run_mt_consumer(self):
-        while True:
-            current_text = await self.queue.get()
-            context_str = "\n".join(list(self.context_buffer)[:-1])
-            prompt = f\"\"\"<context>
-{context_str}
-</context>
-<target>
-{current_text}
-</target>\"\"\"
-            asyncio.create_task(self.call_gemini(prompt))
-
-    async def call_gemini(self, prompt):
-        response = await model.generate_content_async(
-            prompt,
-            stream=True,
-            cached_context=self.cached_context_id,
-        )
-        async for chunk in response:
-            if chunk.text:
-                print(chunk.text, end="", flush=True)
-        print()
-
-    async def create_gemini_cache(self):
-        # 辞書とシステムプロンプトをキャッシュ化し、IDを返す
-        ...
+async def translation_worker():
+    while True:
+        result, masked = await queue.get()
+        translated = await translator.translate(masked)
+        emit(result.text, translated)
 ```
 
-## 6. エッジケースと対策
+## 6. Webデモ (Gradio)
+
+- **入力:** ブラウザのマイク音声（ストリーミング）
+- **処理:** `QueueAudioCapture` → `TranslationPipeline`
+- **出力:** 文字起こしと翻訳のログをリアルタイム表示
+- **起動:** `uv run real-time-translation-demo`
+
+## 7. エッジケースと対策
 
 | 事象 | 対策 |
 | --- | --- |
 | 無音過多 | `endpointing`が効かない場合はタイムアウト監視で手動確定。 |
 | 翻訳遅延 | キュー溢れ時は古い文を破棄し、最新を優先する。 |
-| 幻覚 (Hallucination) | `<context>` `<target>` タグで文脈と翻訳対象を分離する。 |
+| 幻覚 | `<context>` `<target>` タグで文脈と翻訳対象を分離する。 |
 | 辞書更新 | Context Cacheの再生成を実施し、IDを差し替える。 |
 
-## 7. 今後の拡張性
+## 8. 今後の拡張性
 
 - **RAG:** 専門用語辞書や会議録のVector検索を導入し、動的に用語注入。
 - **Speaker Diarization:** 発話者情報を文脈に含め、口調の一貫性を向上。
