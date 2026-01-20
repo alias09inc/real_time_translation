@@ -1,4 +1,4 @@
-"""Translation microservice using Gemini/OpenAI."""
+"""Translation microservice entrypoint."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ import httpx
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
-from real_time_translation.translation.llm_translator import LLMTranslator
+from translator_service.llm_translator import LLMTranslator
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +74,7 @@ class TranslateResponse(BaseModel):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    logging.basicConfig(level=logging.INFO)
     config = TranslationServiceConfig.from_env()
     api_key = (
         config.google_api_key

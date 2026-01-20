@@ -1,4 +1,4 @@
-"""ASR microservice that streams RTMP audio to Deepgram."""
+"""ASR microservice entrypoint."""
 
 from __future__ import annotations
 
@@ -12,11 +12,8 @@ from typing import Any
 
 import httpx
 
-from real_time_translation.audio.capture import FFmpegRTMPCapture
-from real_time_translation.transcription.deepgram_client import (
-    DeepgramTranscriber,
-    TranscriptionResult,
-)
+from asr_service.audio_capture import FFmpegRTMPCapture
+from asr_service.deepgram_client import DeepgramTranscriber, TranscriptionResult
 
 logger = logging.getLogger(__name__)
 

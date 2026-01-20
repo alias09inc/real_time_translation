@@ -66,9 +66,17 @@ uv run real-time-translation
 # Webデモ (Gradio / マイク入力)
 uv run real-time-translation-demo
 
-# マイクロサービス単体起動
+# マイクロサービス単体起動（各サービスのディレクトリで実行）
+cd services/ws
+uv sync
 uv run real-time-translation-ws
+
+cd ../translator
+uv sync
 uv run real-time-translation-translate
+
+cd ../asr
+uv sync
 uv run real-time-translation-asr
 ```
 
@@ -81,6 +89,8 @@ WebデモはZoom認証なしで動作します。`DEEPGRAM_API_KEY` と
 # Docker Composeで起動
 docker compose up --build
 ```
+
+各サービスは `services/<name>/pyproject.toml` を持つ独立パッケージです。
 
 - RTMP 取り込み: `rtmp://localhost:1935/live/zoom`
 - 字幕 WebSocket: `ws://localhost:8000/ws/caption`
@@ -135,7 +145,13 @@ src/real_time_translation/
 ├── main.py          # CLIエントリーポイント
 └── pipeline.py      # パイプライン統合
 services/
-├── asr/             # ASRサービス用Dockerfile
-├── translator/      # 翻訳サービス用Dockerfile
-└── ws/              # WebSocket配信サービス用Dockerfile
+├── asr/
+│   ├── pyproject.toml
+│   └── src/asr_service/      # ASRサービス実装
+├── translator/
+│   ├── pyproject.toml
+│   └── src/translator_service/ # 翻訳サービス実装
+└── ws/
+    ├── pyproject.toml
+    └── src/ws_service/       # WebSocket配信サービス実装
 ```
