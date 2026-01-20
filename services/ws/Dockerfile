@@ -4,7 +4,7 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY pyproject.toml README.md uv.lock /app/
+COPY pyproject.toml /app/
 COPY src /app/src
 
 RUN pip install --no-cache-dir .

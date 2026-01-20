@@ -8,9 +8,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-COPY pyproject.toml README.md uv.lock /app/
+COPY pyproject.toml /app/
 COPY src /app/src
-COPY dictionary.csv /app/dictionary.csv
 
 RUN pip install --no-cache-dir .
 
