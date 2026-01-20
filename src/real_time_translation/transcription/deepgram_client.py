@@ -44,6 +44,8 @@ class DeepgramTranscriber:
         endpointing: int | None = 500,
         utterance_end_ms: int | None = None,
         keepalive_interval: float = 5.0,
+        emit_interim: bool = False,
+        vad_events: bool | None = None,
     ) -> None:
         """Initialize Deepgram transcriber.
 
@@ -57,6 +59,8 @@ class DeepgramTranscriber:
             endpointing: Silence timeout in ms to finalize transcription
             utterance_end_ms: Model-based end-of-speech timeout in ms
             keepalive_interval: Keepalive interval in seconds
+            emit_interim: Whether to emit interim results to consumers
+            vad_events: Whether to enable VAD events in Deepgram
         """
         self._api_key = api_key
         self._language = language
@@ -67,6 +71,8 @@ class DeepgramTranscriber:
         self._endpointing = endpointing
         self._utterance_end_ms = utterance_end_ms
         self._keepalive_interval = keepalive_interval
+        self._emit_interim = emit_interim
+        self._vad_events = vad_events
 
         self._client: AsyncDeepgramClient | None = None
         self._connection_cm: Any = None
@@ -75,8 +81,8 @@ class DeepgramTranscriber:
         self._keepalive_task: asyncio.Task[None] | None = None
         self._last_audio_at = 0.0
         self._pending_result: TranscriptionResult | None = None
-        self._last_emitted_text: str | None = None
-        self._last_emitted_at = 0.0
+        self._last_final_text: str | None = None
+        self._last_final_at = 0.0
         self._running = False
         self._result_queue: asyncio.Queue[TranscriptionResult] = asyncio.Queue()
         self._on_transcript: Callable[[TranscriptionResult], None] | None = None
@@ -102,6 +108,8 @@ class DeepgramTranscriber:
             options["endpointing"] = str(self._endpointing)
         if self._utterance_end_ms is not None:
             options["utterance_end_ms"] = str(self._utterance_end_ms)
+        if self._vad_events is not None:
+            options["vad_events"] = _bool_str(self._vad_events)
 
         self._connection_cm = self._client.listen.v1.connect(**options)
         self._connection = await self._connection_cm.__aenter__()
@@ -220,6 +228,8 @@ class DeepgramTranscriber:
                 self._emit_result(transcript_result)
             else:
                 self._pending_result = transcript_result
+                if self._emit_interim:
+                    self._emit_result(transcript_result)
 
         except (AttributeError, IndexError):
             pass  # Ignore malformed results
@@ -230,10 +240,7 @@ class DeepgramTranscriber:
             return
 
         now = time.monotonic()
-        if (
-            self._last_emitted_text == pending.text
-            and now - self._last_emitted_at < 1.0
-        ):
+        if self._last_final_text == pending.text and now - self._last_final_at < 1.0:
             self._pending_result = None
             return
 
@@ -254,8 +261,9 @@ class DeepgramTranscriber:
         self._emit_result(final_result)
 
     def _emit_result(self, transcript_result: TranscriptionResult) -> None:
-        self._last_emitted_text = transcript_result.text
-        self._last_emitted_at = time.monotonic()
+        if transcript_result.is_final:
+            self._last_final_text = transcript_result.text
+            self._last_final_at = time.monotonic()
 
         with contextlib.suppress(asyncio.QueueFull):
             self._result_queue.put_nowait(transcript_result)

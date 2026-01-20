@@ -64,6 +64,7 @@ class TranslationPipeline:
             smart_format=config.deepgram_smart_format,
             endpointing=config.deepgram_endpointing,
             utterance_end_ms=config.deepgram_utterance_end_ms,
+            vad_events=config.deepgram_vad_events,
         )
 
         # Initialize translator

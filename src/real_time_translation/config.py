@@ -27,6 +27,7 @@ class Config:
     deepgram_smart_format: bool = True
     deepgram_endpointing: int = 500
     deepgram_utterance_end_ms: int | None = None
+    deepgram_vad_events: bool | None = None
     zoom_webhook_port: int = 8080
     zoom_webhook_path: str = "/webhook"
 
@@ -84,6 +85,15 @@ class Config:
                 return None
             return int(value)
 
+        def _get_optional_bool_env(name: str) -> bool | None:
+            value = os.getenv(name)
+            if value is None:
+                return None
+            value = value.strip()
+            if not value:
+                return None
+            return value.lower() in {"1", "true", "yes", "on"}
+
         # Zoom RTMS credentials
         zoom_client_id = os.getenv("ZOOM_CLIENT_ID", "")
         zoom_client_secret = os.getenv("ZOOM_CLIENT_SECRET", "")
@@ -113,6 +123,7 @@ class Config:
             deepgram_utterance_end_ms=_get_optional_int_env(
                 "DEEPGRAM_UTTERANCE_END_MS"
             ),
+            deepgram_vad_events=_get_optional_bool_env("DEEPGRAM_VAD_EVENTS"),
             llm_provider=llm_provider,
             zoom_client_id=zoom_client_id,
             zoom_client_secret=zoom_client_secret,

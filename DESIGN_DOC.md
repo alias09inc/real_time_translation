@@ -127,3 +127,154 @@ async def translation_worker():
 - **RAG:** 専門用語辞書や会議録のVector検索を導入し、動的に用語注入。
 - **Speaker Diarization:** 発話者情報を文脈に含め、口調の一貫性を向上。
 - **代替ASR:** Aqua Voice / AssemblyAIの評価・切替を可能にする抽象化。
+
+---
+
+# Zoom → ASR → 翻訳 → WebSocket 字幕 配信構成まとめ
+
+## 目的
+
+Zoom 会議音声をリアルタイムで文字起こしし、翻訳結果を WebSocket 経由で即時配信する。
+遅延最小化を最優先。
+
+## 全体アーキテクチャ
+
+```
+Zoom
+↓ RTMP
+Node-Media-Server
+↓ PCM (16kHz, mono)
+DeepGram ASR (Python)
+├─ WebSocket（ASR即時字幕）
+└─ HTTP（非同期）
+↓
+Gemini 翻訳 (Python)
+↓
+WebSocket（翻訳字幕更新）
+```
+
+## コンテナ構成（docker-compose）
+
+- nms  
+  RTMP 受信専用。中継のみ。
+- deepgram  
+  音声を ASR。interim 結果を即時配信。
+- gemini  
+  翻訳専用。ステートレス API。
+- ws  
+  字幕配信用。FastAPI + WebSocket。
+
+## docker-compose.yml（最終形）
+
+```yaml
+version: "3.9"
+
+services:
+  nms:
+    image: illuspas/node-media-server
+    ports:
+      - "1935:1935"
+      - "8001:8000"
+
+  ws:
+    build: ./services/ws
+    ports:
+      - "8000:8000"
+    env_file: .env
+
+  gemini:
+    build: ./services/translator
+    env_file: .env
+    environment:
+      - WS_PUBLISH_URL=http://ws:8000/publish
+    depends_on:
+      - ws
+
+  deepgram:
+    build: ./services/asr
+    env_file: .env
+    environment:
+      - RTMP_URL=rtmp://nms:1935/live/zoom
+      - WS_PUBLISH_URL=http://ws:8000/publish
+      - TRANSLATION_API_URL=http://gemini:8000/translate
+    depends_on:
+      - nms
+      - gemini
+      - ws
+```
+
+## DeepGram ASR（要点）
+
+- ffmpeg 設定
+  - low delay
+  - 16kHz / linear16 / mono
+  - 20–40ms chunk
+
+```bash
+ffmpeg -fflags nobuffer -flags low_delay \
+ -i rtmp://nms:1935/live/zoom \
+ -f s16le -ar 16000 -ac 1 -
+```
+
+- DeepGram オプション
+  - interim_results = true
+  - endpointing = 50ms
+  - vad_events = false
+
+## Gemini 翻訳
+
+- FastAPI HTTP API
+- ASR と完全並列
+- partial 文を短文で翻訳
+- 翻訳完了後に字幕を更新送信
+
+## WebSocket 字幕配信
+
+### エンドポイント
+
+```
+ws://<host>:8000/ws/caption
+```
+
+### メッセージ形式
+
+```json
+{
+  "type": "asr_partial",
+  "text": "こんにちは",
+  "ts": 123456
+}
+```
+
+```json
+{
+  "type": "translation",
+  "src": "こんにちは",
+  "translated": "Hello"
+}
+```
+
+## 遅延最小化の原則
+
+- ASR → 翻訳を直列にしない
+- interim 結果を即配信
+- 翻訳は後追い更新
+- WebSocket は 1 hop
+- RTMP バッファを切る
+
+## レイテンシ目安
+
+| 区間          | 遅延        |
+| ----------- | --------- |
+| RTMP → PCM  | 20–40ms   |
+| ASR interim | 80–150ms  |
+| WebSocket   | <10ms     |
+| 翻訳          | 200–400ms |
+
+## 今後の拡張候補
+
+- WebRTC 化（RTMP 廃止）
+- Redis / Kafka による多会議スケール
+- 話者分離（diarization）
+- Gemini による要約・議事録生成
+- 字幕 Web UI（React / Svelte）
