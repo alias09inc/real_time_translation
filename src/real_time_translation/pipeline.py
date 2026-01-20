@@ -63,6 +63,7 @@ class TranslationPipeline:
             interim_results=config.deepgram_interim_results,
             smart_format=config.deepgram_smart_format,
             endpointing=config.deepgram_endpointing,
+            utterance_end_ms=config.deepgram_utterance_end_ms,
         )
 
         # Initialize translator

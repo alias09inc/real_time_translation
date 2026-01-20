@@ -44,6 +44,7 @@ graph LR
 - **Key Parameters:**
   - `smart_format=true`: 句読点・数値整形を有効化し、翻訳精度を向上。
   - `endpointing=500`: 発話終了後500msの無音検知で `is_final` を発行。
+  - `utterance_end_ms`: 意味的な発話区切り検知。UtteranceEnd受信時に直近interimを確定。
   - `interim_results=true`: UI向けの体感速度改善に利用するが、翻訳トリガーには使わない。
 
 ### 4.3 MT Strategy: Contextual Sliding Window
