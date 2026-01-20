@@ -181,8 +181,16 @@ Maintain the original tone and style.
         )
         return self._system_prompt_cache
 
-    def _build_user_prompt(self, text: str) -> str:
-        context_lines = self._context_buffer[-self._context_window_size :]
+    def _build_user_prompt(
+        self,
+        text: str,
+        *,
+        context_lines: list[str] | None = None,
+    ) -> str:
+        if context_lines is None:
+            context_lines = self._context_buffer[-self._context_window_size :]
+        else:
+            context_lines = context_lines[-self._context_window_size :]
         context_block = "\n".join(context_lines)
         return f"<context>\n{context_block}\n</context>\n<target>\n{text}\n</target>"
 
@@ -265,11 +273,19 @@ Maintain the original tone and style.
             )
         return self._gemini_structured_llm
 
-    async def translate(self, text: str) -> TranslationOutput:
+    async def translate(
+        self,
+        text: str,
+        *,
+        context_lines: list[str] | None = None,
+        update_context: bool = True,
+    ) -> TranslationOutput:
         """Translate text using LLM.
 
         Args:
             text: Text to translate
+            context_lines: Optional explicit context lines (stateless mode)
+            update_context: Whether to update internal context buffers
 
         Returns:
             Translation output including the latest slide and current slide window
@@ -277,7 +293,7 @@ Maintain the original tone and style.
         if not text.strip():
             return TranslationOutput(latest_slide="", kept_terms=[], slide_window=[])
 
-        prompt = self._build_user_prompt(text)
+        prompt = self._build_user_prompt(text, context_lines=context_lines)
 
         if self._provider == "gemini":
             llm = self._get_gemini_structured_llm()
@@ -290,16 +306,19 @@ Maintain the original tone and style.
             ]
             output = await llm.ainvoke(messages)
 
-        self._context_buffer.append(text)
-        if len(self._context_buffer) > self._context_window_size:
-            self._context_buffer.pop(0)
+        should_update_context = update_context and context_lines is None
+        if should_update_context:
+            self._context_buffer.append(text)
+            if len(self._context_buffer) > self._context_window_size:
+                self._context_buffer.pop(0)
 
         translation = output.latest_slide.strip()
         kept_terms = list(output.kept_terms or [])
 
-        self._slide_window.append(translation)
-        if len(self._slide_window) > self._context_window_size:
-            self._slide_window.pop(0)
+        if should_update_context:
+            self._slide_window.append(translation)
+            if len(self._slide_window) > self._context_window_size:
+                self._slide_window.pop(0)
 
         return TranslationOutput(
             latest_slide=translation,
