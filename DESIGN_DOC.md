@@ -171,10 +171,11 @@ version: "3.9"
 
 services:
   nms:
-    image: illuspas/node-media-server
+    image: illuspas/node-media-server:2.7.5
     ports:
       - "1935:1935"
-      - "8001:8000"
+      - "8000:8000"
+      - "8443:8443"
 
   ws:
     build: ./services/ws
