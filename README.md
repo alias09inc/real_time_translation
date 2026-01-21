@@ -94,7 +94,8 @@ docker compose up --build
 
 - RTMP 取り込み: `rtmp://localhost:1935/live/zoom`
 - 字幕 WebSocket: `ws://localhost:8000/ws/caption`
-- Node-Media-Server HTTP: `http://localhost:8001`
+- Node-Media-Server HTTP: `http://localhost:8000`
+- Node-Media-Server HTTPS: `https://localhost:8443`
 
 主なサービス:
 - `deepgram`: RTMP → Deepgram ASR、ASR結果をWS/翻訳へ中継
