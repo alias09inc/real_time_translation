@@ -45,6 +45,7 @@ class DeepgramTranscriber:
         keepalive_interval: float = 5.0,
         emit_interim: bool = False,
         vad_events: bool | None = None,
+        keyterms: list[str] | None = None,
     ) -> None:
         """Initialize Deepgram transcriber."""
         self._api_key = api_key
@@ -58,6 +59,7 @@ class DeepgramTranscriber:
         self._keepalive_interval = keepalive_interval
         self._emit_interim = emit_interim
         self._vad_events = vad_events
+        self._keyterms = keyterms or []
 
         self._client: AsyncDeepgramClient | None = None
         self._connection_cm: Any = None
@@ -95,6 +97,8 @@ class DeepgramTranscriber:
             options["utterance_end_ms"] = str(self._utterance_end_ms)
         if self._vad_events is not None:
             options["vad_events"] = _bool_str(self._vad_events)
+        if self._keyterms:
+            options["keyterm"] = self._keyterms
 
         self._connection_cm = self._client.listen.v1.connect(**options)
         self._connection = await self._connection_cm.__aenter__()

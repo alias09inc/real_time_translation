@@ -43,16 +43,19 @@ cp .env.example .env
 
 ### マイクロサービス用追加環境変数
 
-| 変数名                        | 説明                      | 必須 |
-| ----------------------------- | ------------------------- | ---- |
-| `RTMP_URL`                    | NMSのRTMP入力URL          | ✓    |
-| `WS_PUBLISH_URL`              | WSサービスへのPublish URL | ✓    |
-| `TRANSLATION_API_URL`         | 翻訳API URL               | ✓    |
-| `ASR_SEND_INTERIM`            | ASRのinterimをWSへ送信    |      |
-| `TRANSLATE_INTERIM`           | interimを翻訳へ送信       |      |
-| `ASR_PARTIAL_MIN_INTERVAL_MS` | interim送信間隔(ms)       |      |
-| `TRANSLATION_CONCURRENCY`     | 翻訳同時実行数            |      |
-| `HTTP_TIMEOUT`                | HTTPタイムアウト(秒)      |      |
+| 変数名                        | 説明                         | 必須 |
+| ----------------------------- | ---------------------------- | ---- |
+| `RTMP_URL`                    | NMSのRTMP入力URL             | ✓    |
+| `WS_PUBLISH_URL`              | WSサービスへのPublish URL    | ✓    |
+| `TRANSLATION_API_URL`         | 翻訳API URL                  | ✓    |
+| `DICTIONARY_PATH`             | 用語辞書CSVパス（keyterm用） |      |
+| `ASR_SEND_INTERIM`            | ASRのinterimをWSへ送信       |      |
+| `TRANSLATE_INTERIM`           | interimを翻訳へ送信          |      |
+| `ASR_PARTIAL_MIN_INTERVAL_MS` | interim送信間隔(ms)          |      |
+| `TRANSLATION_CONCURRENCY`     | 翻訳同時実行数               |      |
+| `HTTP_TIMEOUT`                | HTTPタイムアウト(秒)         |      |
+
+`DICTIONARY_PATH`で指定したCSVファイルの`source_term`列がDeepgramの[Keyterm Prompting](https://developers.deepgram.com/docs/keyterm)として渡され、専門用語の認識精度が向上します。
 
 ## 使い方
 

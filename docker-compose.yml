@@ -38,6 +38,9 @@ services:
       - RTMP_URL=rtmp://nms:1935/live/zoom
       - WS_PUBLISH_URL=http://ws:8000/publish
       - TRANSLATION_API_URL=http://gemini:8000/translate
+      - DICTIONARY_PATH=/app/dictionary.csv
+    volumes:
+      - ./dictionary.csv:/app/dictionary.csv:ro
     depends_on:
       - nms
       - gemini
