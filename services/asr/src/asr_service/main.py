@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import asyncio
+import csv
 import logging
 import os
 import time
 from collections import deque
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 import httpx
@@ -35,6 +36,24 @@ def _get_optional_int_env(name: str) -> int | None:
     return int(value)
 
 
+def _load_keyterms_from_csv(path: str) -> list[str]:
+    """Load source terms from dictionary CSV as keyterms."""
+    keyterms: list[str] = []
+    try:
+        with open(path, encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                source_term = row.get("source_term", "").strip()
+                if source_term:
+                    keyterms.append(source_term)
+        logger.info("Loaded %d keyterms from %s", len(keyterms), path)
+    except FileNotFoundError:
+        logger.warning("Dictionary file not found: %s", path)
+    except Exception:  # noqa: BLE001
+        logger.exception("Failed to load keyterms from %s", path)
+    return keyterms
+
+
 @dataclass(frozen=True)
 class ASRServiceConfig:
     deepgram_api_key: str
@@ -56,6 +75,7 @@ class ASRServiceConfig:
     context_window_size: int
     translation_concurrency: int
     http_timeout: float
+    keyterms: list[str] = field(default_factory=list)
 
     @staticmethod
     def from_env() -> ASRServiceConfig:
@@ -104,6 +124,9 @@ class ASRServiceConfig:
             context_window_size=int(os.getenv("CONTEXT_WINDOW_SIZE", "3")),
             translation_concurrency=int(os.getenv("TRANSLATION_CONCURRENCY", "2")),
             http_timeout=float(os.getenv("HTTP_TIMEOUT", "10")),
+            keyterms=_load_keyterms_from_csv(
+                os.getenv("DICTIONARY_PATH", "/app/dictionary.csv")
+            ),
         )
 
 
@@ -166,6 +189,7 @@ async def run_service() -> None:
         utterance_end_ms=config.deepgram_utterance_end_ms,
         vad_events=config.deepgram_vad_events,
         emit_interim=emit_interim,
+        keyterms=config.keyterms,
     )
 
     http_client = httpx.AsyncClient(timeout=config.http_timeout)
