@@ -49,6 +49,8 @@ cp .env.example .env
 | `WS_PUBLISH_URL`              | WSサービスへのPublish URL    | ✓    |
 | `TRANSLATION_API_URL`         | 翻訳API URL                  | ✓    |
 | `DICTIONARY_PATH`             | 用語辞書CSVパス（keyterm用） |      |
+| `ZOOM_CAPTION_URL`            | Zoom字幕API URL              |      |
+| `ZOOM_CAPTION_LANG`           | Zoom字幕の言語コード         |      |
 | `ASR_SEND_INTERIM`            | ASRのinterimをWSへ送信       |      |
 | `TRANSLATE_INTERIM`           | interimを翻訳へ送信          |      |
 | `ASR_PARTIAL_MIN_INTERVAL_MS` | interim送信間隔(ms)          |      |
@@ -56,6 +58,8 @@ cp .env.example .env
 | `HTTP_TIMEOUT`                | HTTPタイムアウト(秒)         |      |
 
 `DICTIONARY_PATH`で指定したCSVファイルの`source_term`列がDeepgramの[Keyterm Prompting](https://developers.deepgram.com/docs/keyterm)として渡され、専門用語の認識精度が向上します。
+
+`ZOOM_CAPTION_URL`を設定すると、翻訳結果がZoomミーティングの字幕として表示されます。URLはZoomミーティング内で「字幕を有効化」→「APIトークンをコピー」から取得できます。詳細は[Zoomサポート](https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0060372)を参照。
 
 ## 使い方
 

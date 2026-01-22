@@ -28,6 +28,8 @@ services:
     env_file: .env
     environment:
       - WS_PUBLISH_URL=http://ws:8000/publish
+      - ZOOM_CAPTION_URL=${ZOOM_CAPTION_URL:-}
+      - ZOOM_CAPTION_LANG=${ZOOM_CAPTION_LANG:-}
     depends_on:
       - ws
 

@@ -15,6 +15,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
 from translator_service.llm_translator import LLMTranslator
+from translator_service.zoom_caption import ZoomCaptionClient
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +32,8 @@ class TranslationServiceConfig:
     dictionary_path: Path | None
     ws_publish_url: str
     http_timeout: float
+    zoom_caption_url: str | None
+    zoom_caption_lang: str | None
 
     @staticmethod
     def from_env() -> TranslationServiceConfig:
@@ -54,6 +57,8 @@ class TranslationServiceConfig:
             dictionary_path=Path(dictionary_path) if dictionary_path else None,
             ws_publish_url=os.getenv("WS_PUBLISH_URL", "http://ws:8000/publish"),
             http_timeout=float(os.getenv("HTTP_TIMEOUT", "10")),
+            zoom_caption_url=os.getenv("ZOOM_CAPTION_URL"),
+            zoom_caption_lang=os.getenv("ZOOM_CAPTION_LANG"),
         )
 
 
@@ -96,9 +101,22 @@ async def lifespan(app: FastAPI):
     await translator.prepare()
 
     http_client = httpx.AsyncClient(timeout=config.http_timeout)
+    
+    # Initialize Zoom caption client if URL is configured
+    zoom_caption: ZoomCaptionClient | None = None
+    if config.zoom_caption_url:
+        zoom_caption = ZoomCaptionClient(
+            caption_url=config.zoom_caption_url,
+            http_client=http_client,
+            lang=config.zoom_caption_lang,
+        )
+        await zoom_caption.sync_seq()
+        logger.info("Zoom caption client initialized")
+    
     app.state.config = config
     app.state.translator = translator
     app.state.http_client = http_client
+    app.state.zoom_caption = zoom_caption
     try:
         yield
     finally:
@@ -129,6 +147,7 @@ async def translate(request: TranslateRequest) -> TranslateResponse:
     translator: LLMTranslator = app.state.translator
     config: TranslationServiceConfig = app.state.config
     http_client: httpx.AsyncClient = app.state.http_client
+    zoom_caption: ZoomCaptionClient | None = app.state.zoom_caption
 
     output = await translator.translate(
         request.text,
@@ -147,6 +166,10 @@ async def translate(request: TranslateRequest) -> TranslateResponse:
         "session_id": request.session_id,
     }
     await _publish_translation(http_client, config.ws_publish_url, payload)
+    
+    # Send caption to Zoom if configured and this is a final result
+    if zoom_caption and request.is_final:
+        await zoom_caption.send_caption(output.latest_slide)
 
     return TranslateResponse(
         translated=output.latest_slide,
