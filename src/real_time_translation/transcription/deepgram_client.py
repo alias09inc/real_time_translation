@@ -111,12 +111,25 @@ class DeepgramTranscriber:
         if self._vad_events is not None:
             options["vad_events"] = _bool_str(self._vad_events)
 
+        # print(f"[DEBUG] Connecting to Deepgram with options: {options}")
         self._connection_cm = self._client.listen.v1.connect(**options)
         self._connection = await self._connection_cm.__aenter__()
+        # print("[DEBUG] Deepgram connection established")
         self._running = True
         self._last_audio_at = time.monotonic()
         self._listener_task = asyncio.create_task(self._listen())
         self._keepalive_task = asyncio.create_task(self._keepalive_loop())
+
+    async def finalize(self) -> None:
+        """Signal end of audio stream to Deepgram and wait for final results."""
+        if self._connection:
+            try:
+                # Send finalize signal to Deepgram
+                await self._connection.finish()
+                # Wait for final results to come in
+                await asyncio.sleep(5)
+            except Exception:
+                pass  # Ignore errors during finalize
 
     async def disconnect(self) -> None:
         """Close WebSocket connection."""
@@ -142,6 +155,7 @@ class DeepgramTranscriber:
         """
         if self._connection and self._running:
             self._last_audio_at = time.monotonic()
+            # print(f"[DEBUG] Sending {len(audio_data)} bytes to Deepgram")
             await self._connection.send_media(audio_data)
 
     def set_callback(self, callback: Callable[[TranscriptionResult], None]) -> None:
@@ -203,7 +217,9 @@ class DeepgramTranscriber:
         """
         try:
             message_type = getattr(result, "type", None)
+            # print(f"[DEBUG] Deepgram message type: {message_type}")
             if message_type == "UtteranceEnd":
+                # print(f"[DEBUG] UtteranceEnd received")
                 self._handle_utterance_end(result)
                 return
             if message_type != "Results":
@@ -211,8 +227,11 @@ class DeepgramTranscriber:
 
             channel = result.channel
             alternative = channel.alternatives[0]
+            transcript = alternative.transcript
+            is_final = getattr(result, "is_final", False)
+            # print(f"[DEBUG] Deepgram transcript: '{transcript}', is_final={is_final}")
 
-            if not alternative.transcript:
+            if not transcript:
                 return
 
             transcript_result = TranscriptionResult(
@@ -261,6 +280,7 @@ class DeepgramTranscriber:
         self._emit_result(final_result)
 
     def _emit_result(self, transcript_result: TranscriptionResult) -> None:
+        # print(f"[DEBUG] Emitting result: is_final={transcript_result.is_final}, text='{transcript_result.text}'")
         if transcript_result.is_final:
             self._last_final_text = transcript_result.text
             self._last_final_at = time.monotonic()
