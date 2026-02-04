@@ -65,6 +65,7 @@ class TranslationPipeline:
             endpointing=config.deepgram_endpointing,
             utterance_end_ms=config.deepgram_utterance_end_ms,
             vad_events=config.deepgram_vad_events,
+            emit_interim=True,  # Emit interim results for real-time UI
         )
 
         # Initialize translator
@@ -147,6 +148,12 @@ class TranslationPipeline:
 
     async def stop(self) -> None:
         """Stop the translation pipeline."""
+        # First, stop audio capture to signal no more audio
+        await self._audio_capture.stop()
+
+        # Finalize the transcriber (signal end of audio stream)
+        await self._transcriber.finalize()
+
         self._running = False
 
         # Cancel all tasks
@@ -157,12 +164,12 @@ class TranslationPipeline:
         await asyncio.gather(*self._tasks, return_exceptions=True)
         self._tasks.clear()
 
-        # Stop components
-        await self._audio_capture.stop()
+        # Disconnect transcriber
         await self._transcriber.disconnect()
 
     async def _audio_to_transcription(self) -> None:
         """Send audio data to transcriber."""
+        # print("[DEBUG] _audio_to_transcription started")
         try:
             async for audio_chunk in self._audio_capture.stream():
                 if not self._running:
@@ -170,6 +177,7 @@ class TranslationPipeline:
                 await self._transcriber.send_audio(audio_chunk)
         except asyncio.CancelledError:
             pass
+        # print("[DEBUG] _audio_to_transcription ended")
 
     async def _collect_transcriptions(self) -> None:
         """Collect transcription results into a queue."""
@@ -178,12 +186,20 @@ class TranslationPipeline:
                 if not self._running:
                     break
 
-                # Translate only final results
-                if not result.is_final:
-                    continue
-
                 text = result.text.strip()
                 if not text:
+                    continue
+
+                # Emit interim results to UI (without translation)
+                if not result.is_final:
+                    if self._on_result:
+                        interim_result = TranslationResult(
+                            original_text=text,
+                            translated_text="",
+                            is_final=False,
+                            confidence=result.confidence,
+                        )
+                        self._on_result(interim_result)
                     continue
 
                 # Handle low confidence by masking for translation input
