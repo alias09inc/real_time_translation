@@ -169,7 +169,6 @@ class TranslationPipeline:
 
     async def _audio_to_transcription(self) -> None:
         """Send audio data to transcriber."""
-        # print("[DEBUG] _audio_to_transcription started")
         try:
             async for audio_chunk in self._audio_capture.stream():
                 if not self._running:
@@ -177,7 +176,6 @@ class TranslationPipeline:
                 await self._transcriber.send_audio(audio_chunk)
         except asyncio.CancelledError:
             pass
-        # print("[DEBUG] _audio_to_transcription ended")
 
     async def _collect_transcriptions(self) -> None:
         """Collect transcription results into a queue."""
