@@ -11,6 +11,10 @@ from real_time_translation.pipeline import TranslationPipeline
 
 def convert_to_pcm(audio_path: str) -> bytes:
     """Convert any audio file to 16kHz mono PCM using ffmpeg."""
+    import os
+    if not os.path.isfile(audio_path):
+        raise FileNotFoundError(f"Audio file not found: {audio_path}")
+
     print(f"Converting {audio_path} to 16kHz mono PCM...")
 
     cmd = [
@@ -27,6 +31,7 @@ def convert_to_pcm(audio_path: str) -> bytes:
     result = subprocess.run(
         cmd,
         capture_output=True,
+        check=False,
     )
 
     if result.returncode != 0:
@@ -85,53 +90,54 @@ async def test_with_audio_file(audio_path: str) -> None:
     print("\nStarting pipeline...")
     await pipeline.start()
 
-    # Send audio in chunks (simulating real-time streaming)
-    chunk_size = 16000 * 2  # 1 second of 16kHz 16-bit audio
-    total_chunks = len(audio_data) // chunk_size
+    try:
+        # Send audio in chunks (simulating real-time streaming)
+        chunk_size = 16000 * 2  # 1 second of 16kHz 16-bit audio
+        total_chunks = len(audio_data) // chunk_size
 
-    print(f"Sending {total_chunks} chunks...")
+        print(f"Sending {total_chunks} chunks...")
 
-    for i, offset in enumerate(range(0, len(audio_data), chunk_size)):
-        chunk = audio_data[offset : offset + chunk_size]
-        capture.push_audio(chunk)
-        await asyncio.sleep(1.0)  # Real-time pace for Deepgram
+        for i, offset in enumerate(range(0, len(audio_data), chunk_size)):
+            chunk = audio_data[offset : offset + chunk_size]
+            capture.push_audio(chunk)
+            await asyncio.sleep(1.0)  # Real-time pace for Deepgram
 
-        # Show progress
-        if (i + 1) % 10 == 0 or i == total_chunks - 1:
-            progress = int((i + 1) / total_chunks * 100)
-            print(f"Sending: {progress}% ({i + 1}/{total_chunks}) - ASR: {len(all_asr)}, Trans: {result_count[0]}")
+            # Show progress
+            if (i + 1) % 10 == 0 or i == total_chunks - 1:
+                progress = int((i + 1) / total_chunks * 100)
+                print(f"Sending: {progress}% ({i + 1}/{total_chunks}) - ASR: {len(all_asr)}, Trans: {result_count[0]}")
 
-    # Give Deepgram time to process last chunks
-    print(f"\nAll audio sent. Waiting 10 seconds for Deepgram to catch up...")
-    await asyncio.sleep(10)
+        # Give Deepgram time to process last chunks
+        print(f"\nAll audio sent. Waiting 10 seconds for Deepgram to catch up...")
+        await asyncio.sleep(10)
 
-    print("Waiting for remaining ASR and translations...")
-    last_asr_count = len(all_asr)
-    last_trans_count = result_count[0]
-    stable_seconds = 0
-    max_wait = 180  # Maximum 3 minutes
+        print("Waiting for remaining ASR and translations...")
+        last_asr_count = len(all_asr)
+        last_trans_count = result_count[0]
+        stable_seconds = 0
+        max_wait = 180  # Maximum 3 minutes
 
-    for i in range(max_wait):
-        await asyncio.sleep(1)
-        current_asr = len(all_asr)
-        current_trans = result_count[0]
+        for i in range(max_wait):
+            await asyncio.sleep(1)
+            current_asr = len(all_asr)
+            current_trans = result_count[0]
 
-        if current_asr == last_asr_count and current_trans == last_trans_count:
-            stable_seconds += 1
-        else:
-            stable_seconds = 0
-            last_asr_count = current_asr
-            last_trans_count = current_trans
+            if current_asr == last_asr_count and current_trans == last_trans_count:
+                stable_seconds += 1
+            else:
+                stable_seconds = 0
+                last_asr_count = current_asr
+                last_trans_count = current_trans
 
-        if (i + 1) % 10 == 0:
-            print(f"  Waiting... {i + 1}s - ASR segments: {len(all_asr)}, Translations: {result_count[0]}")
+            if (i + 1) % 10 == 0:
+                print(f"  Waiting... {i + 1}s - ASR segments: {len(all_asr)}, Translations: {result_count[0]}")
 
-        # Stop if no new results for 20 seconds
-        if stable_seconds >= 20:
-            print(f"  No new results for 20 seconds, finishing...")
-            break
-
-    await pipeline.stop()
+            # Stop if no new results for 20 seconds
+            if stable_seconds >= 20:
+                print(f"  No new results for 20 seconds, finishing...")
+                break
+    finally:
+        await pipeline.stop()
 
     # Print summary
     print(f"\n{'='*60}")
