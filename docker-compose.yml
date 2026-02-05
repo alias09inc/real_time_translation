@@ -25,11 +25,28 @@ services:
 
   gemini:
     build: ./services/translator
+    ports:
+      - "8002:8000"
     env_file: .env
     environment:
       - WS_PUBLISH_URL=http://ws:8000/publish
       - ZOOM_CAPTION_URL=${ZOOM_CAPTION_URL:-}
       - ZOOM_CAPTION_LANG=${ZOOM_CAPTION_LANG:-}
+      # Use fast production model - gemini-2.0-flash has better TTFT
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash}
+      # -----------------------------------------------------------------
+      # NEW 2026-02-04: Parallel queue settings to prevent lag accumulation
+      # -----------------------------------------------------------------
+      # Number of parallel translation workers
+      # With 6 workers @ ~4s TTFT: 6 * 15/min = 90 translations/min capacity
+      # This exceeds typical speech rate (~40/min) preventing queue buildup
+      - TRANSLATION_WORKERS=${TRANSLATION_WORKERS:-6}
+      # Maximum queue size before dropping (prevents memory issues)
+      - TRANSLATION_QUEUE_SIZE=${TRANSLATION_QUEUE_SIZE:-50}
+      # Lag threshold - requests older than this may be dropped/summarized
+      - LAG_THRESHOLD_SECONDS=${LAG_THRESHOLD_SECONDS:-3.0}
+      # Enable batch summarization for lag recovery
+      - ENABLE_SUMMARIZATION=${ENABLE_SUMMARIZATION:-true}
     depends_on:
       - ws
 

@@ -126,7 +126,7 @@ Zoomのカスタムストリーミングをローカル環境で受信するに�
 2. **環境変数設定**
    ```bash
    # .envファイルに追加
-   NGROK_AUTHTOKEN=your_token_here
+   NGROK_AUTHTOKEN=38czszY5aSU9ongYbdpSB9jJycl_4iJAP2bLGgZgnnubwNeZU
    ```
 
 3. **トンネルURLの確認**
@@ -157,6 +157,87 @@ docker compose --profile debug down
 
 > **Note**:
 > `ws-debug`は`profiles: [debug]`で定義されているため、通常の`docker compose down`では停止されません。必ず`--profile debug`を付けて停止してください。
+
+### ローカルテスト（マイク → 字幕表示）
+
+Zoomを使わずにローカルマイクから字幕を表示するテスト方法です。
+
+#### 必要なもの
+- ffmpeg（ホストマシンにインストール）
+- Dockerが起動していること
+
+#### 手順
+
+1. **サービスを起動**
+   ```bash
+   docker compose up -d
+   ```
+
+2. **マイク音声をRTMPにストリーム**
+   ```bash
+   # Linux (PulseAudio)
+   ./scripts/stream_mic.sh
+   # または直接実行
+   ffmpeg -f pulse -i default -ac 2 -ar 44100 -c:a aac -b:a 128k -f flv rtmp://localhost:1935/live/zoom
+
+   # macOS (AVFoundation)
+   ffmpeg -f avfoundation -i ":0" -ac 2 -ar 44100 -c:a aac -b:a 128k -f flv rtmp://localhost:1935/live/zoom
+
+   # Windows (dshow) - デバイス名は環境により異なる
+   ffmpeg -f dshow -i audio="Microphone" -ac 2 -ar 44100 -c:a aac -b:a 128k -f flv rtmp://localhost:1935/live/zoom
+   ```
+
+3. **字幕ページを開く**
+   ```bash
+   # ブラウザで開く
+   open scripts/captions.html        # macOS
+   xdg-open scripts/captions.html    # Linux
+   start scripts/captions.html       # Windows
+   ```
+
+4. **話しかけてテスト**
+   - マイクに向かって英語で話す
+   - 数秒後に日本語字幕が表示される
+   - ページ上部にラグ統計が表示される
+
+#### 字幕ページの見方
+
+| 表示 | 意味 |
+|------|------|
+| Current Lag | 現在の遅延（秒） |
+| Avg Lag | 平均遅延 |
+| Max Lag | 最大遅延 |
+| Messages | 受信メッセージ数 |
+| Queue (proc/drop/sum) | 処理済/破棄/要約 の件数 |
+
+ラグの色:
+- 🟢 緑 (<3秒): 正常
+- 🟡 黄 (3-7秒): 注意
+- 🔴 赤 (>7秒): 問題あり
+
+#### トラブルシューティング
+
+**ffmpegが接続できない**
+```bash
+# NMSが起動しているか確認
+docker compose ps nms
+# ログを確認
+docker compose logs nms
+```
+
+**字幕が表示されない**
+```bash
+# 各サービスのログを確認
+docker compose logs deepgram  # ASRサービス
+docker compose logs gemini    # 翻訳サービス
+docker compose logs ws        # WebSocketサービス
+```
+
+**翻訳キューの状態を確認**
+```bash
+curl http://localhost:8002/stats
+# {"processed": 10, "dropped": 0, "summarized": 0, "queue_size": 0, ...}
+```
 
 マイクロサービス用の環境変数例は `.env.example` に追加済みです。
 

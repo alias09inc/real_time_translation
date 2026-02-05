@@ -1,12 +1,45 @@
 source_term,target_term,notes
-API,API,そのまま使用
-machine learning,機械学習,
-deep learning,深層学習,
-neural network,ニューラルネットワーク,
-transformer,トランスフォーマー,モデルアーキテクチャ
-fine-tuning,ファインチューニング,
-inference,推論,
-latency,レイテンシー,遅延
-throughput,スループット,
-real-time,リアルタイム,
-transcription,文字起こし,
+AGI,AGI,
+AIME,AIME,Mathematics benchmark
+Anaconda,Anaconda,
+application programming interface,API,
+architecture efficiency,アーキテクチャ効率,効率性の6側面
+attention,アテンション,
+automatic differentiation,自動微分,
+backpropagation,誤差逆伝播,
+bag of words,Bag of Words,
+bagging,バギング,
+basket data,バスケットデータ,
+batch learning,バッチ学習,
+BERT,BERT,
+bias,バイアス,
+Block Verification,ブロック検証,
+boosting,ブースティング,
+breakeven,損益分岐点,エネルギー的な話だと投入したエネルギーと
+budget efficiency,予算効率,効率性の6側面
+cascade model,カスケードモデル,
+causality,因果性,
+CBRN,CBRN,Chemical,
+Biological, Radiological, Nuclear risks
+chain of thought,Chain of Thought,
+CIFAR-10,CIFAR-10,
+CIFAR-100,CIFAR-100,
+classification,分類,
+clustering,クラスタリング,
+CNN,CNN,
+DeepSomatic,DeepSomatic,
+dense pretrained model,密な事前学習済みモデル,
+dimensionality reduction,次元削減,
+domain adaptation,ドメイン適応,
+downstream adaptation,下流タスクへの適応,
+dropout,ドロップアウト,
+dummy variable,ダミー変数,
+Earth AI,地球環境AI,
+efficiency spectrum,効率性のスペクトル,論文タイトル
+efficient attention,効率的な注意機構,アーキテクチャ
+efficient reasoning model,効率的な推論モデル,
+rotary positional embeddings,Rotary Positional Embeddings (RoPE),アーキテクチャ
+rectified linear unit,Rectified Linear Unit (ReLU),
+recurrent neural network,再帰型ニューラルネットワーク (RNN),
+principal component analysis,主成分分析 (PCA),
+mixture of experts,専門家混合モデル (MoE),アーキテクチャ
