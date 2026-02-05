@@ -193,6 +193,10 @@ Zoomを使わずにローカルマイクから字幕を表示するテスト方�
    open scripts/captions.html        # macOS
    xdg-open scripts/captions.html    # Linux
    start scripts/captions.html       # Windows
+
+   # デフォルトのアプリがブラウザでない場合
+   google-chrome scripts/captions.html
+   firefox scripts/captions.html
    ```
 
 4. **話しかけてテスト**
