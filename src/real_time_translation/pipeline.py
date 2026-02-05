@@ -148,13 +148,14 @@ class TranslationPipeline:
 
     async def stop(self) -> None:
         """Stop the translation pipeline."""
-        # First, stop audio capture to signal no more audio
+        # Signal tasks to stop first to prevent blocking
+        self._running = False
+
+        # Stop audio capture to signal no more audio
         await self._audio_capture.stop()
 
         # Finalize the transcriber (signal end of audio stream)
         await self._transcriber.finalize()
-
-        self._running = False
 
         # Cancel all tasks
         for task in self._tasks:

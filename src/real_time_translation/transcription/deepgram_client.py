@@ -124,8 +124,14 @@ class DeepgramTranscriber:
             try:
                 # Send finalize signal to Deepgram
                 await self._connection.finish()
-                # Wait for final results to come in
-                await asyncio.sleep(5)
+                # Wait for the listener task to process final results
+                if self._listener_task:
+                    # Use keepalive interval to derive a reasonable timeout
+                    timeout = max(self._keepalive_interval * 2, 3.0)
+                    try:
+                        await asyncio.wait_for(self._listener_task, timeout=timeout)
+                    except asyncio.TimeoutError:
+                        pass  # Timeout is expected; listener runs until cancelled
             except Exception:
                 pass  # Ignore errors during finalize
 
@@ -223,14 +229,14 @@ class DeepgramTranscriber:
             channel = result.channel
             alternative = channel.alternatives[0]
             transcript = alternative.transcript
-            is_final = getattr(result, "is_final", False)
+            is_final = bool(getattr(result, "is_final", False))
 
             if not transcript:
                 return
 
             transcript_result = TranscriptionResult(
-                text=alternative.transcript,
-                is_final=bool(result.is_final),
+                text=transcript,
+                is_final=is_final,
                 confidence=float(alternative.confidence),
                 start_time=float(result.start),
                 end_time=float(result.start + result.duration),
