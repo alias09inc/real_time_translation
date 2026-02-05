@@ -1,9 +1,11 @@
 """Test ASR and translation accuracy with a full file (non-streaming)."""
 
 import asyncio
+import logging
 import re
 import sys
 import time
+from dataclasses import dataclass
 from pathlib import Path
 
 from deepgram import DeepgramClient
@@ -11,6 +13,15 @@ from dotenv import load_dotenv
 import os
 
 from real_time_translation.translation.llm_translator import LLMTranslator
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class CombinedResult:
+    """Combined translation result from multiple chunks."""
+    latest_slide: str
+    kept_terms: list
 
 
 async def test_accuracy(audio_path: str) -> None:
@@ -120,9 +131,8 @@ async def test_accuracy(audio_path: str) -> None:
     print("[2/2] Translating with LLM...")
     print("=" * 60)
 
-    print(f"  [DEBUG] Transcript length: {len(transcript)} chars, {len(transcript.split())} words")
+    logger.debug("Transcript length: %d chars, %d words", len(transcript), len(transcript.split()))
 
-    print(f"  [DEBUG] Creating LLMTranslator...")
     translator = LLMTranslator(
         provider=llm_provider,
         api_key=api_key,
@@ -131,15 +141,12 @@ async def test_accuracy(audio_path: str) -> None:
         target_language="Japanese",
     )
 
-    print(f"  [DEBUG] Calling translator.prepare()...")
-    t0 = time.time()
     await translator.prepare()
-    print(f"  [DEBUG] prepare() completed in {time.time() - t0:.2f}s")
 
     # Split long text into sentences and translate in chunks
     # This prevents truncation issues with long texts
     sentences = re.split(r'(?<=[.!?])\s+', transcript)
-    print(f"  [DEBUG] Split into {len(sentences)} sentences")
+    logger.debug("Split into %d sentences", len(sentences))
 
     all_translations = []
     all_kept_terms = []
@@ -149,25 +156,17 @@ async def test_accuracy(audio_path: str) -> None:
         chunk = " ".join(sentences[i:i + chunk_size])
         chunk_num = i // chunk_size + 1
         total_chunks = (len(sentences) + chunk_size - 1) // chunk_size
-        print(f"  [DEBUG] Translating chunk {chunk_num}/{total_chunks} ({len(chunk)} chars)...")
+        logger.debug("Translating chunk %d/%d (%d chars)", chunk_num, total_chunks, len(chunk))
 
-        t0 = time.time()
         try:
-            result = await asyncio.wait_for(translator.translate(chunk), timeout=60.0)
-            print(f"  [DEBUG] Chunk {chunk_num} completed in {time.time() - t0:.2f}s")
-            all_translations.append(result.latest_slide)
-            all_kept_terms.extend(result.kept_terms)
+            chunk_result = await asyncio.wait_for(translator.translate(chunk), timeout=60.0)
+            all_translations.append(chunk_result.latest_slide)
+            all_kept_terms.extend(chunk_result.kept_terms)
         except asyncio.TimeoutError:
-            print(f"  [ERROR] Chunk {chunk_num} timed out!")
+            logger.error("Chunk %d timed out!", chunk_num)
             all_translations.append(f"[翻訳タイムアウト: {chunk[:50]}...]")
 
     # Combine results
-    from dataclasses import dataclass
-    @dataclass
-    class CombinedResult:
-        latest_slide: str
-        kept_terms: list
-
     result = CombinedResult(
         latest_slide="\n".join(all_translations),
         kept_terms=list(set(all_kept_terms))

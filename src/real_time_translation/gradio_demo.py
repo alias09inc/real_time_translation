@@ -45,6 +45,10 @@ def _timestamp() -> str:
 
 def _convert_file_to_pcm(file_path: str) -> bytes:
     """Convert any audio file to 16kHz mono PCM using ffmpeg."""
+    import os
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"Audio file not found: {file_path}")
+
     cmd = [
         "ffmpeg",
         "-loglevel", "error",
@@ -55,7 +59,7 @@ def _convert_file_to_pcm(file_path: str) -> bytes:
         "-acodec", "pcm_s16le",
         "pipe:1",
     ]
-    result = subprocess.run(cmd, capture_output=True)
+    result = subprocess.run(cmd, capture_output=True, check=False)
     if result.returncode != 0:
         raise RuntimeError(f"ffmpeg error: {result.stderr.decode()}")
     return result.stdout
@@ -217,7 +221,12 @@ async def process_audio_file(
 
         chunk = audio_data[offset : offset + chunk_size]
         state.capture.push_audio(chunk)
-        await asyncio.sleep(0.5)  # Pace the audio sending (closer to real-time)
+
+        # Sleep in shorter intervals to respond more quickly to cancellation
+        for _ in range(5):  # 5 x 0.1s = 0.5s total
+            if state.cancel_requested:
+                break
+            await asyncio.sleep(0.1)
 
         # Drain results queue periodically
         while True:
@@ -235,7 +244,8 @@ async def process_audio_file(
         return state, _status("Cancelled"), transcript, translation
 
     # Wait longer for processing to complete (based on audio duration)
-    wait_seconds = max(10, int(duration * 0.3))  # At least 10 seconds, or 30% of audio duration
+    # Base time of 5 seconds plus 20% of audio duration, minimum 10 seconds
+    wait_seconds = max(10, 5 + int(duration * 0.2))
 
     last_count = 0
     stable_count = 0
@@ -311,7 +321,8 @@ async def handle_audio(chunk: Any, state: DemoSession | None) -> tuple[str, str,
     # Show finalized lines + current interim transcript
     finalized = "\n".join(state.transcript_lines[-state.window_size :])
     if state.interim_transcript:
-        transcript = f"{finalized}\n> {state.interim_transcript}" if finalized else f"> {state.interim_transcript}"
+        interim_display = f"[interim] {state.interim_transcript}"
+        transcript = f"{finalized}\n{interim_display}" if finalized else interim_display
     else:
         transcript = finalized
 
