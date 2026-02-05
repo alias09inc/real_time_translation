@@ -244,14 +244,12 @@ class QueueAudioCapture(AudioCapture):
             audio_data: Raw PCM audio data
         """
         if not self._running:
-            # print(f"[DEBUG] push_audio: not running, discarding {len(audio_data)} bytes")
             return
         if self._queue.full():
             with contextlib.suppress(asyncio.QueueEmpty):
                 self._queue.get_nowait()
         with contextlib.suppress(asyncio.QueueFull):
             self._queue.put_nowait(audio_data)
-            # print(f"[DEBUG] push_audio: queued {len(audio_data)} bytes, queue size={self._queue.qsize()}")
 
 
 class FFmpegRTMPCapture(AudioCapture):

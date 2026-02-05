@@ -107,7 +107,6 @@ def _normalize_audio_chunk(chunk: Any) -> bytes | None:
 async def start_session(
     state: DemoSession | None,
 ) -> tuple[DemoSession | None, str, str, str]:
-    print(f"[DEBUG] start_session called, state exists: {state is not None}")
     if state is not None:
         transcript = "\n".join(state.transcript_lines)
         translation = "\n".join(state.translation_lines)
@@ -131,22 +130,17 @@ async def start_session(
         if result.kept_terms:
             kept = ", ".join(result.kept_terms)
             print(f"[{timestamp}] Kept terms: {kept}")
-        try:
+        with contextlib.suppress(asyncio.QueueFull):
             results_queue.put_nowait(result)
-            print(f"[DEBUG] Put result in queue, queue size now: {results_queue.qsize()}")
-        except asyncio.QueueFull:
-            print("[DEBUG] WARNING: results_queue is full, dropping result")
 
     pipeline.set_callback(on_result)
     try:
         await pipeline.start()
     except Exception as exc:
-        print(f"[DEBUG] Pipeline start failed: {exc}")
         with contextlib.suppress(Exception):
             await pipeline.stop()
         return None, _status(f"error: {exc}"), "", ""
 
-    print("[DEBUG] Session created successfully")
     return (
         DemoSession(
             pipeline=pipeline,
@@ -184,7 +178,6 @@ def cancel_processing(state: DemoSession | None) -> tuple[DemoSession | None, st
         return None, _status("stopped")
 
     state.cancel_requested = True
-    print("[DEBUG] Cancel requested")
     return state, _status("Cancelling...")
 
 
@@ -192,14 +185,11 @@ async def process_audio_file(
     file_path: str | None, state: DemoSession | None
 ) -> tuple[DemoSession | None, str, str, str]:
     """Process an uploaded audio file through the pipeline."""
-    print(f"[DEBUG] process_audio_file called, file_path={file_path}")
-
     if file_path is None:
         return state, _status("No file selected"), "", ""
 
     # Start session if not already running
     if state is None:
-        print("[DEBUG] Starting new session for file processing")
         state, status, _, _ = await start_session(None)
         if state is None:
             return None, status, "", ""
@@ -210,12 +200,9 @@ async def process_audio_file(
     state.interim_transcript = ""
 
     try:
-        print(f"[DEBUG] Converting audio file: {file_path}")
         audio_data = _convert_file_to_pcm(file_path)
         duration = len(audio_data) / (16000 * 2)
-        print(f"[DEBUG] Audio duration: {duration:.2f} seconds")
     except Exception as e:
-        print(f"[DEBUG] Conversion error: {e}")
         return state, _status(f"Error: {e}"), "", ""
 
     # Reset cancel flag
@@ -223,12 +210,9 @@ async def process_audio_file(
 
     # Stream audio in chunks
     chunk_size = 16000 * 2  # 1 second of audio
-    total_chunks = max(1, len(audio_data) // chunk_size)
-    print(f"[DEBUG] Sending {total_chunks} chunks...")
 
-    for i, offset in enumerate(range(0, len(audio_data), chunk_size)):
+    for offset in range(0, len(audio_data), chunk_size):
         if state.cancel_requested:
-            print("[DEBUG] Processing cancelled by user")
             break
 
         chunk = audio_data[offset : offset + chunk_size]
@@ -242,7 +226,6 @@ async def process_audio_file(
                 if result.is_final and result.translated_text:
                     state.transcript_lines.append(result.original_text)
                     state.translation_lines.append(result.translated_text)
-                    print(f"[DEBUG] Got final: '{result.original_text[:40]}...' -> '{result.translated_text[:40]}...'")
             except asyncio.QueueEmpty:
                 break
 
@@ -251,17 +234,13 @@ async def process_audio_file(
         translation = "\n".join(state.translation_lines)
         return state, _status("Cancelled"), transcript, translation
 
-    print("[DEBUG] All audio sent, waiting for remaining results...")
-
     # Wait longer for processing to complete (based on audio duration)
     wait_seconds = max(10, int(duration * 0.3))  # At least 10 seconds, or 30% of audio duration
-    print(f"[DEBUG] Waiting up to {wait_seconds} seconds for translations...")
 
     last_count = 0
     stable_count = 0
     for i in range(wait_seconds * 10):  # Check every 0.1 seconds
         if state.cancel_requested:
-            print("[DEBUG] Waiting cancelled by user")
             break
 
         await asyncio.sleep(0.1)
@@ -273,7 +252,6 @@ async def process_audio_file(
                 if result.is_final and result.translated_text:
                     state.transcript_lines.append(result.original_text)
                     state.translation_lines.append(result.translated_text)
-                    print(f"[DEBUG] Got final: '{result.original_text[:40]}...' -> '{result.translated_text[:40]}...'")
             except asyncio.QueueEmpty:
                 break
 
@@ -282,7 +260,6 @@ async def process_audio_file(
         if current_count == last_count:
             stable_count += 1
             if stable_count > 30:  # No new results for 3 seconds
-                print(f"[DEBUG] Results stabilized after {i/10:.1f} seconds")
                 break
         else:
             stable_count = 0
@@ -296,43 +273,33 @@ async def process_audio_file(
     else:
         status_text = f"Done ({len(state.transcript_lines)} segments)"
 
-    print(f"[DEBUG] {status_text}. Lines: {len(state.transcript_lines)} transcripts, {len(state.translation_lines)} translations")
     return state, _status(status_text), transcript, translation
 
 
 async def handle_audio(chunk: Any, state: DemoSession | None) -> tuple[str, str, str]:
-    print(f"[DEBUG] handle_audio called, state={state is not None}, chunk={type(chunk)}")
     if state is None:
         return "", "", _status("click Start to initialize")
 
     audio_bytes = _normalize_audio_chunk(chunk)
     if audio_bytes:
-        print(f"[DEBUG] Pushing audio: {len(audio_bytes)} bytes")
         state.capture.push_audio(audio_bytes)
-    else:
-        print(f"[DEBUG] No audio bytes from chunk: {chunk}")
 
     latest_slide_window: list[str] | None = None
-    queue_read_count = 0
     while True:
         try:
             result = state.results_queue.get_nowait()
-            queue_read_count += 1
-            print(f"[DEBUG] Read from queue: is_final={result.is_final}, text='{result.original_text[:50]}...' if len > 50")
         except asyncio.QueueEmpty:
             break
 
         if not result.is_final:
             # Update interim transcript (shown in real-time)
             state.interim_transcript = result.original_text
-            print(f"[DEBUG] Updated interim_transcript: '{state.interim_transcript}'")
             continue
 
         # Final result - add to history and clear interim
         state.transcript_lines.append(result.original_text)
         state.translation_lines.append(result.translated_text)
         state.interim_transcript = ""
-        print(f"[DEBUG] Added final result - transcript_lines={len(state.transcript_lines)}, translation_lines={len(state.translation_lines)}")
         if result.slide_window:
             latest_slide_window = result.slide_window
 
@@ -340,9 +307,6 @@ async def handle_audio(chunk: Any, state: DemoSession | None) -> tuple[str, str,
             state.transcript_lines = state.transcript_lines[-MAX_DISPLAY_LINES:]
         if len(state.translation_lines) > MAX_DISPLAY_LINES:
             state.translation_lines = state.translation_lines[-MAX_DISPLAY_LINES:]
-
-    if queue_read_count > 0:
-        print(f"[DEBUG] Read {queue_read_count} items from queue")
 
     # Show finalized lines + current interim transcript
     finalized = "\n".join(state.transcript_lines[-state.window_size :])
@@ -356,8 +320,6 @@ async def handle_audio(chunk: Any, state: DemoSession | None) -> tuple[str, str,
     else:
         translation = "\n".join(state.translation_lines[-state.window_size :])
 
-    if transcript or translation:
-        print(f"[DEBUG] Returning to UI - transcript: '{transcript[:100]}...' translation: '{translation[:100] if translation else ''}...'")
     return transcript, translation, _status("running")
 
 
