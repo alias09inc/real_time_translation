@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from deepgram import AsyncDeepgramClient
-from deepgram.listen.v1.types import ListenV1KeepAlive
+from deepgram.extensions.types.sockets import ListenV1ControlMessage
 
 
 @dataclass
@@ -36,7 +36,7 @@ class DeepgramTranscriber:
         self,
         api_key: str,
         language: str = "en",
-        model: str = "nova-2-general",
+        model: str = "nova-3-general",
         punctuate: bool = True,
         smart_format: bool = True,
         interim_results: bool = True,
@@ -164,8 +164,8 @@ class DeepgramTranscriber:
                 idle_time = time.monotonic() - self._last_audio_at
                 if idle_time < self._keepalive_interval:
                     continue
-                await self._connection.send_keep_alive(
-                    ListenV1KeepAlive(type="KeepAlive")
+                await self._connection.send_control(
+                    ListenV1ControlMessage(type="KeepAlive")
                 )
         except asyncio.CancelledError:
             pass
@@ -220,7 +220,7 @@ class DeepgramTranscriber:
         last_word_end = getattr(result, "last_word_end", None)
         end_time = (
             float(last_word_end)
-            if isinstance(last_word_end, (int, float))
+            if isinstance(last_word_end, int | float)
             else pending.end_time
         )
         final_result = TranscriptionResult(
