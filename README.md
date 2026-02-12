@@ -126,7 +126,7 @@ Zoomのカスタムストリーミングをローカル環境で受信するに�
 2. **環境変数設定**
    ```bash
    # .envファイルに追加
-   NGROK_AUTHTOKEN=38czszY5aSU9ongYbdpSB9jJycl_4iJAP2bLGgZgnnubwNeZU
+   NGROK_AUTHTOKEN=your_token_here
    ```
 
 3. **トンネルURLの確認**
@@ -157,6 +157,7 @@ docker compose --profile debug down
 
 > **Note**:
 > `ws-debug`は`profiles: [debug]`で定義されているため、通常の`docker compose down`では停止されません。必ず`--profile debug`を付けて停止してください。
+
 
 ### ローカルテスト（マイク → 字幕表示）
 
@@ -219,28 +220,6 @@ Zoomを使わずにローカルマイクから字幕を表示するテスト方�
 - 🟡 黄 (3-7秒): 注意
 - 🔴 赤 (>7秒): 問題あり
 
-#### トラブルシューティング
-
-**ffmpegが接続できない**
-```bash
-# NMSが起動しているか確認
-docker compose ps nms
-# ログを確認
-docker compose logs nms
-```
-
-**字幕が表示されない**
-```bash
-# 各サービスのログを確認
-docker compose logs deepgram  # ASRサービス
-docker compose logs gemini    # 翻訳サービス
-docker compose logs ws        # WebSocketサービス
-```
-
-**翻訳キューの状態を確認**
-```bash
-curl http://localhost:8002/stats
-# {"processed": 10, "dropped": 0, "summarized": 0, "queue_size": 0, ...}
 ```
 
 マイクロサービス用の環境変数例は `.env.example` に追加済みです。

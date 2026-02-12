@@ -296,38 +296,6 @@ Maintain the original tone and style.
         result = await self.translate(text)
         yield result.latest_slide
 
-    async def summarize_texts(self, texts: list[str]) -> str:
-        """Summarize multiple texts into a concise form for translation.
-        
-        Used when lag accumulates to catch up by summarizing backlogged texts.
-        """
-        if not texts:
-            return ""
-        if len(texts) == 1:
-            return texts[0]
-
-        combined = "\n".join(f"- {t}" for t in texts)
-        prompt = f"""Summarize the following speech segments into a single coherent paragraph.
-Keep the key points and main ideas. Output ONLY the summarized text in {self._source_language}.
-
-Speech segments:
-{combined}
-
-Summarized text:"""
-
-        if self._provider == "gemini":
-            llm = self._get_gemini_llm()
-            response = await llm.ainvoke([HumanMessage(content=prompt)])
-        else:
-            llm = self._get_openai_llm()
-            messages = [
-                SystemMessage(content="You are a concise summarizer. Output only the summary."),
-                HumanMessage(content=prompt),
-            ]
-            response = await llm.ainvoke(messages)
-
-        return str(response.content).strip()
-
     def clear_context(self) -> None:
         """Clear the context buffer."""
         self._context_buffer.clear()

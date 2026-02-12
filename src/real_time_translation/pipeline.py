@@ -65,6 +65,7 @@ class TranslationPipeline:
             endpointing=config.deepgram_endpointing,
             utterance_end_ms=config.deepgram_utterance_end_ms,
             vad_events=config.deepgram_vad_events,
+            emit_interim=True,  # Emit interim results for real-time UI
         )
 
         # Initialize translator
@@ -147,7 +148,14 @@ class TranslationPipeline:
 
     async def stop(self) -> None:
         """Stop the translation pipeline."""
+        # Signal tasks to stop first to prevent blocking
         self._running = False
+
+        # Stop audio capture to signal no more audio
+        await self._audio_capture.stop()
+
+        # Finalize the transcriber (signal end of audio stream)
+        await self._transcriber.finalize()
 
         # Cancel all tasks
         for task in self._tasks:
@@ -157,8 +165,7 @@ class TranslationPipeline:
         await asyncio.gather(*self._tasks, return_exceptions=True)
         self._tasks.clear()
 
-        # Stop components
-        await self._audio_capture.stop()
+        # Disconnect transcriber
         await self._transcriber.disconnect()
 
     async def _audio_to_transcription(self) -> None:
@@ -178,12 +185,20 @@ class TranslationPipeline:
                 if not self._running:
                     break
 
-                # Translate only final results
-                if not result.is_final:
-                    continue
-
                 text = result.text.strip()
                 if not text:
+                    continue
+
+                # Emit interim results to UI (without translation)
+                if not result.is_final:
+                    if self._on_result:
+                        interim_result = TranslationResult(
+                            original_text=text,
+                            translated_text="",
+                            is_final=False,
+                            confidence=result.confidence,
+                        )
+                        self._on_result(interim_result)
                     continue
 
                 # Handle low confidence by masking for translation input

@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from deepgram import AsyncDeepgramClient
-from deepgram.extensions.types.sockets import ListenV1ControlMessage
+from deepgram.listen.v1.types import ListenV1KeepAlive
 
 
 @dataclass
@@ -164,8 +164,8 @@ class DeepgramTranscriber:
                 idle_time = time.monotonic() - self._last_audio_at
                 if idle_time < self._keepalive_interval:
                     continue
-                await self._connection.send_control(
-                    ListenV1ControlMessage(type="KeepAlive")
+                await self._connection.send_keep_alive(
+                    ListenV1KeepAlive(type="KeepAlive")
                 )
         except asyncio.CancelledError:
             pass

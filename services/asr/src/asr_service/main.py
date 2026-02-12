@@ -1,18 +1,4 @@
-"""ASR microservice entrypoint.
-
-CHANGE LOG (2026-02-04):
-========================
-MODIFIED - Reduced VAD (Voice Activity Detection) timings for lower latency.
-
-Changes made (Lines 90-105):
-- deepgram_endpointing: 1000ms → 300ms (aggressive silence detection)
-- deepgram_utterance_end_ms: 1500ms → 800ms (faster sentence end detection)
-
-Impact: Reduced ~700ms from sentence detection time.
-
-Trade-off: May split sentences more often on short pauses, but acceptable
-for real-time translation where speed matters more than perfect segmentation.
-"""
+"""ASR microservice entrypoint."""
 
 from __future__ import annotations
 
@@ -102,10 +88,8 @@ class ASRServiceConfig:
             raise ValueError("RTMP_URL is required")
 
         endpointing_value = os.getenv("DEEPGRAM_ENDPOINTING")
-        # CHANGED 2026-02-04: Reduced from 1000ms to 300ms for lower latency
-        # Trade-off: May split sentences on short pauses
         deepgram_endpointing = (
-            300  # 300ms - aggressive VAD for low latency
+            500
             if endpointing_value is None
             else _get_optional_int_env("DEEPGRAM_ENDPOINTING")
         )
@@ -116,10 +100,9 @@ class ASRServiceConfig:
             deepgram_interim_results=_get_bool_env("DEEPGRAM_INTERIM_RESULTS", True),
             deepgram_smart_format=_get_bool_env("DEEPGRAM_SMART_FORMAT", True),
             deepgram_endpointing=deepgram_endpointing,
-            # CHANGED 2026-02-04: Reduced from 1500ms to 800ms for faster sentence detection
-            deepgram_utterance_end_ms=(
-                _get_optional_int_env("DEEPGRAM_UTTERANCE_END_MS") or 800
-            ),  # 800ms silence = end of utterance (aggressive)
+            deepgram_utterance_end_ms=_get_optional_int_env(
+                "DEEPGRAM_UTTERANCE_END_MS"
+            ),
             deepgram_vad_events=(
                 _get_bool_env("DEEPGRAM_VAD_EVENTS", False)
                 if os.getenv("DEEPGRAM_VAD_EVENTS") is not None
@@ -139,7 +122,7 @@ class ASRServiceConfig:
                 os.getenv("ASR_PARTIAL_MIN_INTERVAL_MS", "200")
             ),
             context_window_size=int(os.getenv("CONTEXT_WINDOW_SIZE", "3")),
-            translation_concurrency=int(os.getenv("TRANSLATION_CONCURRENCY", "10")),
+            translation_concurrency=int(os.getenv("TRANSLATION_CONCURRENCY", "2")),
             http_timeout=float(os.getenv("HTTP_TIMEOUT", "10")),
             keyterms=_load_keyterms_from_csv(
                 os.getenv("DICTIONARY_PATH", "/app/dictionary.csv")

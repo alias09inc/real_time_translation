@@ -6,9 +6,10 @@ import subprocess
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
 
-import rtms
+if TYPE_CHECKING:
+    import rtms
 
 
 class AudioSource(Protocol):
@@ -74,11 +75,13 @@ class ZoomRTMSCapture(AudioCapture):
         self._config = config
         self._running = False
         self._queue: asyncio.Queue[bytes] = asyncio.Queue()
-        self._client: rtms.Client | None = None
+        self._client: "rtms.Client | None" = None
         self._loop: asyncio.AbstractEventLoop | None = None
 
     async def start(self) -> None:
         """Start capturing audio from Zoom meeting."""
+        import rtms
+
         self._running = True
         self._loop = asyncio.get_running_loop()
 

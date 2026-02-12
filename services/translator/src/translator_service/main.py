@@ -1,25 +1,9 @@
-"""Translation microservice entrypoint.
-
-CHANGE LOG (2026-02-04):
-========================
-MODIFIED - Integrated parallel queue manager to fix lag accumulation.
-
-Changes made:
-1. Added imports for queue_manager (TranslationQueueManager, etc.)
-2. Added queue config to TranslationServiceConfig (num_workers, max_queue_size, etc.)
-3. Added environment variable parsing for TRANSLATION_WORKERS, etc.
-4. Modified lifespan to initialize queue_manager with worker pool
-5. Modified /translate endpoint to enqueue requests instead of direct processing
-6. Added CORS middleware for browser access to /stats endpoint
-7. Added /stats endpoint for monitoring queue status
-
-Before: Each translation request processed sequentially (blocked others)
-After: Requests enqueued, 6 workers process in parallel from shared queue
-"""
+"""Translation microservice entrypoint."""
 
 from __future__ import annotations
 
 import asyncio
+
 import logging
 import os
 import time
@@ -31,15 +15,16 @@ from typing import Any
 import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from pydantic import BaseModel, Field
 
-from translator_service.fast_translator import FastTranslator
+from translator_service.llm_translator import LLMTranslator
+from translator_service.zoom_caption import ZoomCaptionClient
 from translator_service.queue_manager import (
     TranslationQueueConfig,
     TranslationQueueManager,
     TranslationRequest,
 )
-from translator_service.zoom_caption import ZoomCaptionClient
 
 logger = logging.getLogger(__name__)
 
@@ -190,8 +175,7 @@ async def lifespan(app: FastAPI):
         config.gemini_model if config.llm_provider == "gemini" else config.openai_model
     )
 
-    # Initialize FastTranslator (replaces LangChain-based translator)
-    translator = FastTranslator(
+    translator = LLMTranslator(
         provider=config.llm_provider,  # type: ignore[arg-type]
         api_key=api_key or "",
         model=model,
@@ -199,10 +183,10 @@ async def lifespan(app: FastAPI):
         target_language=config.target_language,
         dictionary_path=config.dictionary_path,
     )
-    await translator.prepare()  # Pre-warm Gemini context cache
+    await translator.prepare()
 
     http_client = httpx.AsyncClient(timeout=config.http_timeout)
-
+    
     # Initialize Zoom caption client if URL is configured
     zoom_caption: ZoomCaptionClient | None = None
     if config.zoom_caption_url:
@@ -214,7 +198,7 @@ async def lifespan(app: FastAPI):
         await zoom_caption.sync_seq()
         logger.info("Zoom caption client initialized")
 
-    # NEW 2026-02-04: Create translation function for queue workers
+    # Create translation function for queue workers
     # This function is called by each worker when processing a request
     async def do_translate(
         text: str,
@@ -223,7 +207,7 @@ async def lifespan(app: FastAPI):
         ts: float,
         session_id: str | None,
     ) -> None:
-        # Perform actual translation via FastTranslator
+        # Perform actual translation via LLMTranslator
         output = await translator.translate(
             text,
             context_lines=context,
@@ -250,7 +234,7 @@ async def lifespan(app: FastAPI):
     async def do_summarize(texts: list[str]) -> str:
         return await translator.summarize_texts(texts)
 
-    # NEW 2026-02-04: Initialize queue manager with parallel workers
+    # Initialize queue manager with parallel workers
     # This is the key change that prevents lag accumulation
     queue_config = TranslationQueueConfig(
         num_workers=config.num_workers,       # Default: 6 workers
@@ -280,7 +264,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# NEW 2026-02-04: Add CORS for browser access to /stats endpoint
+# Add CORS for browser access to /stats endpoint
 # Needed because captions.html fetches stats from different origin
 app.add_middleware(
     CORSMiddleware,
@@ -301,7 +285,6 @@ async def _publish_translation(
     url: str,
     payload: dict[str, Any],
 ) -> None:
-    """Publish translation result to WebSocket service for broadcast."""
     try:
         await http_client.post(url, json=payload)
     except Exception:  # noqa: BLE001
@@ -312,7 +295,7 @@ async def _publish_translation(
 async def translate(request: TranslateRequest) -> TranslateResponse:
     """Main translation endpoint - enqueues request for parallel processing.
     
-    MODIFIED 2026-02-04: Changed from direct processing to queue-based.
+    Changed from direct processing to queue-based.
     
     Before: await translator.translate(request.text) - blocked other requests
     After:  await queue_manager.enqueue(request) - returns immediately, 
@@ -353,7 +336,6 @@ async def translate_sync(request: TranslateRequest) -> TranslateResponse:
     http_client: httpx.AsyncClient = app.state.http_client
     zoom_caption: ZoomCaptionClient | None = app.state.zoom_caption
 
-    # Direct translation (blocks until complete)
     output = await translator.translate(
         request.text,
         context_lines=request.context,
@@ -371,13 +353,13 @@ async def translate_sync(request: TranslateRequest) -> TranslateResponse:
         "session_id": request.session_id,
     }
     await _publish_translation(http_client, config.ws_publish_url, payload)
-
+    
     # Send caption to Zoom if configured and this is a final result
     if zoom_caption and request.is_final:
         await zoom_caption.send_caption(output.latest_slide)
 
     return TranslateResponse(
-        translated=output.latest_slide,  # Actual result (not placeholder)
+        translated=output.latest_slide,
         kept_terms=output.kept_terms,
         is_final=request.is_final,
         ts=ts,
