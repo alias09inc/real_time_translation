@@ -37,7 +37,7 @@ async def test_accuracy(audio_path: str) -> None:
     llm_provider = os.getenv("LLM_PROVIDER", "gemini")
     if llm_provider == "gemini":
         api_key = os.getenv("GOOGLE_API_KEY")
-        model = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+        model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
     else:
         api_key = os.getenv("OPENAI_API_KEY")
         model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")

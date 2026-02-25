@@ -364,6 +364,6 @@ With 6 parallel workers, the system has ~50 sentences/min surplus capacity.
 | `TRANSLATION_WORKERS` | 6 | Number of parallel translation workers |
 | `TRANSLATION_QUEUE_SIZE` | 50 | Max queue size before dropping |
 | `LAG_THRESHOLD_SECONDS` | 3.0 | Skip/summarize requests older than this |
-| `GEMINI_MODEL` | gemini-2.0-flash | Gemini model to use |
+| `GEMINI_MODEL` | gemini-2.5-flash | Gemini model to use |
 | `DEEPGRAM_ENDPOINTING` | 300 | Silence detection threshold (ms) |
 | `DEEPGRAM_UTTERANCE_END_MS` | 800 | Silence for utterance end (ms) |

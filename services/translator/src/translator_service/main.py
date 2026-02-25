@@ -64,7 +64,7 @@ class TranslationServiceConfig:
             llm_provider=llm_provider,
             google_api_key=google_api_key,
             openai_api_key=openai_api_key,
-            gemini_model=os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
+            gemini_model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
             openai_model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             source_language=os.getenv("SOURCE_LANGUAGE", "en"),
             target_language=os.getenv("TARGET_LANGUAGE", "ja"),

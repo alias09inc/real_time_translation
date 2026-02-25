@@ -204,8 +204,8 @@ class DeepgramTranscriber:
                 idle_time = time.monotonic() - self._last_audio_at
                 if idle_time < self._keepalive_interval:
                     continue
-                await self._connection.send_keep_alive(
-                    ListenV1KeepAlive(type="KeepAlive")
+                await self._connection.send_control(
+                    ListenV1ControlMessage(type="KeepAlive")
                 )
         except asyncio.CancelledError:
             pass

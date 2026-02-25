@@ -32,8 +32,8 @@ services:
       - WS_PUBLISH_URL=http://ws:8000/publish
       - ZOOM_CAPTION_URL=${ZOOM_CAPTION_URL:-}
       - ZOOM_CAPTION_LANG=${ZOOM_CAPTION_LANG:-}
-      # Use fast production model - gemini-2.0-flash has better TTFT
-      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash}
+      # Use fast production model - gemini-2.5-flash has better TTFT
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.5-flash}
       # -----------------------------------------------------------------
       # NEW 2026-02-04: Parallel queue settings to prevent lag accumulation
       # -----------------------------------------------------------------

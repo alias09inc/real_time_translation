@@ -33,7 +33,7 @@ class Config:
 
     # Gemini
     google_api_key: str | None = None
-    gemini_model: str = "gemini-2.0-flash"
+    gemini_model: str = "gemini-2.5-flash"
 
     # OpenAI
     openai_api_key: str | None = None
@@ -130,7 +130,7 @@ class Config:
             zoom_webhook_port=int(os.getenv("ZOOM_WEBHOOK_PORT", "8080")),
             zoom_webhook_path=os.getenv("ZOOM_WEBHOOK_PATH", "/webhook"),
             google_api_key=google_api_key,
-            gemini_model=os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
+            gemini_model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
             openai_api_key=openai_api_key,
             openai_model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             source_language=os.getenv("SOURCE_LANGUAGE", "en"),
