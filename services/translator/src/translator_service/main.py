@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from pydantic import BaseModel, Field
 
-from translator_service.llm_translator import LLMTranslator
+from translator_service.fast_translator import FastTranslator
 from translator_service.zoom_caption import ZoomCaptionClient
 from translator_service.queue_manager import (
     TranslationQueueConfig,
@@ -175,7 +175,7 @@ async def lifespan(app: FastAPI):
         config.gemini_model if config.llm_provider == "gemini" else config.openai_model
     )
 
-    translator = LLMTranslator(
+    translator = FastTranslator(
         provider=config.llm_provider,  # type: ignore[arg-type]
         api_key=api_key or "",
         model=model,
@@ -331,7 +331,7 @@ async def translate_sync(request: TranslateRequest) -> TranslateResponse:
     Unlike /translate, this waits for translation to complete and returns result.
     Use for testing or when you need the result directly.
     """
-    translator: FastTranslator = app.state.translator
+    translator: FastTranslator = app.state.translator  # type: ignore[assignment]
     config: TranslationServiceConfig = app.state.config
     http_client: httpx.AsyncClient = app.state.http_client
     zoom_caption: ZoomCaptionClient | None = app.state.zoom_caption
