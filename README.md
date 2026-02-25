@@ -165,7 +165,7 @@ Zoomを使わずにローカルマイクから字幕を表示するテスト方�
 
 #### 必要なもの
 - ffmpeg（ホストマシンにインストール）
-- Dockerが起動していること
+- Dockerが起動していること (docker compose build)
 
 #### 手順
 
@@ -190,7 +190,6 @@ Zoomを使わずにローカルマイクから字幕を表示するテスト方�
 
 3. **字幕ページを開く**
    ```bash
-   # ブラウザで開く
    open scripts/captions.html        # macOS
    xdg-open scripts/captions.html    # Linux
    start scripts/captions.html       # Windows
