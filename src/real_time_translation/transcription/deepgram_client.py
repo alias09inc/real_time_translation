@@ -8,9 +8,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from deepgram import AsyncDeepgramClient
-from deepgram.listen.v1.types import ListenV1KeepAlive
-
-
+from deepgram.extensions.types.sockets.listen_v1_control_message import ListenV1ControlMessage
 @dataclass
 class TranscriptionResult:
     """Result from transcription service."""
