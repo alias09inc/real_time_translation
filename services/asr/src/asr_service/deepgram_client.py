@@ -36,7 +36,7 @@ class DeepgramTranscriber:
         self,
         api_key: str,
         language: str = "en",
-        model: str = "nova-2-general",
+        model: str = "nova-3-general",
         punctuate: bool = True,
         smart_format: bool = True,
         interim_results: bool = True,
@@ -220,7 +220,7 @@ class DeepgramTranscriber:
         last_word_end = getattr(result, "last_word_end", None)
         end_time = (
             float(last_word_end)
-            if isinstance(last_word_end, (int, float))
+            if isinstance(last_word_end, int | float)
             else pending.end_time
         )
         final_result = TranscriptionResult(
