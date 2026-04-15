@@ -1,0 +1,4 @@
+date,experiment_name,domain,url,start_seconds,end_seconds,deepgram_model,llm_provider,llm_model,segment_count,avg_confidence,chrf_score,xcomet_score,notes,json_path
+2026-04-01,youtube_10m_to_20m,,https://www.youtube.com/watch?v=JycsHP-sGmw,600.000,1200.000,nova-3-general,gemini,gemini-3-flash-preview,61,0.9479,,,,experiments/20260401_youtube_10m_to_20m.json
+2026-04-01,youtube_10m_to_20m,,https://www.youtube.com/watch?v=JycsHP-sGmw,600.000,1200.000,nova-3-general,gemini,gemini-3.1-pro-preview,60,0.9421,,,,experiments/20260401_youtube_10m_to_20m.json
+2026-04-15,youtube_10m_to_12m,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,720.000,nova-3-general,gemini,gemini-3.1-pro-preview,16,0.9991,,,,experiments/20260415_youtube_10m_to_12m.json

@@ -246,6 +246,21 @@ uv run ruff format .
 uv run ruff check .
 ```
 
+### 実験記録（YouTube指定区間）
+
+YouTubeの指定区間を入力として、**確定(=final)のASR + 翻訳**を
+`experiments/*.json` と `experiments/results.csv` に保存するランナーがあります。
+
+```bash
+uv sync --extra experiments
+
+# デフォルト: 10:00–20:00
+uv run real-time-translation-exp-youtube \
+   --url "https://www.youtube.com/watch?v=JycsHP-sGmw" \
+   --start 10:00 --end 20:00 \
+   --name youtube_10m_to_20m
+```
+
 ## プロジェクト構造
 
 ```

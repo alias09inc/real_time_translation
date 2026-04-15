@@ -23,6 +23,8 @@ class TranslationResult:
     translated_text: str
     is_final: bool
     confidence: float
+    start_time: float | None = None
+    end_time: float | None = None
     kept_terms: list[str] = field(default_factory=list)
     slide_window: list[str] = field(default_factory=list)
 
@@ -197,6 +199,8 @@ class TranslationPipeline:
                             translated_text="",
                             is_final=False,
                             confidence=result.confidence,
+                            start_time=result.start_time,
+                            end_time=result.end_time,
                         )
                         self._on_result(interim_result)
                     continue
@@ -230,6 +234,8 @@ class TranslationPipeline:
                     translated_text=output.latest_slide,
                     is_final=queued.original.is_final,
                     confidence=queued.original.confidence,
+                    start_time=queued.original.start_time,
+                    end_time=queued.original.end_time,
                     kept_terms=output.kept_terms,
                     slide_window=output.slide_window,
                 )

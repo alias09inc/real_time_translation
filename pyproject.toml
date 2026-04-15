@@ -25,10 +25,12 @@ rtms = { index = "testpypi" }
 [project.optional-dependencies]
 zoom = ["rtms>=0.0.2"]
 dev = ["pytest>=8.0.0", "pytest-asyncio>=0.24.0", "ruff>=0.8.0"]
+experiments = ["sacrebleu>=2.4.0", "yt-dlp>=2024.1.0"]
 
 [project.scripts]
 real-time-translation = "real_time_translation.main:main"
 real-time-translation-demo = "real_time_translation.gradio_demo:main"
+real-time-translation-exp-youtube = "real_time_translation.experiments.youtube_segment:main"
 
 [build-system]
 requires = ["hatchling"]

@@ -58,6 +58,7 @@ services:
       - WS_PUBLISH_URL=http://ws:8000/publish
       - TRANSLATION_API_URL=http://gemini:8000/translate
       - DICTIONARY_PATH=/app/dictionary.csv
+      - DEEPGRAM_VAD_EVENTS=${DEEPGRAM_VAD_EVENTS:-true}
     volumes:
       - ./dictionary.csv:/app/dictionary.csv:ro
     depends_on:

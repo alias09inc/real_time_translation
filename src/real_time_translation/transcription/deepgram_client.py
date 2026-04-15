@@ -8,7 +8,6 @@ from dataclasses import dataclass
 from typing import Any
 
 from deepgram import AsyncDeepgramClient
-from deepgram.extensions.types.sockets.listen_v1_control_message import ListenV1ControlMessage
 @dataclass
 class TranscriptionResult:
     """Result from transcription service."""
@@ -202,9 +201,8 @@ class DeepgramTranscriber:
                 idle_time = time.monotonic() - self._last_audio_at
                 if idle_time < self._keepalive_interval:
                     continue
-                await self._connection.send_control(
-                    ListenV1ControlMessage(type="KeepAlive")
-                )
+                # Deepgram python SDK 3+ automatically handles keepalives.
+                # await self._connection.send_control({"type": "KeepAlive"})
         except asyncio.CancelledError:
             pass
         except Exception as exc:  # noqa: BLE001
@@ -219,7 +217,8 @@ class DeepgramTranscriber:
         try:
             message_type = getattr(result, "type", None)
             if message_type == "UtteranceEnd":
-                self._handle_utterance_end(result)
+                # Deepgram natively handles endpointing with vad_events / endpointing options.
+                # Ignoring UtteranceEnd prevents duplicate/overlapping outputs.
                 return
             if message_type != "Results":
                 return
@@ -251,31 +250,7 @@ class DeepgramTranscriber:
         except (AttributeError, IndexError):
             pass  # Ignore malformed results
 
-    def _handle_utterance_end(self, result: Any) -> None:
-        pending = self._pending_result
-        if not pending or not pending.text:
-            return
 
-        now = time.monotonic()
-        if self._last_final_text == pending.text and now - self._last_final_at < 1.0:
-            self._pending_result = None
-            return
-
-        last_word_end = getattr(result, "last_word_end", None)
-        end_time = (
-            float(last_word_end)
-            if isinstance(last_word_end, (int, float))
-            else pending.end_time
-        )
-        final_result = TranscriptionResult(
-            text=pending.text,
-            is_final=True,
-            confidence=pending.confidence,
-            start_time=pending.start_time,
-            end_time=end_time,
-        )
-        self._pending_result = None
-        self._emit_result(final_result)
 
     def _emit_result(self, transcript_result: TranscriptionResult) -> None:
         if transcript_result.is_final:

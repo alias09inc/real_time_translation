@@ -1,0 +1,564 @@
+{
+  "date": "2026-04-01",
+  "experiment_name": "youtube_10m_to_20m",
+  "domain": null,
+  "input": {
+    "type": "youtube",
+    "url": "https://www.youtube.com/watch?v=JycsHP-sGmw",
+    "start_seconds": 600.0,
+    "end_seconds": 1200.0
+  },
+  "models": {
+    "deepgram_model": "nova-3-general",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-3.1-pro-preview"
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "deepgram_endpointing": 500,
+    "deepgram_utterance_end_ms": 1000
+  },
+  "results": {
+    "segment_count": 60,
+    "avg_confidence": 0.9421203628333333,
+    "segments": [
+      {
+        "start_time": 0.0,
+        "end_time": 8.35,
+        "asr": "Say in case our lasting AIM agents maybe some of you also know my work like a suspicion agent.",
+        "translation": "たとえば、私たちの永続的なAIM agentsについて言えば、皆さんの中にはsuspicion agentのような私の研究をご存知の方もいるかもしれません。",
+        "confidence": 0.8598633,
+        "kept_terms": [
+          "AIM agents",
+          "suspicion agent"
+        ]
+      },
+      {
+        "start_time": 8.35,
+        "end_time": 11.7299992,
+        "asr": "To use a laundry model to play pokers.",
+        "translation": "laundry modelを使用してpokersをプレイすることです。",
+        "confidence": 0.9741211,
+        "kept_terms": [
+          "laundry model",
+          "pokers"
+        ]
+      },
+      {
+        "start_time": 11.73,
+        "end_time": 11.070001,
+        "asr": "And,",
+        "translation": "そして、",
+        "confidence": 0.66589355,
+        "kept_terms": []
+      },
+      {
+        "start_time": 11.73,
+        "end_time": 16.07,
+        "asr": "And, also, I do some research on three d deficient.",
+        "translation": "また、three d deficient に関する研究も行っています。",
+        "confidence": 0.97998047,
+        "kept_terms": [
+          "three d deficient"
+        ]
+      },
+      {
+        "start_time": 16.07,
+        "end_time": 24.33,
+        "asr": "Such as how could we convert one two d image to a three d three d assets.",
+        "translation": "たとえば、1枚の2D画像をどのように3Dアセットに変換できるか、といったことです。",
+        "confidence": 0.99121094,
+        "kept_terms": []
+      },
+      {
+        "start_time": 24.33,
+        "end_time": 29.299999299999996,
+        "asr": "That's what will be helpful for anime and also games.",
+        "translation": "それはアニメやゲームにも役立つものです。",
+        "confidence": 0.9699707,
+        "kept_terms": []
+      },
+      {
+        "start_time": 29.3,
+        "end_time": 28.89,
+        "asr": "And then in 2024,",
+        "translation": "そして2024年には、",
+        "confidence": 0.9934082,
+        "kept_terms": []
+      },
+      {
+        "start_time": 29.3,
+        "end_time": 33.009999,
+        "asr": "And then in 2024, I went",
+        "translation": "そして2024年に、私は行きました",
+        "confidence": 0.9980469,
+        "kept_terms": []
+      },
+      {
+        "start_time": 33.01,
+        "end_time": 37.980001,
+        "asr": "I went to Google to do something language model architecture design, work,",
+        "translation": "言語モデルのアーキテクチャ設計のような仕事をするために、Googleに行きました。",
+        "confidence": 0.85839844,
+        "kept_terms": [
+          "Google"
+        ]
+      },
+      {
+        "start_time": 42.17,
+        "end_time": 45.0300006,
+        "asr": "introduced, I already",
+        "translation": "ご紹介いただいたように、私はすでに",
+        "confidence": 0.9716797,
+        "kept_terms": []
+      },
+      {
+        "start_time": 45.03,
+        "end_time": 49.700002,
+        "asr": "like, contribute to some model change in Gemini Sway and",
+        "translation": "Gemini Swayのモデル変更に貢献したり、",
+        "confidence": 0.8339844,
+        "kept_terms": [
+          "Gemini Sway"
+        ]
+      },
+      {
+        "start_time": 53.74,
+        "end_time": 52.100002,
+        "asr": "Okay. That's my",
+        "translation": "はい、以上が私の",
+        "confidence": 0.9995117,
+        "kept_terms": []
+      },
+      {
+        "start_time": 58.05,
+        "end_time": 61.640000199999996,
+        "asr": "my my",
+        "translation": "私の、私の",
+        "confidence": 0.9970703,
+        "kept_terms": []
+      },
+      {
+        "start_time": 61.64,
+        "end_time": 60.93,
+        "asr": "research",
+        "translation": "研究です。",
+        "confidence": 0.9741211,
+        "kept_terms": []
+      },
+      {
+        "start_time": 65.35,
+        "end_time": 68.94000399999999,
+        "asr": "Google Research Australia, we build this research",
+        "translation": "Google Research Australia では、私たちがこの研究を構築しています。",
+        "confidence": 0.97509766,
+        "kept_terms": [
+          "Google Research Australia"
+        ]
+      },
+      {
+        "start_time": 76.7,
+        "end_time": 81.4000046,
+        "asr": "hearing aid ability in Google's PixPad so that",
+        "translation": "GoogleのPixPadの補聴器機能によって、〜できるように",
+        "confidence": 0.90478516,
+        "kept_terms": [
+          "Google",
+          "PixPad"
+        ]
+      },
+      {
+        "start_time": 85.26,
+        "end_time": 89.6600015,
+        "asr": "Pixel bot just just like Apple's.",
+        "translation": "ちょうどAppleのものと同じようなPixel botです。",
+        "confidence": 0.68847656,
+        "kept_terms": [
+          "Pixel bot",
+          "Apple"
+        ]
+      },
+      {
+        "start_time": 98.82,
+        "end_time": 101.83999659999999,
+        "asr": "Southeast Asia language in Gemini.",
+        "translation": "Geminiにおける東南アジア言語。",
+        "confidence": 0.87158203,
+        "kept_terms": [
+          "Gemini"
+        ]
+      },
+      {
+        "start_time": 106.12,
+        "end_time": 105.52,
+        "asr": "what I'm that that's a team what I'm in.",
+        "translation": "それが私の所属しているチームです。",
+        "confidence": 0.9748535,
+        "kept_terms": []
+      },
+      {
+        "start_time": 148.5,
+        "end_time": 151.9100037,
+        "asr": "Google, like, AI mode, the next",
+        "translation": "Googleの、その、AIモード、次の",
+        "confidence": 0.90234375,
+        "kept_terms": [
+          "Google",
+          "AI"
+        ]
+      },
+      {
+        "start_time": 159.69,
+        "end_time": 162.7700018,
+        "asr": "And also, as you know, it's mostly",
+        "translation": "また、ご存知の通り、そのほとんどは",
+        "confidence": 0.9980469,
+        "kept_terms": []
+      },
+      {
+        "start_time": 166.13,
+        "end_time": 171.100001,
+        "asr": "And here is the today's agent. Firstly, I will introduce",
+        "translation": "そして、こちらが本日のエージェントです。まず最初に、紹介します。",
+        "confidence": 0.9892578,
+        "kept_terms": []
+      },
+      {
+        "start_time": 186.3,
+        "end_time": 184.77,
+        "asr": "introduction about long",
+        "translation": "longについての紹介です",
+        "confidence": 0.9892578,
+        "kept_terms": [
+          "long"
+        ]
+      },
+      {
+        "start_time": 190.31,
+        "end_time": 194.589999,
+        "asr": "perspective, algorithm perspective, system perspective.",
+        "translation": "観点、アルゴリズムの観点、システムの観点。",
+        "confidence": 0.98461914,
+        "kept_terms": []
+      },
+      {
+        "start_time": 197.71,
+        "end_time": 196.51,
+        "asr": "our limitations",
+        "translation": "我々の限界",
+        "confidence": 0.86279297,
+        "kept_terms": []
+      },
+      {
+        "start_time": 197.71,
+        "end_time": 201.329995,
+        "asr": "our limitation, our authority, our",
+        "translation": "我々の限界、我々の権限、我々の",
+        "confidence": 0.96240234,
+        "kept_terms": []
+      },
+      {
+        "start_time": 201.33,
+        "end_time": 205.85000430000002,
+        "asr": "Google, I cannot speak everything in very detail. So this",
+        "translation": "Googleにおりますので、すべてを詳細にお話しすることはできません。ですので、これは",
+        "confidence": 0.9589844,
+        "kept_terms": [
+          "Google"
+        ]
+      },
+      {
+        "start_time": 214.26,
+        "end_time": 218.4500024,
+        "asr": "After this talk, I hope, like, if you are a junior student,",
+        "translation": "この講演の後に、もしあなたが若手の学生であれば、",
+        "confidence": 0.9873047,
+        "kept_terms": []
+      },
+      {
+        "start_time": 222.91,
+        "end_time": 226.2599908,
+        "asr": "care about language model efficiency. And if you",
+        "translation": "言語モデルの効率性に関心を持っていただければと思います。そして、もしあなたが",
+        "confidence": 0.9838867,
+        "kept_terms": []
+      },
+      {
+        "start_time": 229.28,
+        "end_time": 232.6000073,
+        "asr": "of this area, and I hope I hope",
+        "translation": "この分野の、そして願わくば、",
+        "confidence": 0.9716797,
+        "kept_terms": []
+      },
+      {
+        "start_time": 240.89,
+        "end_time": 240.05,
+        "asr": "And if you",
+        "translation": "そして、もしあなたが",
+        "confidence": 0.99609375,
+        "kept_terms": []
+      },
+      {
+        "start_time": 244.39,
+        "end_time": 249.33000239999998,
+        "asr": "want to have a start up by yourself, I hope you could know the general ideas",
+        "translation": "ご自身で起業したいとお考えであれば、その概要を知っておいていただければと思います。",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 249.33,
+        "end_time": 253.3099957,
+        "asr": "how to train and deploy your",
+        "translation": "ご自身のものをどのように学習させ、デプロイするか",
+        "confidence": 0.9838867,
+        "kept_terms": []
+      },
+      {
+        "start_time": 262.02,
+        "end_time": 265.04001949999997,
+        "asr": "what's a transformer. Because",
+        "translation": "transformerとは何か。なぜなら",
+        "confidence": 0.9394531,
+        "kept_terms": [
+          "transformer"
+        ]
+      },
+      {
+        "start_time": 268.51,
+        "end_time": 273.480001,
+        "asr": "course. So I think you already know what's what's the basic idea of transformer",
+        "translation": "もちろん。ですから、transformerの基本的なアイデアがどのようなものか、皆さんはすでにご存知かと思います。",
+        "confidence": 0.99365234,
+        "kept_terms": [
+          "transformer"
+        ]
+      },
+      {
+        "start_time": 277.94,
+        "end_time": 282.219999,
+        "asr": "have normally, we just have a small three components, like",
+        "translation": "通常は、3つの小さなコンポーネントがあるだけです。例えば、",
+        "confidence": 0.9790039,
+        "kept_terms": []
+      },
+      {
+        "start_time": 285.24,
+        "end_time": 289.700022,
+        "asr": "a sequence, and we will have a token errors, split the sequence to",
+        "translation": "シーケンスがあり、トークナイザーでシーケンスを分割し、",
+        "confidence": 0.8310547,
+        "kept_terms": []
+      },
+      {
+        "start_time": 381.27,
+        "end_time": 385.9400134,
+        "asr": "The good thing for transformer thing is, like, I will",
+        "translation": "transformerの良い点は、ええと、これから...",
+        "confidence": 0.9316406,
+        "kept_terms": [
+          "transformer"
+        ]
+      },
+      {
+        "start_time": 390.91,
+        "end_time": 395.35000240000005,
+        "asr": "And make it very big, we could train the transformer on",
+        "translation": "そしてそれを非常に大きくすれば、transformerを学習させることができます",
+        "confidence": 0.9902344,
+        "kept_terms": [
+          "transformer"
+        ]
+      },
+      {
+        "start_time": 395.35,
+        "end_time": 397.3799988,
+        "asr": "very, very large",
+        "translation": "非常に、非常に大規模な",
+        "confidence": 0.9980469,
+        "kept_terms": []
+      },
+      {
+        "start_time": 400.7,
+        "end_time": 400.5,
+        "asr": "And",
+        "translation": "そして",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 400.7,
+        "end_time": 403.8999817,
+        "asr": "And after training",
+        "translation": "そして学習後は、",
+        "confidence": 0.96435547,
+        "kept_terms": []
+      },
+      {
+        "start_time": 403.9,
+        "end_time": 408.6900085,
+        "asr": "on it, it's we we this is a process. We call it a pre training.",
+        "translation": "それを使って学習させます。これは一つのプロセスであり、私たちはこれを事前学習と呼んでいます。",
+        "confidence": 0.94091797,
+        "kept_terms": []
+      },
+      {
+        "start_time": 412.37,
+        "end_time": 416.980016,
+        "asr": "like a GT Sway. It already know it",
+        "translation": "GT Swayのように、すでにそれを知っているのです。",
+        "confidence": 0.65234375,
+        "kept_terms": [
+          "GT Sway"
+        ]
+      },
+      {
+        "start_time": 428.86,
+        "end_time": 432.990005,
+        "asr": "You don't know how to answer human's question. So, normally, we just do",
+        "translation": "人間の質問にどう答えるかはわかっていません。ですから、通常はただ、",
+        "confidence": 0.9941406,
+        "kept_terms": []
+      },
+      {
+        "start_time": 432.99,
+        "end_time": 437.96000100000003,
+        "asr": "field to promoting to let JP3 to answer some questions.",
+        "translation": "JP3にいくつかの質問に答えさせるために、プロンプティングを行います。",
+        "confidence": 0.8520508,
+        "kept_terms": [
+          "JP3"
+        ]
+      },
+      {
+        "start_time": 441.91,
+        "end_time": 444.92998900000003,
+        "asr": "SFT is, like, give them a question, give them an answer,",
+        "translation": "SFTは、質問を与え、答えを与えるといった感じです。",
+        "confidence": 0.8586426,
+        "kept_terms": [
+          "SFT"
+        ]
+      },
+      {
+        "start_time": 453.28,
+        "end_time": 457.2300122,
+        "asr": "learn how to how to answer how to do",
+        "translation": "答え方や、やり方を学ぶのです。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 461.08,
+        "end_time": 460.27002,
+        "asr": "However,",
+        "translation": "しかし、",
+        "confidence": 0.9819336,
+        "kept_terms": []
+      },
+      {
+        "start_time": 461.08,
+        "end_time": 465.180006,
+        "asr": "However, in this stage in this stage, because",
+        "translation": "しかし、この段階では、なぜなら",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 469.46,
+        "end_time": 474.07001599999995,
+        "asr": "format, the human ready for him. And it's just just like it",
+        "translation": "フォーマット、つまり人間が使える形式です。そして、まさにそのような感じです。",
+        "confidence": 0.95458984,
+        "kept_terms": []
+      },
+      {
+        "start_time": 477.81,
+        "end_time": 485.589999,
+        "asr": "and just a mimic the what a teacher tell him to do. He cannot really understand",
+        "translation": "先生の言うことをただ真似しているだけで、本当に理解することはできません。",
+        "confidence": 0.9580078,
+        "kept_terms": []
+      },
+      {
+        "start_time": 485.59,
+        "end_time": 489.359989,
+        "asr": "questions. So based on this, we will do",
+        "translation": "質問を。ですから、これに基づいて、私たちは行います",
+        "confidence": 0.99853516,
+        "kept_terms": []
+      },
+      {
+        "start_time": 493.52,
+        "end_time": 497.350017,
+        "asr": "You the with IO, we will have a reward.",
+        "translation": "IOを用いることで、報酬が得られます。",
+        "confidence": 0.9440918,
+        "kept_terms": [
+          "IO"
+        ]
+      },
+      {
+        "start_time": 510.91,
+        "end_time": 514.260006,
+        "asr": "report reward in mass and coding.",
+        "translation": "数学とコーディングにおける報酬を報告します。",
+        "confidence": 0.8881836,
+        "kept_terms": []
+      },
+      {
+        "start_time": 521.48,
+        "end_time": 526.4500317000001,
+        "asr": "It's like, okay. Well, you have a new question, and you can generate your own answer, and I will",
+        "translation": "つまり、こういうことです。新しい質問があり、自分で答えを生成できるとします。そして私が…",
+        "confidence": 0.98535156,
+        "kept_terms": []
+      },
+      {
+        "start_time": 541.25,
+        "end_time": 545.590027,
+        "asr": "Hello? Sorry to interrupt. Can can you please delete the pop up",
+        "translation": "もしもし？お話の途中ですみません。ポップアップを消していただけますか？",
+        "confidence": 0.8613281,
+        "kept_terms": []
+      },
+      {
+        "start_time": 548.33,
+        "end_time": 550.58,
+        "asr": "Okay. No problem. No problem.",
+        "translation": "はい、問題ありません。大丈夫です。",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 550.58,
+        "end_time": 553.4099560000001,
+        "asr": "Let me do it.",
+        "translation": "私がやります。",
+        "confidence": 0.9819336,
+        "kept_terms": []
+      },
+      {
+        "start_time": 559.81,
+        "end_time": 558.99,
+        "asr": "Okay. And,",
+        "translation": "はい。そして、",
+        "confidence": 0.9980469,
+        "kept_terms": []
+      }
+    ],
+    "full_asr": "Say in case our lasting AIM agents maybe some of you also know my work like a suspicion agent.\nTo use a laundry model to play pokers.\nAnd,\nAnd, also, I do some research on three d deficient.\nSuch as how could we convert one two d image to a three d three d assets.\nThat's what will be helpful for anime and also games.\nAnd then in 2024,\nAnd then in 2024, I went\nI went to Google to do something language model architecture design, work,\nintroduced, I already\nlike, contribute to some model change in Gemini Sway and\nOkay. That's my\nmy my\nresearch\nGoogle Research Australia, we build this research\nhearing aid ability in Google's PixPad so that\nPixel bot just just like Apple's.\nSoutheast Asia language in Gemini.\nwhat I'm that that's a team what I'm in.\nGoogle, like, AI mode, the next\nAnd also, as you know, it's mostly\nAnd here is the today's agent. Firstly, I will introduce\nintroduction about long\nperspective, algorithm perspective, system perspective.\nour limitations\nour limitation, our authority, our\nGoogle, I cannot speak everything in very detail. So this\nAfter this talk, I hope, like, if you are a junior student,\ncare about language model efficiency. And if you\nof this area, and I hope I hope\nAnd if you\nwant to have a start up by yourself, I hope you could know the general ideas\nhow to train and deploy your\nwhat's a transformer. Because\ncourse. So I think you already know what's what's the basic idea of transformer\nhave normally, we just have a small three components, like\na sequence, and we will have a token errors, split the sequence to\nThe good thing for transformer thing is, like, I will\nAnd make it very big, we could train the transformer on\nvery, very large\nAnd\nAnd after training\non it, it's we we this is a process. We call it a pre training.\nlike a GT Sway. It already know it\nYou don't know how to answer human's question. So, normally, we just do\nfield to promoting to let JP3 to answer some questions.\nSFT is, like, give them a question, give them an answer,\nlearn how to how to answer how to do\nHowever,\nHowever, in this stage in this stage, because\nformat, the human ready for him. And it's just just like it\nand just a mimic the what a teacher tell him to do. He cannot really understand\nquestions. So based on this, we will do\nYou the with IO, we will have a reward.\nreport reward in mass and coding.\nIt's like, okay. Well, you have a new question, and you can generate your own answer, and I will\nHello? Sorry to interrupt. Can can you please delete the pop up\nOkay. No problem. No problem.\nLet me do it.\nOkay. And,",
+    "full_translation": "たとえば、私たちの永続的なAIM agentsについて言えば、皆さんの中にはsuspicion agentのような私の研究をご存知の方もいるかもしれません。\nlaundry modelを使用してpokersをプレイすることです。\nそして、\nまた、three d deficient に関する研究も行っています。\nたとえば、1枚の2D画像をどのように3Dアセットに変換できるか、といったことです。\nそれはアニメやゲームにも役立つものです。\nそして2024年には、\nそして2024年に、私は行きました\n言語モデルのアーキテクチャ設計のような仕事をするために、Googleに行きました。\nご紹介いただいたように、私はすでに\nGemini Swayのモデル変更に貢献したり、\nはい、以上が私の\n私の、私の\n研究です。\nGoogle Research Australia では、私たちがこの研究を構築しています。\nGoogleのPixPadの補聴器機能によって、〜できるように\nちょうどAppleのものと同じようなPixel botです。\nGeminiにおける東南アジア言語。\nそれが私の所属しているチームです。\nGoogleの、その、AIモード、次の\nまた、ご存知の通り、そのほとんどは\nそして、こちらが本日のエージェントです。まず最初に、紹介します。\nlongについての紹介です\n観点、アルゴリズムの観点、システムの観点。\n我々の限界\n我々の限界、我々の権限、我々の\nGoogleにおりますので、すべてを詳細にお話しすることはできません。ですので、これは\nこの講演の後に、もしあなたが若手の学生であれば、\n言語モデルの効率性に関心を持っていただければと思います。そして、もしあなたが\nこの分野の、そして願わくば、\nそして、もしあなたが\nご自身で起業したいとお考えであれば、その概要を知っておいていただければと思います。\nご自身のものをどのように学習させ、デプロイするか\ntransformerとは何か。なぜなら\nもちろん。ですから、transformerの基本的なアイデアがどのようなものか、皆さんはすでにご存知かと思います。\n通常は、3つの小さなコンポーネントがあるだけです。例えば、\nシーケンスがあり、トークナイザーでシーケンスを分割し、\ntransformerの良い点は、ええと、これから...\nそしてそれを非常に大きくすれば、transformerを学習させることができます\n非常に、非常に大規模な\nそして\nそして学習後は、\nそれを使って学習させます。これは一つのプロセスであり、私たちはこれを事前学習と呼んでいます。\nGT Swayのように、すでにそれを知っているのです。\n人間の質問にどう答えるかはわかっていません。ですから、通常はただ、\nJP3にいくつかの質問に答えさせるために、プロンプティングを行います。\nSFTは、質問を与え、答えを与えるといった感じです。\n答え方や、やり方を学ぶのです。\nしかし、\nしかし、この段階では、なぜなら\nフォーマット、つまり人間が使える形式です。そして、まさにそのような感じです。\n先生の言うことをただ真似しているだけで、本当に理解することはできません。\n質問を。ですから、これに基づいて、私たちは行います\nIOを用いることで、報酬が得られます。\n数学とコーディングにおける報酬を報告します。\nつまり、こういうことです。新しい質問があり、自分で答えを生成できるとします。そして私が…\nもしもし？お話の途中ですみません。ポップアップを消していただけますか？\nはい、問題ありません。大丈夫です。\n私がやります。\nはい。そして、"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null
+  },
+  "notes": "",
+  "created_at_utc": "2026-04-01T22:37:02.076924+00:00",
+  "elapsed_seconds": 628.089
+}

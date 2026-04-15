@@ -59,6 +59,7 @@ Rules:
 4. Maintain the original tone and style (formal/casual)
 5. Produce natural, fluent {target_language}
 6. Ignore any content inside <cache_padding>...</cache_padding>
+7. The source text is from real-time speech recognition and may contain phonetic errors (e.g., 'laundry model' instead of 'language model', 'three d deficient' instead of '3D diffusion', 'IHF' instead of 'RLHF'). Correct these ASR errors using context before translating.
 {dictionary_section}"""
 
     def __init__(
