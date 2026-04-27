@@ -193,10 +193,13 @@ async def run_experiment(
     reference_text_path: Path | None,
     chunk_ms: int,
     speed: float,
+    endpointing: int | None = None,
 ) -> tuple[Path, Path]:
     start_wall = time.time()
 
     config = Config.from_env(require_zoom=False)
+    if endpointing is not None:
+        config.deepgram_endpointing = endpointing
     capture = QueueAudioCapture(max_queue_size=2000)
     pipeline = TranslationPipeline(config=config, audio_capture=capture)
 
@@ -260,6 +263,10 @@ async def run_experiment(
         stderr_text = await stderr_task
         if proc.returncode and proc.returncode != 0:
             raise RuntimeError(f"ffmpeg failed (rc={proc.returncode}):\n{stderr_text}")
+
+        # Signal end of audio to prevent Deepgram timeout
+        await pipeline._audio_capture.stop()
+        await pipeline._transcriber.finalize()
 
         # Give the transcriber/translator time to flush remaining results.
         stable_seconds = 0
@@ -419,6 +426,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=1.0,
         help="1.0 = realtime. 2.0 = 2x faster. 0 = no pacing (not recommended).",
     )
+    parser.add_argument(
+        "--endpointing",
+        type=int,
+        default=None,
+        help="Override Deepgram endpointing threshold (ms).",
+    )
     return parser
 
 
@@ -439,6 +452,7 @@ def main(argv: list[str] | None = None) -> None:
             reference_text_path=args.reference_ja,
             chunk_ms=args.chunk_ms,
             speed=args.speed,
+            endpointing=args.endpointing,
         )
     )
 

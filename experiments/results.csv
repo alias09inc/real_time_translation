@@ -2,3 +2,15 @@ date,experiment_name,domain,url,start_seconds,end_seconds,deepgram_model,llm_pro
 2026-04-01,youtube_10m_to_20m,,https://www.youtube.com/watch?v=JycsHP-sGmw,600.000,1200.000,nova-3-general,gemini,gemini-3-flash-preview,61,0.9479,,,,experiments/20260401_youtube_10m_to_20m.json
 2026-04-01,youtube_10m_to_20m,,https://www.youtube.com/watch?v=JycsHP-sGmw,600.000,1200.000,nova-3-general,gemini,gemini-3.1-pro-preview,60,0.9421,,,,experiments/20260401_youtube_10m_to_20m.json
 2026-04-15,youtube_10m_to_12m,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,720.000,nova-3-general,gemini,gemini-3.1-pro-preview,16,0.9991,,,,experiments/20260415_youtube_10m_to_12m.json
+2026-04-15,youtube_10m_to_12m_fixed,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,720.000,nova-3-general,gemini,gemini-3.1-pro-preview,19,0.9994,,,,experiments/20260415_youtube_10m_to_12m_fixed.json
+2026-04-15,ep_sweep_300ms,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,630.000,nova-3-general,gemini,gemini-3.1-pro-preview,3,0.9987,,,,experiments/20260415_ep_sweep_300ms.json
+2026-04-15,ep_sweep_500ms,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,630.000,nova-3-general,gemini,gemini-3.1-pro-preview,3,0.9987,,,,experiments/20260415_ep_sweep_500ms.json
+2026-04-15,ep_sweep_800ms,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,630.000,nova-3-general,gemini,gemini-3.1-pro-preview,6,0.9992,,,,experiments/20260415_ep_sweep_800ms.json
+2026-04-15,ep_sweep_1200ms,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,630.000,nova-3-general,gemini,gemini-3.1-pro-preview,6,0.9992,,,,experiments/20260415_ep_sweep_1200ms.json
+2026-04-15,ep_sweep_1500ms,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,630.000,nova-3-general,gemini,gemini-3.1-pro-preview,6,0.9992,,,,experiments/20260415_ep_sweep_1500ms.json
+2026-04-15,ep_sweep_300ms,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,630.000,nova-3-general,gemini,gemini-3.1-pro-preview,7,0.9993,,,,experiments/20260415_ep_sweep_300ms.json
+2026-04-15,ep_sweep_500ms,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,630.000,nova-3-general,gemini,gemini-3.1-pro-preview,2,0.9980,,,,experiments/20260415_ep_sweep_500ms.json
+2026-04-15,ep_sweep_800ms,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,630.000,nova-3-general,gemini,gemini-3.1-pro-preview,6,0.9992,,,,experiments/20260415_ep_sweep_800ms.json
+2026-04-15,ep_sweep_1200ms,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,630.000,nova-3-general,gemini,gemini-3.1-pro-preview,2,0.9980,,,,experiments/20260415_ep_sweep_1200ms.json
+2026-04-15,ep_sweep_1500ms,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,630.000,nova-3-general,gemini,gemini-3.1-pro-preview,5,0.9992,,,,experiments/20260415_ep_sweep_1500ms.json
+2026-04-15,youtube_10m_to_12m_new_prompt,,https://www.youtube.com/watch?v=wjZofJX0v4M,600.000,720.000,nova-3-general,gemini,gemini-3.1-pro-preview,11,0.9994,,,,experiments/20260415_youtube_10m_to_12m_new_prompt.json

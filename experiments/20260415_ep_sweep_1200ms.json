@@ -1,0 +1,55 @@
+{
+  "date": "2026-04-15",
+  "experiment_name": "ep_sweep_1200ms",
+  "domain": null,
+  "input": {
+    "type": "youtube",
+    "url": "https://www.youtube.com/watch?v=wjZofJX0v4M",
+    "start_seconds": 600.0,
+    "end_seconds": 630.0
+  },
+  "models": {
+    "deepgram_model": "nova-3-general",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-3.1-pro-preview"
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "deepgram_endpointing": 1200,
+    "deepgram_utterance_end_ms": 1000
+  },
+  "results": {
+    "segment_count": 2,
+    "avg_confidence": 0.99804687,
+    "segments": [
+      {
+        "start_time": 0.0,
+        "end_time": 4.7,
+        "asr": "Into many distinct layers where again each layer is always structured as some kind",
+        "translation": "多くの異なる層に分かれており、そこでもまた、各層は常に何らかの形で構成されています",
+        "confidence": 0.9970703,
+        "kept_terms": []
+      },
+      {
+        "start_time": 4.7,
+        "end_time": 9.0100004,
+        "asr": "of array of real numbers until you get to a final layer which you consider the output.",
+        "translation": "実数の配列として構成され、最終的に出力とみなされる最後の層へと至ります。",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      }
+    ],
+    "full_asr": "Into many distinct layers where again each layer is always structured as some kind\nof array of real numbers until you get to a final layer which you consider the output.",
+    "full_translation": "多くの異なる層に分かれており、そこでもまた、各層は常に何らかの形で構成されています\n実数の配列として構成され、最終的に出力とみなされる最後の層へと至ります。"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null
+  },
+  "notes": "",
+  "created_at_utc": "2026-04-15T20:58:51.100455+00:00",
+  "elapsed_seconds": 39.335
+}
