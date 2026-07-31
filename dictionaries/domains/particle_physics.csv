@@ -1,0 +1,62 @@
+source_term,target_term,notes
+quark,クォーク,
+lepton,レプトン,
+boson,ボゾン,
+fermion,フェルミオン,
+Higgs boson,ヒッグス粒子,
+Higgs field,ヒッグス場,
+gluon,グルーオン,
+photon,光子,
+neutrino,ニュートリノ,
+electron,電子,
+muon,ミューオン,
+tau lepton,タウ粒子,
+hadron,ハドロン,
+baryon,バリオン,
+meson,中間子,
+proton,陽子,
+neutron,中性子,
+antiparticle,反粒子,
+antimatter,反物質,
+spin,スピン,
+charge conjugation,荷電共役,
+parity violation,パリティ対称性の破れ,
+CP violation,CP対称性の破れ,
+Standard Model,標準模型,素粒子物理学の標準理論
+quantum chromodynamics,量子色力学,QCD
+quantum electrodynamics,量子電磁力学,QED
+gauge symmetry,ゲージ対称性,
+gauge boson,ゲージ粒子,
+strong force,強い相互作用,強い力
+weak force,弱い相互作用,弱い力
+electroweak interaction,電弱相互作用,
+confinement,閉じ込め,クォークの閉じ込め
+asymptotic freedom,漸近的自由性,
+color charge,色荷,
+Feynman diagram,ファインマン図,
+cross section,断面積,
+luminosity,ルミノシティ,衝突型加速器の輝度
+decay channel,崩壊チャンネル,
+branching ratio,分岐比,
+particle accelerator,粒子加速器,
+collider,コライダー,衝突型加速器
+Large Hadron Collider,大型ハドロン衝突型加速器,LHC
+detector,検出器,
+calorimeter,カロリメータ,
+dark matter,ダークマター,暗黒物質
+dark energy,ダークエネルギー,
+supersymmetry,超対称性,
+string theory,超弦理論,
+vacuum expectation value,真空期待値,
+symmetry breaking,対称性の破れ,
+spontaneous symmetry breaking,自発的対称性の破れ,
+renormalization,くりこみ,
+Lagrangian,ラグランジアン,
+conservation law,保存則,
+angular momentum,角運動量,
+four-momentum,四元運動量,
+Lorentz invariance,ローレンツ不変性,
+quantum field theory,場の量子論,
+vacuum,真空,
+annihilation,対消滅,
+pair production,対生成,

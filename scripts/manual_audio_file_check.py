@@ -167,10 +167,10 @@ async def test_with_audio_file(audio_path: str) -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: uv run python test_audio_file.py <audio_file>")
+        print("Usage: uv run python scripts/manual_audio_file_check.py <audio_file>")
         print("\nSupported formats: WAV, FLAC, MP3, etc. (anything ffmpeg supports)")
         print("\nExample:")
-        print("  uv run python test_audio_file.py clip_386-464.flac")
+        print("  uv run python scripts/manual_audio_file_check.py clip_386-464.flac")
         sys.exit(1)
 
     asyncio.run(test_with_audio_file(sys.argv[1]))

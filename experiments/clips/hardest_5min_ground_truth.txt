@@ -1,0 +1,42 @@
+<transcript>
+[00:00] other companies.
+[00:01] Yeah. Yes, it's a very secret sauce for the, uh, advantages.
+[00:09] Okay. Thank you. And the next question is, uh, what was the most exciting moment during Gemini's development? Please tell us an impressive story.
+[00:19] If you have...
+[00:20] Yeah, thanks, thanks for the question. Yeah, actually I think there are many impressive story.
+[00:26] From my, from my perspective is like Google has many, many, many talents inside.
+[00:34] And also normally, sometimes our method will, currently we cannot publish paper, but we do see a lot of amazing progress in Gemini.
+[00:48] I think when you see some groundbreaking things, and also when you see many different methods could work,
+[00:59] and also anti your, anti your intuition, some methods anti your intuition but also work, that would be amazing. Yeah.
+[01:07] And also, yeah, I think from my perspective is like as a researcher, I think to see many different works, to see many different kind of talents to discuss these methods, uh, it's, it's very amazing. Yeah.
+[01:24] Okay. Okay. Thank you very much for answering very sensitive question.
+[01:29] And the next question is, uh, what strategy do you think holds the most promise for a low-hallucination LLM?
+[01:37] Any specific fine-tuning algorithm or paradigms you recommend, uh, such as training on SLM?
+[01:44] Yeah, uh, I think it's a very good question. For hallucination in LLM, I think it's an open question.
+[01:52] In Google, we do a lot, such as in Simple, SimpleQA, it's a, uh, uh, benchmark to evaluate how, how, how, how much the language model hallucinate.
+[02:06] In Google, we do it very well, and we use many different methods.
+[02:11] The thing is like, you need to carefully think about how, how good your language model it is.
+[02:18] So you need to analysis the language model hallucination.
+[02:22] Like, um, maybe sometimes because you fine-tune the, this language model, this language model has no knowledge about your data set, but you want to let it to learn how to reasoning in data set.
+[02:37] What can, what can it do? It can just hallucinate. Hallucinate some process.
+[02:44] So just like if you, our people, we don't know some area, but we must answer this question, and then we, we will just hallucinate to answer the question, right?
+[02:58] So, so this is a complicated methods, but one perspective is like, just do the right thing for your language model.
+[03:07] If you think that it's not capable to answer the question, maybe you should think about how to enhance this ability. Yeah.
+[03:17] Okay. Thank you.
+[03:19] And the next question, uh, where is the next battleground for LLM efficiency? Quantization, sparsity, distillation, speculative decoding, KV-cache, or serving, and why?
+[03:34] Yeah, I think, yeah, yeah, this...
+[03:36] Battleground means, I, I suppose, uh, hot topic.
+[03:42] Hot topic. Yeah, I think, yeah, it's very good question.
+[03:48] Actually, um, I think MoE is already sparsity, right? MoE is just one kind of activation sparsity.
+[03:56] And also distillation is very important.
+[04:00] Uh, I think, actually I think for all of your mentioned, these concepts are very, very important.
+[04:11] For, such as for quantization, before we just do like element-wise quantization, currently we have vector quantization.
+[04:19] It's a new, new thing, right? We still need to do it further.
+[04:23] And for sparsity and MoE, and also there are still a lot of research paper about this kind of area.
+[04:32] I think all these things will be very important.
+[04:36] Even for KV, also for KV cache. Because the KV cache will decide how many, how large is the batch size.
+[04:44] It will impact the throughput, and also RL training throughput.
+[04:49] For serving, and it will be very, very important too.
+[04:52] It's like, you could say with reasoning model, our generated tokens are very, very long.
+[04:58] So, so...
+</transcript>

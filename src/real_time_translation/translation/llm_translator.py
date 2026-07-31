@@ -1,4 +1,14 @@
-"""LLM-based translator with Gemini/OpenAI support and context caching."""
+"""LLM-based translator with Gemini/OpenAI support and context caching.
+
+Uses direct provider SDK calls (google-genai / openai) with real token
+streaming instead of LangChain's `with_structured_output`, which blocks
+until the full JSON response is generated. That blocking + structured-output
+overhead was measured to add seconds of latency with negligible quality
+benefit, and made real-time (word-by-word) caption rendering impossible.
+As a deliberate trade-off, this path no longer extracts `kept_terms` via
+a second structured field (it's always empty) — the same trade already
+validated in services/translator/fast_translator.py.
+"""
 
 from __future__ import annotations
 
@@ -11,30 +21,11 @@ from datetime import timedelta
 from pathlib import Path
 from typing import Any, Literal
 
-from langchain_core.language_models import BaseChatModel
-from langchain_core.messages import HumanMessage, SystemMessage
-from pydantic import BaseModel, Field
-
-from real_time_translation.translation.dictionary import TermDictionary
-
-
-class TranslationLLMOutput(BaseModel):
-    """Structured output returned by the LLM."""
-
-    latest_slide: str = Field(
-        ...,
-        description=(
-            "Translated text for the current <target> only. Do not include any extra "
-            "commentary."
-        ),
-    )
-    kept_terms: list[str] = Field(
-        default_factory=list,
-        description=(
-            "Source terms intentionally kept unchanged because they are proper nouns, "
-            "acronyms, code identifiers, or ambiguous/unknown."
-        ),
-    )
+from real_time_translation.translation.dictionary import DictionaryEntry, TermDictionary
+from real_time_translation.translation.domain_packs import (
+    DEFAULT_DOMAIN_PACKS_DIR,
+    resolve_domain_pack,
+)
 
 
 @dataclass(frozen=True)
@@ -59,6 +50,8 @@ Strict Rules:
 3. USE CONTINUATIONS: If the <target> is a fragment, translate it as a continuation (e.g., using noun phrases, 'て' forms, or dangling particles) so it flows naturally into whatever text might come next.
 4. PRESERVE TERMINOLOGY: Keep proper nouns, acronyms, and code identifiers EXACTLY as they appear. Do not translate, transliterate, or normalize them. If a term is ambiguous or unknown, keep it unchanged.
 5. IGNORE PADDING: Ignore any content inside <cache_padding>...</cache_padding>.
+6. TERMINOLOGY DICTIONARY: A <dictionary> block may appear below, or inline with the current message alongside <context>/<target>. Either way, use its exact target-language translations for any matching terms.
+7. LOW-CONFIDENCE MARKER: If <target> is wrapped exactly as `[uncertain: ...]`, that wrapper is a confidence hint for you, not literal content to translate. Translate only the text inside it (favor a cautious, literal reading over a confident guess) and NEVER reproduce the `[uncertain: ...]`/`[不確か: ...]` wrapper itself in your output.
 
 Maintain the original tone and style.
 {dictionary_section}"""
@@ -72,6 +65,12 @@ Maintain the original tone and style.
         target_language: str = "Japanese",
         dictionary_path: Path | str | None = None,
         context_window_size: int = 3,
+        thinking_budget: int | None = 0,
+        dictionary_dynamic_threshold: int = 80,
+        dictionary_dynamic_limit: int = 30,
+        domain_packs: list[str] | None = None,
+        domain_packs_dir: Path | str = DEFAULT_DOMAIN_PACKS_DIR,
+        openai_temperature: float | None = 0.3,
     ) -> None:
         """Initialize LLM translator.
 
@@ -81,8 +80,33 @@ Maintain the original tone and style.
             model: Model name to use
             source_language: Source language name
             target_language: Target language name
-            dictionary_path: Optional path to CSV dictionary file
+            dictionary_path: Optional path to CSV dictionary file. Loaded
+                after `domain_packs`, so its entries take precedence over
+                any pack entry for the same term.
             context_window_size: Number of previous lines to keep as context
+            thinking_budget: Gemini "thinking" token budget. 0 disables extended
+                reasoning for lower latency (measured ~700-1000ms TTFT on
+                gemini-2.5-flash vs multi-second TTFT with thinking enabled on
+                gemini-3.x models). None omits the parameter entirely, for
+                models that reject it.
+            dictionary_dynamic_threshold: Above this many dictionary entries,
+                stop dumping the full dictionary into the (cached) system
+                prompt and instead inject only per-request relevant terms
+                into the (uncached) user prompt -- see `_is_dynamic_mode`.
+                Below it, the full dictionary is cached once and reused,
+                which also gives the LLM a shot at correcting ASR errors on
+                terms that aren't a literal substring match.
+            dictionary_dynamic_limit: Max terms injected per request once in
+                dynamic mode.
+            domain_packs: Names of curated glossary packs to load first
+                (e.g. ["machine_learning", "particle_physics"]), before
+                `dictionary_path`. See `translation.domain_packs`.
+            domain_packs_dir: Directory containing `<name>.csv` pack files.
+            openai_temperature: Sampling temperature for the OpenAI provider.
+                None omits the parameter (API default), for models that
+                reject a non-default value -- confirmed `gpt-5.6-luna`
+                400s on anything but the default (1); `gpt-5.4-mini`/
+                `gpt-5.4-nano` accept 0.3 fine. Ignored for `provider="gemini"`.
         """
         self._provider = provider
         self._api_key = api_key
@@ -90,11 +114,13 @@ Maintain the original tone and style.
         self._source_language = source_language
         self._target_language = target_language
         self._context_window_size = context_window_size
+        self._thinking_budget = thinking_budget
+        self._dictionary_dynamic_threshold = dictionary_dynamic_threshold
+        self._dictionary_dynamic_limit = dictionary_dynamic_limit
+        self._domain_packs_dir = domain_packs_dir
+        self._openai_temperature = openai_temperature
+        self._openai_temperature_unsupported = False
 
-        self._openai_llm: BaseChatModel | None = None
-        self._gemini_llm: BaseChatModel | None = None
-        self._openai_structured_llm: Any | None = None
-        self._gemini_structured_llm: Any | None = None
         self._context_buffer: list[str] = []
         self._slide_window: list[str] = []
         self._system_prompt_cache: str | None = None
@@ -103,10 +129,31 @@ Maintain the original tone and style.
         self._gemini_cache_name: str | None = None
         self._gemini_cache_ttl = timedelta(hours=12)
 
-        # Load dictionary if provided
+        self._openai_client: Any | None = None
+
+        # Load domain packs first, then the session dictionary on top, so
+        # session-specific entries override same-named pack entries.
         self._dictionary = TermDictionary()
+        for pack_name in domain_packs or []:
+            self.load_domain_pack(pack_name)
         if dictionary_path:
             self.load_dictionary(dictionary_path)
+
+    def load_domain_pack(self, name: str) -> int:
+        """Load a curated domain glossary pack by name.
+
+        Args:
+            name: Pack name (CSV stem under `domain_packs_dir`), e.g.
+                "machine_learning" or "particle_physics"
+
+        Returns:
+            Number of entries loaded
+
+        Raises:
+            FileNotFoundError: If no pack named `name` exists
+        """
+        path = resolve_domain_pack(name, self._domain_packs_dir)
+        return self.load_dictionary(path)
 
     def load_dictionary(self, path: Path | str) -> int:
         """Load terminology dictionary from CSV file.
@@ -127,6 +174,39 @@ Maintain the original tone and style.
         """Get the terminology dictionary."""
         return self._dictionary
 
+    @property
+    def source_language(self) -> str:
+        """Source language name."""
+        return self._source_language
+
+    @property
+    def target_language(self) -> str:
+        """Target language name."""
+        return self._target_language
+
+    def merge_supplementary_entries(self, entries: list[DictionaryEntry]) -> int:
+        """Merge a best-effort/supplementary source into the dictionary.
+
+        Unlike `load_dictionary`/`load_domain_pack`, entries here never
+        override an already-loaded term (see `TermDictionary.add_if_absent`)
+        -- for auto-extracted pre-brief terms (see `preload.auto_preload`),
+        which are less deliberately curated than a domain pack or session
+        `dictionary_path`.
+
+        Returns:
+            Number of entries actually added
+        """
+        added = self._dictionary.add_if_absent(entries)
+        if added:
+            self._system_prompt_cache = None
+            if not self._is_dynamic_mode():
+                self._invalidate_gemini_cache()
+        return added
+
+    def _is_dynamic_mode(self) -> bool:
+        """Whether the dictionary is too large to dump into every prompt."""
+        return len(self._dictionary) > self._dictionary_dynamic_threshold
+
     async def prepare(self) -> None:
         """Warm up translator state (e.g., create Gemini cache)."""
         if self._provider == "gemini":
@@ -143,24 +223,14 @@ Maintain the original tone and style.
                 self._gemini_client.caches.delete(name=self._gemini_cache_name)
 
         self._gemini_cache_name = None
-        self._gemini_llm = None
-        self._gemini_structured_llm = None
 
-    def _get_openai_llm(self) -> BaseChatModel:
-        """Get or create LLM instance for OpenAI.
+    def _get_openai_client(self) -> Any:
+        """Get or create the direct OpenAI async client."""
+        if self._openai_client is None:
+            from openai import AsyncOpenAI
 
-        Returns:
-            LangChain chat model
-        """
-        if self._openai_llm is None:
-            from langchain_openai import ChatOpenAI
-
-            self._openai_llm = ChatOpenAI(
-                model=self._model_name,
-                api_key=self._api_key,
-                temperature=0.3,
-            )
-        return self._openai_llm
+            self._openai_client = AsyncOpenAI(api_key=self._api_key)
+        return self._openai_client
 
     def _get_system_prompt(self) -> str:
         """Get system prompt with language settings and dictionary.
@@ -171,8 +241,12 @@ Maintain the original tone and style.
         if self._system_prompt_cache is not None:
             return self._system_prompt_cache
 
+        # In dynamic mode the dictionary is injected per-request into the
+        # (uncached) user prompt instead -- see `_build_user_prompt` -- so
+        # the cached system prompt stays small and stable regardless of how
+        # large the dictionary grows.
         dictionary_section = ""
-        if self._dictionary:
+        if self._dictionary and not self._is_dynamic_mode():
             formatted = self._dictionary.format_for_prompt()
             dictionary_section = f"\n\n<dictionary>\n{formatted}\n</dictionary>"
 
@@ -194,7 +268,22 @@ Maintain the original tone and style.
         else:
             context_lines = context_lines[-self._context_window_size :]
         context_block = "\n".join(context_lines)
-        return f"<context>\n{context_block}\n</context>\n<target>\n{text}\n</target>"
+
+        dictionary_block = ""
+        if self._dictionary and self._is_dynamic_mode():
+            relevant = self._dictionary.relevant_entries(
+                text,
+                limit=self._dictionary_dynamic_limit,
+                extra_context=context_lines,
+            )
+            if relevant:
+                formatted = self._dictionary.format_for_prompt(relevant)
+                dictionary_block = f"<dictionary>\n{formatted}\n</dictionary>\n"
+
+        return (
+            f"{dictionary_block}"
+            f"<context>\n{context_block}\n</context>\n<target>\n{text}\n</target>"
+        )
 
     def _get_gemini_client(self) -> Any:
         if self._gemini_client is None:
@@ -243,37 +332,149 @@ Maintain the original tone and style.
             )
             return _create(base_system_prompt + padding)
 
-    def _ensure_gemini_cache(self) -> str:
+    def _ensure_gemini_cache(self) -> str | None:
+        """Create the Gemini context cache if possible.
+
+        Context caching requires a paid tier (free tier has a cached-content
+        storage quota of 0 and returns 429 RESOURCE_EXHAUSTED, not just the
+        "too small" error `_create_gemini_cache` already handles). Caching is
+        a latency optimization, not a correctness requirement -- translation
+        works fine without it (falls back to sending the system prompt on
+        every request), so failures here must never be fatal.
+        """
         if self._gemini_cache_name is None:
-            self._gemini_cache_name = self._create_gemini_cache()
+            try:
+                self._gemini_cache_name = self._create_gemini_cache()
+            except Exception as exc:  # noqa: BLE001
+                print(
+                    f"Gemini context caching unavailable, continuing without it: {exc}"
+                )
+                return None
         return self._gemini_cache_name
 
-    def _get_gemini_llm(self) -> BaseChatModel:
-        if self._gemini_llm is None:
-            from langchain_google_genai import ChatGoogleGenerativeAI
+    def _gemini_generation_config(self, *, cache_name: str | None) -> Any:
+        from google.genai import types
 
-            cache_name = self._ensure_gemini_cache()
-            self._gemini_llm = ChatGoogleGenerativeAI(
-                model=self._model_name,
-                google_api_key=self._api_key,
-                temperature=0.3,
-                cached_content=cache_name,
+        kwargs: dict[str, Any] = dict(
+            temperature=0.2,
+            max_output_tokens=512,
+            top_p=0.95,
+            top_k=40,
+        )
+        if self._thinking_budget is not None:
+            kwargs["thinking_config"] = types.ThinkingConfig(
+                thinking_budget=self._thinking_budget
             )
-        return self._gemini_llm
+        if cache_name:
+            kwargs["cached_content"] = cache_name
+        else:
+            kwargs["system_instruction"] = self._get_system_prompt()
+        return types.GenerateContentConfig(**kwargs)
 
-    def _get_openai_structured_llm(self) -> Any:
-        if self._openai_structured_llm is None:
-            self._openai_structured_llm = self._get_openai_llm().with_structured_output(
-                TranslationLLMOutput
-            )
-        return self._openai_structured_llm
+    async def _translate_gemini_stream(self, prompt: str) -> AsyncIterator[str]:
+        """Stream Gemini output token-by-token via the direct async SDK.
 
-    def _get_gemini_structured_llm(self) -> Any:
-        if self._gemini_structured_llm is None:
-            self._gemini_structured_llm = self._get_gemini_llm().with_structured_output(
-                TranslationLLMOutput
+        Uses context caching for the (large, static) system prompt so each
+        request only pays for the small per-utterance user prompt.
+        """
+        client = self._get_gemini_client()
+        cache_name = self._gemini_cache_name
+        config = self._gemini_generation_config(cache_name=cache_name)
+
+        stream = await client.aio.models.generate_content_stream(
+            model=self._model_name,
+            contents=prompt,
+            config=config,
+        )
+        async for chunk in stream:
+            if chunk.text:
+                yield chunk.text
+
+    def _openai_kwargs(
+        self, prompt: str, *, include_temperature: bool
+    ) -> dict[str, Any]:
+        kwargs: dict[str, Any] = {
+            "model": self._model_name,
+            "messages": [
+                {"role": "system", "content": self._get_system_prompt()},
+                {"role": "user", "content": prompt},
+            ],
+            "max_completion_tokens": 512,
+            "stream": True,
+        }
+        if include_temperature and self._openai_temperature is not None:
+            kwargs["temperature"] = self._openai_temperature
+        return kwargs
+
+    async def _translate_openai_stream(self, prompt: str) -> AsyncIterator[str]:
+        """Stream OpenAI output token-by-token."""
+        client = self._get_openai_client()
+        try:
+            stream = await client.chat.completions.create(
+                **self._openai_kwargs(
+                    prompt, include_temperature=not self._openai_temperature_unsupported
+                )
             )
-        return self._gemini_structured_llm
+        except Exception as exc:
+            # Some models (confirmed: gpt-5.6-luna) reject any non-default
+            # temperature outright (400). Retry once without it and
+            # remember for the rest of this translator's lifetime, rather
+            # than erroring every single translation for the whole
+            # session -- an unsupported sampling parameter shouldn't be
+            # able to break translation entirely.
+            if self._openai_temperature_unsupported or "temperature" not in str(exc):
+                raise
+            self._openai_temperature_unsupported = True
+            stream = await client.chat.completions.create(
+                **self._openai_kwargs(prompt, include_temperature=False)
+            )
+        async for chunk in stream:
+            if chunk.choices and chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
+
+    async def translate_stream(
+        self,
+        text: str,
+        *,
+        context_lines: list[str] | None = None,
+        update_context: bool = True,
+    ) -> AsyncIterator[str]:
+        """Translate text, yielding output chunks as they are generated.
+
+        Args:
+            text: Text to translate
+            context_lines: Optional explicit context lines (stateless mode,
+                used by parallel workers so concurrent calls don't race on
+                the shared internal context buffer)
+            update_context: Whether to update internal context buffers
+                after the translation completes
+
+        Yields:
+            Translation text chunks (concatenate for the full translation)
+        """
+        if not text.strip():
+            return
+
+        prompt = self._build_user_prompt(text, context_lines=context_lines)
+
+        full_text = ""
+        if self._provider == "gemini":
+            async for chunk in self._translate_gemini_stream(prompt):
+                full_text += chunk
+                yield chunk
+        else:
+            async for chunk in self._translate_openai_stream(prompt):
+                full_text += chunk
+                yield chunk
+
+        should_update_context = update_context and context_lines is None
+        if should_update_context:
+            self._context_buffer.append(text)
+            if len(self._context_buffer) > self._context_window_size:
+                self._context_buffer.pop(0)
+            self._slide_window.append(full_text.strip())
+            if len(self._slide_window) > self._context_window_size:
+                self._slide_window.pop(0)
 
     async def translate(
         self,
@@ -282,7 +483,7 @@ Maintain the original tone and style.
         context_lines: list[str] | None = None,
         update_context: bool = True,
     ) -> TranslationOutput:
-        """Translate text using LLM.
+        """Translate text using LLM (non-streaming convenience wrapper).
 
         Args:
             text: Text to translate
@@ -295,53 +496,40 @@ Maintain the original tone and style.
         if not text.strip():
             return TranslationOutput(latest_slide="", kept_terms=[], slide_window=[])
 
-        prompt = self._build_user_prompt(text, context_lines=context_lines)
-
-        if self._provider == "gemini":
-            llm = self._get_gemini_structured_llm()
-            output = await llm.ainvoke([HumanMessage(content=prompt)])
-        else:
-            llm = self._get_openai_structured_llm()
-            messages = [
-                SystemMessage(content=self._get_system_prompt()),
-                HumanMessage(content=prompt),
-            ]
-            output = await llm.ainvoke(messages)
-
-        should_update_context = update_context and context_lines is None
-        if should_update_context:
-            self._context_buffer.append(text)
-            if len(self._context_buffer) > self._context_window_size:
-                self._context_buffer.pop(0)
-
-        translation = output.latest_slide.strip()
-        kept_terms = list(output.kept_terms or [])
-
-        if should_update_context:
-            self._slide_window.append(translation)
-            if len(self._slide_window) > self._context_window_size:
-                self._slide_window.pop(0)
+        full_text = ""
+        async for chunk in self.translate_stream(
+            text, context_lines=context_lines, update_context=update_context
+        ):
+            full_text += chunk
 
         return TranslationOutput(
-            latest_slide=translation,
-            kept_terms=kept_terms,
+            latest_slide=full_text.strip(),
+            kept_terms=[],
             slide_window=list(self._slide_window),
         )
 
-    async def translate_stream(self, text: str) -> AsyncIterator[str]:
-        """Translate text with streaming output.
+    @property
+    def slide_window(self) -> list[str]:
+        """Current slide window (recent translated lines)."""
+        return list(self._slide_window)
 
-        Args:
-            text: Text to translate
+    def context_snapshot(self) -> list[str]:
+        """Snapshot of the current source-context buffer (for stateless calls)."""
+        return list(self._context_buffer[-self._context_window_size :])
 
-        Yields:
-            Translation chunks
+    def commit_context(self, source_text: str, translated_text: str) -> None:
+        """Append a completed translation to the shared context buffers.
+
+        Used by callers that translate statelessly (explicit `context_lines`,
+        `update_context=False`) so concurrent workers can commit results
+        without racing on `translate_stream`'s internal buffer mutation.
         """
-        if not text.strip():
-            return
-
-        result = await self.translate(text)
-        yield result.latest_slide
+        self._context_buffer.append(source_text)
+        if len(self._context_buffer) > self._context_window_size:
+            self._context_buffer.pop(0)
+        self._slide_window.append(translated_text)
+        if len(self._slide_window) > self._context_window_size:
+            self._slide_window.pop(0)
 
     def clear_context(self) -> None:
         """Clear the context buffer."""

@@ -1,0 +1,118 @@
+SRC: hallucination LLM?
+  gpt-5.6-luna (ttft=3.0376555919647217): 幻覚の少ない大規模言語モデル？
+  gpt-5.4-mini (ttft=0.6979753971099854): 幻覚の少ない大規模言語モデル？
+  gpt-5.4-nano (ttft=0.5980563163757324): 幻覚の少ない 大規模言語モデル (Large Language Model)？
+  gemini-3.6-flash (ttft=3.152069330215454): ハルシネーションの少ない大規模言語モデルでしょうか？
+  gemini-3.5-flash-lite (ttft=0.8778672218322754): ハルシネーションの少ない大規模言語モデル
+
+SRC: for hallucination in LLM. I think it's
+  gpt-5.6-luna (ttft=2.4641575813293457): 大規模言語モデルにおけるハルシネーション対策に。私はそれが…
+  gpt-5.4-mini (ttft=0.49848079681396484): LLMにおける幻覚については、私はそれは
+  gpt-5.4-nano (ttft=0.5468578338623047): LLMにおけるハルシネーションのために だと思う それで
+  gemini-3.6-flash (ttft=2.3642380237579346): 大規模言語モデルにおけるハルシネーションに対して。それは〜だと思っていますし、
+  gemini-3.5-flash-lite (ttft=0.7884933948516846): 大規模言語モデルのハルシネーションに対して、私としては
+
+SRC: analysis language model hallucination.
+  gpt-5.6-luna (ttft=1.359872817993164): 言語モデルのハルシネーションの分析
+  gpt-5.4-mini (ttft=0.4398319721221924): 分析、言語モデルの幻覚。
+  gpt-5.4-nano (ttft=0.533137321472168): 分析 言語モデルのハルシネーション
+  gemini-3.6-flash (ttft=2.983743906021118): 言語モデルのハルシネーションの分析
+  gemini-3.5-flash-lite (ttft=0.8764147758483887): 言語モデルのハルシネーションの分析
+
+SRC: model hallucination. Like,
+  gpt-5.6-luna (ttft=1.5599396228790283): モデルのハルシネーション。例えば、
+  gpt-5.4-mini (ttft=0.4651036262512207): モデルの幻覚。例えば、
+  gpt-5.4-nano (ttft=0.6434717178344727): モデルのハルシネーション。たとえば、
+  gemini-3.6-flash (ttft=2.891308069229126): モデルのハルシネーション。たとえば、
+  gemini-3.5-flash-lite (ttft=0.9750707149505615): モデルのハルシネーションのような
+
+SRC: hallucinate hallucinate the sound process?
+  gpt-5.6-luna (ttft=1.5910770893096924): 音声処理を幻覚してしまう？
+  gpt-5.4-mini (ttft=0.4565286636352539): 音を生成するプロセスを幻覚生成、幻覚生成するってこと？
+  gpt-5.4-nano (ttft=0.5734846591949463): 幻覚させる、幻覚させるように音のプロセスを？
+  gemini-3.6-flash (ttft=2.5330379009246826): 音声プロセスをハルシネーションするのでしょうか？
+  gemini-3.5-flash-lite (ttft=1.0041544437408447): 音声のプロセスを勝手にハルシネーション（幻覚）で生成する
+
+SRC: hallucinate to answer question. Right?
+  gpt-5.6-luna (ttft=1.2406351566314697): 質問に答えるためにハルシネーションする、ということですよね？
+  gpt-5.4-mini (ttft=0.7853062152862549): 質問に答えるために幻覚を起こす、でしょ？
+  gpt-5.4-nano (ttft=0.6436386108398438): 質問に答えるためにハルシネートするってことだよね？
+  gemini-3.6-flash (ttft=2.8710196018218994): 質問に答えるためにハルシネーションを起こしてしまう、ですよね？
+  gemini-3.5-flash-lite (ttft=1.1095855236053467): ハルシネーションを起こして答えてしまう、というね
+
+SRC: compatible,
+  gpt-5.6-luna (ttft=1.614509105682373): 互換性がないと考えるなら、
+  gpt-5.4-mini (ttft=0.3944220542907715): 互換性がある、
+  gpt-5.4-nano (ttft=0.5464344024658203): 互換性がある
+  gemini-3.6-flash (ttft=3.887092113494873): 互換性がある、
+  gemini-3.5-flash-lite (ttft=0.9731857776641846): 互換性が
+
+SRC: Battleground for LLM efficiency? Quantization's past
+  gpt-5.6-luna (ttft=1.2822237014770508): 大規模言語モデルの効率性をめぐる戦場？ 量子化の過去
+  gpt-5.4-mini (ttft=0.5666546821594238): LLMの効率性の戦場？　量子化の過去
+  gpt-5.4-nano (ttft=1.5282139778137207): LLMの効率性（Efficiency）をめぐる戦場？量子化はもう過去
+  gemini-3.6-flash (ttft=2.0262863636016846): 大規模言語モデルの効率性を巡る主戦場？量子化の過去
+  gemini-3.5-flash-lite (ttft=0.7183530330657959): 大規模言語モデルの効率化における主戦場とは？ 量子化の過去の
+
+SRC: distillation, speculative decoding, KV cash flow,
+  gpt-5.6-luna (ttft=1.652566909790039): 蒸留、推論デコーディング、KVキャッシュ、
+  gpt-5.4-mini (ttft=0.4223155975341797): 蒸留、推論デコーディング (推論高速化手法)、KVキャッシュフロー、
+  gpt-5.4-nano (ttft=0.5304627418518066): 蒸留、推論デコーディング、KVキャッシュフロー、
+  gemini-3.6-flash (ttft=None): 
+  gemini-3.5-flash-lite (ttft=0.9177544116973877): 蒸留、推論デコーディング、KVキャッシュフロー、
+
+SRC: I think MOE is already spotty. Right? MOE is the
+  gpt-5.6-luna (ttft=1.6509895324707031): MOEはすでにムラがあると思います。そうですよね？ MOEはその
+  gpt-5.4-mini (ttft=0.41511082649230957): MoEはもうかなりまばらだと思いますよね？ MoEは
+  gpt-5.4-nano (ttft=0.5843632221221924): MOE はもうちょっとムラがあると思う。そうだよね。MoE はその
+  gemini-3.6-flash (ttft=2.707623243331909): MoEはすでに不確定要素が多いと思いますよね？MoEは
+  gemini-3.5-flash-lite (ttft=0.965817928314209): MoEはすでにまだら模様というか、ね？MoEというのは
+
+SRC: one kind of activation sparsity also and also this
+  gpt-5.6-luna (ttft=1.4477088451385498): 一種の活性化スパース性でもあり、またこれは
+  gpt-5.4-mini (ttft=0.43627166748046875): 活性化スパース性の一種でもあって、それにこれも
+  gpt-5.4-nano (ttft=0.5349671840667725): 活性化スパース性の一種でもあって、それでそれも
+  gemini-3.6-flash (ttft=3.0398855209350586): 活性化スパース性の一種でもあり、またこれも
+  gemini-3.5-flash-lite (ttft=0.983203649520874): 活性化スパース性の1種であり、また
+
+SRC: such as for quantization before we just do, like,
+  gpt-5.6-luna (ttft=1.6233577728271484): 量子化などに関しては、以前は単に、たとえば、
+  gpt-5.4-mini (ttft=0.7349953651428223): 量子化のようなものについては、その前にただ、みたいな
+  gpt-5.4-nano (ttft=0.5208232402801514): 量子化のためのような、ただやる前に、みたいな
+  gemini-3.6-flash (ttft=2.1798462867736816): 例えば量子化などにおいて、単に〜を行う前に、
+  gemini-3.5-flash-lite (ttft=0.7869515419006348): 量子化などのように、事前に私たちが
+
+SRC: quantization, country, we have vector quantization.
+  gpt-5.6-luna (ttft=3.204784870147705): 量子化については、具体的にはベクトル量子化があり
+  gpt-5.4-mini (ttft=0.5725982189178467): 量子化、country、vector quantization があります
+  gpt-5.4-nano (ttft=0.5299522876739502): 量子化、国、ベクトル量子化がある
+  gemini-3.6-flash (ttft=4.0964672565460205): 量子化、あるいはベクトル量子化があります。
+  gemini-3.5-flash-lite (ttft=1.0613110065460205): 量子化だけでなく、ベクトル量子化もあり
+
+SRC: And for sparsity and the MOE and also
+  gpt-5.6-luna (ttft=1.1027531623840332): そしてスパース性やMoE、さらに
+  gpt-5.4-mini (ttft=0.4333031177520752): そしてスパース性とMoE、それから
+  gpt-5.4-nano (ttft=0.5854101181030273): スパース性とMoE、それからあと
+  gemini-3.6-flash (ttft=3.322725534439087): そして、スパース性やMoE、さらには
+  gemini-3.5-flash-lite (ttft=1.0627927780151367): そしてスパース性とMoE、さらに
+
+SRC: Even for KV also for KV catch, because the KV
+  gpt-5.6-luna (ttft=1.4879412651062012): KVについても、KV cacheについても、というのもKVは
+  gpt-5.4-mini (ttft=0.4474763870239258): KV に関しても、KV catch に関しても、KV が
+  gpt-5.4-nano (ttft=0.6182200908660889): KV でも、KV catch でも、というのも KV が
+  gemini-3.6-flash (ttft=2.4024910926818848): KVにとっても、そしてKV cacheにとっても同様で、なぜならKVは
+  gemini-3.5-flash-lite (ttft=1.03764009475708): KVに関しても、KVキャッシュに関しても、なぜならKVが
+
+SRC: batch size. It will impact the throughput and also
+  gpt-5.6-luna (ttft=1.9195170402526855): バッチサイズの大きさを決めます。スループットにも影響し、さらに
+  gpt-5.4-mini (ttft=0.41736793518066406): バッチサイズ。スループットにも影響するし、また
+  gpt-5.4-nano (ttft=0.5935733318328857): バッチサイズ それがスループットにも影響してそれから
+  gemini-3.6-flash (ttft=3.438263177871704): バッチサイズが決まります。これはスループットにも影響を与えますし、
+  gemini-3.5-flash-lite (ttft=0.86734938621521): バッチサイズに影響を与え、スループットにも
+
+SRC: throughput.
+  gpt-5.6-luna (ttft=1.2244713306427002): スループット。
+  gpt-5.4-mini (ttft=0.647331714630127): スループット。
+  gpt-5.4-nano (ttft=0.56028151512146): スループット
+  gemini-3.6-flash (ttft=2.169502019882202): スループット。
+  gemini-3.5-flash-lite (ttft=1.051537036895752): スループット

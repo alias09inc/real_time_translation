@@ -26,11 +26,22 @@ rtms = { index = "testpypi" }
 zoom = ["rtms>=0.0.2"]
 dev = ["pytest>=8.0.0", "pytest-asyncio>=0.24.0", "ruff>=0.8.0"]
 experiments = ["sacrebleu>=2.4.0", "yt-dlp>=2024.1.0"]
+preload = [
+    "pypdf>=5.0.0",
+    "python-pptx>=1.0.0",
+]
 
 [project.scripts]
 real-time-translation = "real_time_translation.main:main"
 real-time-translation-demo = "real_time_translation.gradio_demo:main"
 real-time-translation-exp-youtube = "real_time_translation.experiments.youtube_segment:main"
+real-time-translation-exp-video = "real_time_translation.experiments.video_segment:main"
+real-time-translation-render-captions = "real_time_translation.experiments.render_honest_captions:main"
+real-time-translation-preload-doc = "real_time_translation.preload.document_preload:main"
+real-time-translation-preload-video = "real_time_translation.preload.video_preload:main"
+real-time-translation-exp-find-hardest = "real_time_translation.experiments.find_hardest_segment:main"
+real-time-translation-exp-compare-dictionary = "real_time_translation.experiments.compare_dictionary_runs:main"
+real-time-translation-exp-compare-models = "real_time_translation.experiments.compare_translation_models:main"
 
 [build-system]
 requires = ["hatchling"]

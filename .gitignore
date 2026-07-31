@@ -25,3 +25,9 @@ uv.lock
 
 # Environment
 .env
+
+# Local experiment media (large, not for version control)
+/video/*.mp4
+experiments/clips/*.mp4
+experiments/clips/*.wav
+experiments/clips/*.pcm

@@ -1,0 +1,1055 @@
+{
+  "date": "2026-07-23",
+  "experiment_name": "en_talk_7m20_8m50",
+  "domain": "llm_lecture_en_talk",
+  "input": {
+    "type": "local_video",
+    "path": "experiments\\clips\\clip_7m20_90s_entalk2.wav",
+    "start_seconds": 0.0,
+    "duration_seconds": null
+  },
+  "models": {
+    "deepgram_model": "nova-3",
+    "deepgram_language": "multi",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-2.5-flash-lite",
+    "gemini_thinking_budget": 0
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "translation_workers": 4,
+    "gemini_rpm_limit": 9,
+    "deepgram_endpointing": 300,
+    "deepgram_utterance_end_ms": 1000,
+    "deepgram_max_interim_duration": 2.5
+  },
+  "results": {
+    "segment_count": 3,
+    "avg_confidence": 0.96647136,
+    "avg_end_to_end_latency_seconds": 5.398541692097982,
+    "max_end_to_end_latency_seconds": 9.304050302505495,
+    "avg_mt_latency_seconds": 0.13121668497721353,
+    "segments": [
+      {
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.25,
+        "asr_final_arrival": 3.2988457679748535,
+        "translation_complete_arrival": 3.5193326473236084,
+        "translation_first_token_arrival": 3.2988457679748535,
+        "end_to_end_latency": 3.5193326473236084,
+        "mt_latency": 0.22048687934875488,
+        "asr": "Let me share my screen.",
+        "translation": "画面を共有させてください。",
+        "confidence": 0.9951172
+      },
+      {
+        "asr_start_time": 7.59,
+        "asr_end_time": 9.3699997,
+        "asr_final_arrival": 10.91063666343689,
+        "translation_complete_arrival": 10.962242126464844,
+        "translation_first_token_arrival": 10.91063666343689,
+        "end_to_end_latency": 3.372242126464844,
+        "mt_latency": 0.0516054630279541,
+        "asr": "Please go ahead.",
+        "translation": "どうぞ。",
+        "confidence": 0.90527344
+      },
+      {
+        "asr_start_time": 40.4,
+        "asr_end_time": 44.099997,
+        "asr_final_arrival": 49.58249258995056,
+        "translation_complete_arrival": 49.70405030250549,
+        "translation_first_token_arrival": 49.58249258995056,
+        "end_to_end_latency": 9.304050302505495,
+        "mt_latency": 0.12155771255493164,
+        "asr": "learned something from my talk, and, also, we could",
+        "translation": "私の話から何か学んでいただけたなら、そして、また、",
+        "confidence": 0.99902344
+      }
+    ],
+    "events": [
+      {
+        "kind": "asr_interim",
+        "playback_offset": 1.117875337600708,
+        "wall_clock_lag": 1.117875337600708,
+        "text": "Wie",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 1.0,
+        "confidence": 0.2578125
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 3.2988457679748535,
+        "wall_clock_lag": 3.2988457679748535,
+        "text": "画面",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.25,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 3.5178632736206055,
+        "wall_clock_lag": 3.5178632736206055,
+        "text": "画面を共有させてください。",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.25,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 3.5193326473236084,
+        "wall_clock_lag": 3.5193326473236084,
+        "text": "画面を共有させてください。",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.25,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 10.91063666343689,
+        "wall_clock_lag": 3.32063666343689,
+        "text": "どうぞ",
+        "is_final": true,
+        "asr_start_time": 7.59,
+        "asr_end_time": 9.3699997,
+        "confidence": 0.90527344
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 10.960844039916992,
+        "wall_clock_lag": 3.3708440399169923,
+        "text": "どうぞ。",
+        "is_final": true,
+        "asr_start_time": 7.59,
+        "asr_end_time": 9.3699997,
+        "confidence": 0.90527344
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 10.962242126464844,
+        "wall_clock_lag": 3.372242126464844,
+        "text": "どうぞ。",
+        "is_final": true,
+        "asr_start_time": 7.59,
+        "asr_end_time": 9.3699997,
+        "confidence": 0.90527344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 12.529357433319092,
+        "wall_clock_lag": 3.1593574333190926,
+        "text": "K. Can I ask",
+        "is_final": false,
+        "asr_start_time": 9.37,
+        "asr_end_time": 11.399999699999999,
+        "confidence": 0.64160156
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 13.63604736328125,
+        "wall_clock_lag": 4.266047363281251,
+        "text": "K. Can you see my screen?",
+        "is_final": false,
+        "asr_start_time": 9.37,
+        "asr_end_time": 12.399999699999999,
+        "confidence": 0.97314453
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 14.737089157104492,
+        "wall_clock_lag": 5.367089157104493,
+        "text": "Can you see my screen? Ah, yes.",
+        "is_final": false,
+        "asr_start_time": 9.37,
+        "asr_end_time": 13.399999699999999,
+        "confidence": 0.9394531
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 16.37037754058838,
+        "wall_clock_lag": 2.5103775405883795,
+        "text": "Okay. Alright.",
+        "is_final": false,
+        "asr_start_time": 13.86,
+        "asr_end_time": 14.899999999999999,
+        "confidence": 0.9897461
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 17.46641707420349,
+        "wall_clock_lag": 3.606417074203492,
+        "text": "Okay. Very good.",
+        "is_final": false,
+        "asr_start_time": 13.86,
+        "asr_end_time": 15.899999999999999,
+        "confidence": 0.99365234
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 18.00607705116272,
+        "wall_clock_lag": 4.14607705116272,
+        "text": "Okay. Very good.",
+        "is_final": false,
+        "asr_start_time": 13.86,
+        "asr_end_time": 16.4,
+        "confidence": 0.9941406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 18.44482970237732,
+        "wall_clock_lag": 4.58482970237732,
+        "text": "Okay. Very good. Yeah.",
+        "is_final": false,
+        "asr_start_time": 13.86,
+        "asr_end_time": 16.7999996,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 19.10272216796875,
+        "wall_clock_lag": 5.242722167968751,
+        "text": "Okay. Very good. Yeah.",
+        "is_final": false,
+        "asr_start_time": 13.86,
+        "asr_end_time": 17.4,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 20.193881273269653,
+        "wall_clock_lag": 6.333881273269654,
+        "text": "Okay. Very good. Yeah. Hello,",
+        "is_final": false,
+        "asr_start_time": 13.86,
+        "asr_end_time": 18.4,
+        "confidence": 0.9892578
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 20.747597217559814,
+        "wall_clock_lag": 3.5375972175598136,
+        "text": "Hello, everyone.",
+        "is_final": false,
+        "asr_start_time": 17.21,
+        "asr_end_time": 18.9000005,
+        "confidence": 0.9885254
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 21.83068609237671,
+        "wall_clock_lag": 4.620686092376708,
+        "text": "Hello, everyone. Yeah. My name",
+        "is_final": false,
+        "asr_start_time": 17.21,
+        "asr_end_time": 19.9000005,
+        "confidence": 0.9890137
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 22.936419010162354,
+        "wall_clock_lag": 5.726419010162353,
+        "text": "Hello, everyone. Yeah. My name is Jaachenko.",
+        "is_final": false,
+        "asr_start_time": 17.21,
+        "asr_end_time": 20.9000005,
+        "confidence": 0.9230957
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 23.263368129730225,
+        "wall_clock_lag": 6.053368129730224,
+        "text": "Hello, everyone. Yeah. My name is Cha senko. I",
+        "is_final": false,
+        "asr_start_time": 17.21,
+        "asr_end_time": 21.2000017,
+        "confidence": 0.9291992
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 24.476147890090942,
+        "wall_clock_lag": 3.526147890090943,
+        "text": "And currently",
+        "is_final": false,
+        "asr_start_time": 20.95,
+        "asr_end_time": 22.2999985,
+        "confidence": 0.9291992
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 25.675283908843994,
+        "wall_clock_lag": 4.725283908843995,
+        "text": "And, currently, I'm a senior",
+        "is_final": false,
+        "asr_start_time": 20.95,
+        "asr_end_time": 23.3999989,
+        "confidence": 0.99658203
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 26.774372100830078,
+        "wall_clock_lag": 5.824372100830079,
+        "text": "And, currently, I'm a senior research scientist",
+        "is_final": false,
+        "asr_start_time": 20.95,
+        "asr_end_time": 24.3999989,
+        "confidence": 0.9975586
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 27.96679949760437,
+        "wall_clock_lag": 7.016799497604371,
+        "text": "And, currently, I'm a senior research scientist in Google Research",
+        "is_final": false,
+        "asr_start_time": 20.95,
+        "asr_end_time": 25.499999,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 29.166067361831665,
+        "wall_clock_lag": 8.216067361831666,
+        "text": "And currently, I'm a senior research scientist in Google Research Australia.",
+        "is_final": false,
+        "asr_start_time": 20.95,
+        "asr_end_time": 26.5999996,
+        "confidence": 0.9941406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 30.240798234939575,
+        "wall_clock_lag": 9.290798234939576,
+        "text": "And currently, I'm a senior research scientist in Google Research Australia, and also thank",
+        "is_final": false,
+        "asr_start_time": 20.95,
+        "asr_end_time": 27.5999996,
+        "confidence": 0.9941406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 31.64597797393799,
+        "wall_clock_lag": 10.695977973937989,
+        "text": "And currently, I'm a senior research scientist in Google Research Australia. And, also, thanks for",
+        "is_final": false,
+        "asr_start_time": 20.95,
+        "asr_end_time": 28.899999,
+        "confidence": 0.99853516
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 32.74955987930298,
+        "wall_clock_lag": 11.79955987930298,
+        "text": "And currently, I'm a senior research scientist in Google Research Australia. And, also, thanks for muscle labs in my",
+        "is_final": false,
+        "asr_start_time": 20.95,
+        "asr_end_time": 29.899999,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 33.49207377433777,
+        "wall_clock_lag": 4.702073774337769,
+        "text": "Marsau Labs' invitation, and",
+        "is_final": false,
+        "asr_start_time": 28.79,
+        "asr_end_time": 30.5999995,
+        "confidence": 0.74438477
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 34.55664682388306,
+        "wall_clock_lag": 5.7666468238830575,
+        "text": "Marsau Labs invitation. I'm very happy to",
+        "is_final": false,
+        "asr_start_time": 28.79,
+        "asr_end_time": 31.5999995,
+        "confidence": 0.8366699
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 35.63886475563049,
+        "wall_clock_lag": 6.848864755630494,
+        "text": "Marsau Labs invitation. I'm very happy to discuss",
+        "is_final": false,
+        "asr_start_time": 28.79,
+        "asr_end_time": 32.5999976,
+        "confidence": 0.9289551
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 36.725634813308716,
+        "wall_clock_lag": 7.935634813308717,
+        "text": "Marsau Labs invitation. I'm very happy to discuss with",
+        "is_final": false,
+        "asr_start_time": 28.79,
+        "asr_end_time": 33.5999976,
+        "confidence": 0.9145508
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 37.700557231903076,
+        "wall_clock_lag": 4.210557231903074,
+        "text": "you guys.",
+        "is_final": false,
+        "asr_start_time": 33.49,
+        "asr_end_time": 34.4999983,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 38.80232334136963,
+        "wall_clock_lag": 5.312323341369627,
+        "text": "you guys, and thanks for",
+        "is_final": false,
+        "asr_start_time": 33.49,
+        "asr_end_time": 35.4999983,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 39.91337442398071,
+        "wall_clock_lag": 6.423374423980711,
+        "text": "you guys, and thanks for coming this talk.",
+        "is_final": false,
+        "asr_start_time": 33.49,
+        "asr_end_time": 36.4999983,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 40.55405902862549,
+        "wall_clock_lag": 7.064059028625486,
+        "text": "you guys, and thanks for coming this talk.",
+        "is_final": false,
+        "asr_start_time": 33.49,
+        "asr_end_time": 37.0999968,
+        "confidence": 0.99609375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 41.65235495567322,
+        "wall_clock_lag": 8.162354955673216,
+        "text": "you guys, and thanks for coming this talk and hopeful",
+        "is_final": false,
+        "asr_start_time": 33.49,
+        "asr_end_time": 38.099997,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 42.084182262420654,
+        "wall_clock_lag": 5.1241822624206534,
+        "text": "And, hopefully, we",
+        "is_final": false,
+        "asr_start_time": 36.96,
+        "asr_end_time": 38.5000009,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 43.053730964660645,
+        "wall_clock_lag": 6.093730964660644,
+        "text": "And, hopefully, we could",
+        "is_final": false,
+        "asr_start_time": 36.96,
+        "asr_end_time": 39.4000024,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 44.14247393608093,
+        "wall_clock_lag": 7.182473936080932,
+        "text": "And, hopefully, we could you could have",
+        "is_final": false,
+        "asr_start_time": 36.96,
+        "asr_end_time": 40.4000024,
+        "confidence": 0.9995117
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 45.23023247718811,
+        "wall_clock_lag": 8.27023247718811,
+        "text": "And, hopefully, we could you could have learned something",
+        "is_final": false,
+        "asr_start_time": 36.96,
+        "asr_end_time": 41.4000024,
+        "confidence": 0.9995117
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 45.88455557823181,
+        "wall_clock_lag": 5.484555578231813,
+        "text": "learned something from my talk",
+        "is_final": false,
+        "asr_start_time": 40.4,
+        "asr_end_time": 41.9999985,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 47.082746744155884,
+        "wall_clock_lag": 6.682746744155885,
+        "text": "learned something from my talk, and, also, we could",
+        "is_final": false,
+        "asr_start_time": 40.4,
+        "asr_end_time": 43.099997,
+        "confidence": 0.9980469
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 48.16476130485535,
+        "wall_clock_lag": 7.764761304855348,
+        "text": "learned something from my talk, and, also, we could",
+        "is_final": false,
+        "asr_start_time": 40.4,
+        "asr_end_time": 44.099997,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 49.3719367980957,
+        "wall_clock_lag": 8.971936798095705,
+        "text": "learned something from my talk, and, also, we could discuss together",
+        "is_final": false,
+        "asr_start_time": 40.4,
+        "asr_end_time": 45.199999,
+        "confidence": 0.9980469
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 49.58249258995056,
+        "wall_clock_lag": 9.182492589950563,
+        "text": "私の",
+        "is_final": true,
+        "asr_start_time": 40.4,
+        "asr_end_time": 44.099997,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 49.5887713432312,
+        "wall_clock_lag": 5.778771343231199,
+        "text": "discuss together",
+        "is_final": false,
+        "asr_start_time": 43.81,
+        "asr_end_time": 45.4000002,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 49.7030143737793,
+        "wall_clock_lag": 9.303014373779298,
+        "text": "私の話から何か学んでいただけたなら、そして、また、",
+        "is_final": true,
+        "asr_start_time": 40.4,
+        "asr_end_time": 44.099997,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 49.70405030250549,
+        "wall_clock_lag": 9.304050302505495,
+        "text": "私の話から何か学んでいただけたなら、そして、また、",
+        "is_final": true,
+        "asr_start_time": 40.4,
+        "asr_end_time": 44.099997,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 50.7702054977417,
+        "wall_clock_lag": 6.960205497741697,
+        "text": "discuss together for some",
+        "is_final": false,
+        "asr_start_time": 43.81,
+        "asr_end_time": 46.499998600000005,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 51.65007543563843,
+        "wall_clock_lag": 7.8400754356384255,
+        "text": "discuss together for some have",
+        "is_final": false,
+        "asr_start_time": 43.81,
+        "asr_end_time": 47.2999979,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 52.846991777420044,
+        "wall_clock_lag": 9.036991777420042,
+        "text": "discuss together for some have have some",
+        "is_final": false,
+        "asr_start_time": 43.81,
+        "asr_end_time": 48.400000000000006,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 53.398345947265625,
+        "wall_clock_lag": 6.238345947265628,
+        "text": "help some fruitful",
+        "is_final": false,
+        "asr_start_time": 47.16,
+        "asr_end_time": 48.9000017,
+        "confidence": 0.7426758
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 54.483529806137085,
+        "wall_clock_lag": 7.323529806137088,
+        "text": "have some fruitful discussions",
+        "is_final": false,
+        "asr_start_time": 47.16,
+        "asr_end_time": 49.9000017,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 54.81577205657959,
+        "wall_clock_lag": 7.655772056579593,
+        "text": "have some fruitful discussions.",
+        "is_final": false,
+        "asr_start_time": 47.16,
+        "asr_end_time": 50.200001,
+        "confidence": 0.98095703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 55.91124892234802,
+        "wall_clock_lag": 8.751248922348026,
+        "text": "have some fruitful discussions. Here, my",
+        "is_final": false,
+        "asr_start_time": 47.16,
+        "asr_end_time": 51.200001,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 57.013843059539795,
+        "wall_clock_lag": 6.833843059539795,
+        "text": "Here, my talks title is a",
+        "is_final": false,
+        "asr_start_time": 50.18,
+        "asr_end_time": 52.2000005,
+        "confidence": 0.9482422
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 58.10272240638733,
+        "wall_clock_lag": 7.922722406387329,
+        "text": "Here, my talks title is about an",
+        "is_final": false,
+        "asr_start_time": 50.18,
+        "asr_end_time": 53.2000005,
+        "confidence": 0.9223633
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 59.19605994224548,
+        "wall_clock_lag": 9.016059942245484,
+        "text": "Here, my talk's title is about an overview of",
+        "is_final": false,
+        "asr_start_time": 50.18,
+        "asr_end_time": 54.2000005,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 60.305155754089355,
+        "wall_clock_lag": 6.265155754089356,
+        "text": "our large language model",
+        "is_final": false,
+        "asr_start_time": 54.04,
+        "asr_end_time": 55.1999998,
+        "confidence": 0.85253906
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 60.84603929519653,
+        "wall_clock_lag": 6.806039295196534,
+        "text": "our large language model.",
+        "is_final": false,
+        "asr_start_time": 54.04,
+        "asr_end_time": 55.6999998,
+        "confidence": 0.7056885
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 61.95981478691101,
+        "wall_clock_lag": 7.919814786911012,
+        "text": "our large language model efficiency,",
+        "is_final": false,
+        "asr_start_time": 54.04,
+        "asr_end_time": 56.6999998,
+        "confidence": 0.72143555
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 63.57175374031067,
+        "wall_clock_lag": 6.411753740310672,
+        "text": "That",
+        "is_final": false,
+        "asr_start_time": 57.16,
+        "asr_end_time": 58.2000009,
+        "confidence": 0.9140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 64.66414666175842,
+        "wall_clock_lag": 7.504146661758426,
+        "text": "Let me just",
+        "is_final": false,
+        "asr_start_time": 57.16,
+        "asr_end_time": 59.200001,
+        "confidence": 0.984375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 65.76040983200073,
+        "wall_clock_lag": 8.600409832000736,
+        "text": "Let me just first introduce my",
+        "is_final": false,
+        "asr_start_time": 57.16,
+        "asr_end_time": 60.200001,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 66.52265548706055,
+        "wall_clock_lag": 9.36265548706055,
+        "text": "Let me just first introduce myself.",
+        "is_final": false,
+        "asr_start_time": 57.16,
+        "asr_end_time": 60.9000017,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 67.17945599555969,
+        "wall_clock_lag": 10.019455995559696,
+        "text": "Let me just first introduce myself. Yeah.",
+        "is_final": false,
+        "asr_start_time": 57.16,
+        "asr_end_time": 61.5,
+        "confidence": 0.9807129
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 67.94619607925415,
+        "wall_clock_lag": 7.166196079254149,
+        "text": "Yeah. I",
+        "is_final": false,
+        "asr_start_time": 60.78,
+        "asr_end_time": 62.200002,
+        "confidence": 0.9980469
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 69.03243088722229,
+        "wall_clock_lag": 8.252430887222289,
+        "text": "Yeah. I graduate in",
+        "is_final": false,
+        "asr_start_time": 60.78,
+        "asr_end_time": 63.200002,
+        "confidence": 0.99853516
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 70.1239116191864,
+        "wall_clock_lag": 9.3439116191864,
+        "text": "Yeah. I graduate in go to my under",
+        "is_final": false,
+        "asr_start_time": 60.78,
+        "asr_end_time": 64.1999982,
+        "confidence": 0.99609375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 71.22054815292358,
+        "wall_clock_lag": 10.440548152923583,
+        "text": "Yeah. I graduate in go to my undergraduate degree",
+        "is_final": false,
+        "asr_start_time": 60.78,
+        "asr_end_time": 65.199998,
+        "confidence": 0.9975586
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 72.94925427436829,
+        "wall_clock_lag": 7.229254274368287,
+        "text": "in twenty",
+        "is_final": false,
+        "asr_start_time": 65.72,
+        "asr_end_time": 66.8000018,
+        "confidence": 0.9873047
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 74.15894222259521,
+        "wall_clock_lag": 8.438942222595216,
+        "text": "in 2018, but my",
+        "is_final": false,
+        "asr_start_time": 65.72,
+        "asr_end_time": 67.9000003,
+        "confidence": 0.96435547
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 74.91898775100708,
+        "wall_clock_lag": 9.198987751007081,
+        "text": "in 2018, but my",
+        "is_final": false,
+        "asr_start_time": 65.72,
+        "asr_end_time": 68.5999973,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 76.01650023460388,
+        "wall_clock_lag": 10.296500234603883,
+        "text": "in 2018, but my I started the",
+        "is_final": false,
+        "asr_start_time": 65.72,
+        "asr_end_time": 69.5999973,
+        "confidence": 0.984375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 77.11025524139404,
+        "wall_clock_lag": 11.390255241394044,
+        "text": "in 2018, but my I started my research",
+        "is_final": false,
+        "asr_start_time": 65.72,
+        "asr_end_time": 70.5999973,
+        "confidence": 0.99609375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 78.29895687103271,
+        "wall_clock_lag": 7.608956871032717,
+        "text": "career for",
+        "is_final": false,
+        "asr_start_time": 70.69,
+        "asr_end_time": 71.6999945,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 79.39329743385315,
+        "wall_clock_lag": 8.703297433853152,
+        "text": "career from twenty seven",
+        "is_final": false,
+        "asr_start_time": 70.69,
+        "asr_end_time": 72.6999945,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 80.15905332565308,
+        "wall_clock_lag": 9.469053325653078,
+        "text": "career from 2017. I",
+        "is_final": false,
+        "asr_start_time": 70.69,
+        "asr_end_time": 73.399999,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 81.25395560264587,
+        "wall_clock_lag": 10.563955602645876,
+        "text": "career from 2017, and",
+        "is_final": false,
+        "asr_start_time": 70.69,
+        "asr_end_time": 74.399999,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 82.35828876495361,
+        "wall_clock_lag": 11.668288764953616,
+        "text": "career from 2017. And at that time, I",
+        "is_final": false,
+        "asr_start_time": 70.69,
+        "asr_end_time": 75.399999,
+        "confidence": 0.9802246
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 82.67763018608093,
+        "wall_clock_lag": 8.33763018608093,
+        "text": "at that time, I do some",
+        "is_final": false,
+        "asr_start_time": 74.34,
+        "asr_end_time": 75.70000060000001,
+        "confidence": 0.98583984
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 83.88625717163086,
+        "wall_clock_lag": 9.546257171630856,
+        "text": "a lot of time, I do some works, like, for",
+        "is_final": false,
+        "asr_start_time": 74.34,
+        "asr_end_time": 76.8000067,
+        "confidence": 0.9851074
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 84.9746401309967,
+        "wall_clock_lag": 10.6346401309967,
+        "text": "a lot of time, I do some works, like, for like,",
+        "is_final": false,
+        "asr_start_time": 74.34,
+        "asr_end_time": 77.8000067,
+        "confidence": 0.9243164
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 85.8489556312561,
+        "wall_clock_lag": 11.5089556312561,
+        "text": "a lot of time, I do some works, like, for like, you you",
+        "is_final": false,
+        "asr_start_time": 74.34,
+        "asr_end_time": 78.600002,
+        "confidence": 0.9589844
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 86.50124788284302,
+        "wall_clock_lag": 12.161247882843014,
+        "text": "a lot of time, I do some works, like, for like, you use",
+        "is_final": false,
+        "asr_start_time": 74.34,
+        "asr_end_time": 79.20000060000001,
+        "confidence": 0.92822266
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 87.36774730682373,
+        "wall_clock_lag": 8.387747306823726,
+        "text": "reinforcement",
+        "is_final": false,
+        "asr_start_time": 78.98,
+        "asr_end_time": 79.9999966,
+        "confidence": 0.9980469
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 88.45510625839233,
+        "wall_clock_lag": 9.47510625839233,
+        "text": "reinforcement learning to train",
+        "is_final": false,
+        "asr_start_time": 78.98,
+        "asr_end_time": 80.9999966,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 89.55667614936829,
+        "wall_clock_lag": 10.576676149368282,
+        "text": "reinforcement learning to train language model.",
+        "is_final": false,
+        "asr_start_time": 78.98,
+        "asr_end_time": 81.9999966,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 90.64859867095947,
+        "wall_clock_lag": 11.668598670959469,
+        "text": "reinforcement learning to train language model. Maybe",
+        "is_final": false,
+        "asr_start_time": 78.98,
+        "asr_end_time": 82.9999966,
+        "confidence": 0.9980469
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 91.74292826652527,
+        "wall_clock_lag": 9.532928266525275,
+        "text": "Maybe this is a",
+        "is_final": false,
+        "asr_start_time": 82.21,
+        "asr_end_time": 84.00000089999999,
+        "confidence": 0.9941406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 92.81779146194458,
+        "wall_clock_lag": 10.607791461944586,
+        "text": "Maybe this is several for",
+        "is_final": false,
+        "asr_start_time": 82.21,
+        "asr_end_time": 85.000001,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 93.91066813468933,
+        "wall_clock_lag": 11.700668134689337,
+        "text": "Maybe this is several paper to",
+        "is_final": false,
+        "asr_start_time": 82.21,
+        "asr_end_time": 86.000001,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 95.01505017280579,
+        "wall_clock_lag": 12.805050172805792,
+        "text": "Maybe this is several first paper to use IO",
+        "is_final": false,
+        "asr_start_time": 82.21,
+        "asr_end_time": 87.000001,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 96.1983995437622,
+        "wall_clock_lag": 9.138399543762205,
+        "text": "enhance language",
+        "is_final": false,
+        "asr_start_time": 87.06,
+        "asr_end_time": 88.1000009,
+        "confidence": 0.9941406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 97.1693947315216,
+        "wall_clock_lag": 10.109394731521604,
+        "text": "enhance language model",
+        "is_final": false,
+        "asr_start_time": 87.06,
+        "asr_end_time": 89.0000024,
+        "confidence": 0.98828125
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 98.29569745063782,
+        "wall_clock_lag": 11.235697450637815,
+        "text": "enhance language model coherency.",
+        "is_final": false,
+        "asr_start_time": 87.06,
+        "asr_end_time": 90.0000024,
+        "confidence": 0.9951172
+      }
+    ],
+    "full_asr": "Let me share my screen.\nPlease go ahead.\nlearned something from my talk, and, also, we could",
+    "full_translation": "画面を共有させてください。\nどうぞ。\n私の話から何か学んでいただけたなら、そして、また、"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null
+  },
+  "notes": "Shifted per user request to 7:20-8:50, right at the start of Jiaxian Guo's actual English talk (skips most of the JA handoff). Tests ASR-error auto-correction with strengthened dictionary hints (Cha senko/Jaachenko -> Jiaxian Guo, Marsau Labs -> Matsuo Lab). gemini-2.5-flash-lite, fresh daily quota.",
+  "created_at_utc": "2026-07-23T00:49:44.158019+00:00",
+  "elapsed_seconds": 120.022
+}

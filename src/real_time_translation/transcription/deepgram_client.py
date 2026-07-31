@@ -17,6 +17,17 @@ class TranscriptionResult:
     confidence: float
     start_time: float
     end_time: float
+    # Identifies which spoken utterance this chunk belongs to (stable across
+    # soft-finalized continuation chunks of the same utterance, see
+    # `max_interim_duration`). Lets downstream consumers tell "more of the
+    # same utterance is coming" apart from "this utterance is truly done"
+    # instead of treating every `is_final=True` chunk as a standalone line.
+    utterance_id: int = 0
+    # True when this chunk is the genuine end of the utterance (Deepgram's
+    # own `is_final`/`UtteranceEnd`). False when it's a soft-finalized
+    # mid-utterance chunk emitted early (by `max_interim_duration`) purely
+    # for latency -- more chunks for the same `utterance_id` are expected.
+    is_utterance_end: bool = True
 
     @property
     def is_low_confidence(self) -> bool:
@@ -43,6 +54,8 @@ class DeepgramTranscriber:
         keepalive_interval: float = 5.0,
         emit_interim: bool = False,
         vad_events: bool | None = None,
+        max_interim_duration: float | None = 4.0,
+        keyterms: list[str] | None = None,
     ) -> None:
         """Initialize Deepgram transcriber.
 
@@ -58,6 +71,16 @@ class DeepgramTranscriber:
             keepalive_interval: Keepalive interval in seconds
             emit_interim: Whether to emit interim results to consumers
             vad_events: Whether to enable VAD events in Deepgram
+            max_interim_duration: Force-finalize (soft-final) an in-progress
+                utterance after this many seconds even without a natural
+                pause. Continuous fluent speech (common in lectures) can run
+                well past `endpointing`/`utterance_end_ms` without ever
+                triggering Deepgram's own `is_final`, which would otherwise
+                silently withhold translation for the entire stretch. None
+                disables this safety net.
+            keyterms: Domain terms to bias the acoustic/language model
+                toward (Deepgram Keyterm Prompting). Only supported on
+                nova-3 models -- pass None/empty when using an older model.
         """
         self._api_key = api_key
         self._language = language
@@ -70,12 +93,15 @@ class DeepgramTranscriber:
         self._keepalive_interval = keepalive_interval
         self._emit_interim = emit_interim
         self._vad_events = vad_events
+        self._max_interim_duration = max_interim_duration
+        self._keyterms = keyterms
 
         self._client: AsyncDeepgramClient | None = None
         self._connection_cm: Any = None
         self._connection: Any = None
         self._listener_task: asyncio.Task[None] | None = None
         self._keepalive_task: asyncio.Task[None] | None = None
+        self._force_finalize_task: asyncio.Task[None] | None = None
         self._last_audio_at = 0.0
         self._pending_result: TranscriptionResult | None = None
         self._last_final_text: str | None = None
@@ -84,6 +110,18 @@ class DeepgramTranscriber:
         self._result_queue: asyncio.Queue[TranscriptionResult] = asyncio.Queue()
         self._on_transcript: Callable[[TranscriptionResult], None] | None = None
 
+        # Utterance-level state for incremental (soft) finalization. Deepgram
+        # sends cumulative transcripts per utterance (each interim/final
+        # message repeats the whole utterance so far, not just new words),
+        # so soft-finalizing early requires tracking how many words have
+        # already been consumed/emitted to avoid re-translating them when
+        # the next message repeats them.
+        self._utterance_start_time: float | None = None
+        self._consumed_word_count = 0
+        self._consumed_end_time: float | None = None
+        self._utterance_since: float | None = None
+        self._utterance_id = 0
+
     async def connect(self) -> None:
         """Establish WebSocket connection to Deepgram."""
         self._client = AsyncDeepgramClient(api_key=self._api_key)
@@ -91,29 +129,62 @@ class DeepgramTranscriber:
         def _bool_str(value: bool) -> str:
             return "true" if value else "false"
 
-        options = {
-            "model": self._model,
-            "language": self._language,
-            "punctuate": _bool_str(self._punctuate),
-            "smart_format": _bool_str(self._smart_format),
-            "interim_results": _bool_str(self._interim_results),
-            "encoding": "linear16",
-            "sample_rate": "16000",
-            "channels": "1",
-        }
-        if self._endpointing is not None:
-            options["endpointing"] = str(self._endpointing)
-        if self._utterance_end_ms is not None:
-            options["utterance_end_ms"] = str(self._utterance_end_ms)
-        if self._vad_events is not None:
-            options["vad_events"] = _bool_str(self._vad_events)
+        def _build_options(keyterms: list[str] | None) -> dict[str, Any]:
+            options: dict[str, Any] = {
+                "model": self._model,
+                "language": self._language,
+                "punctuate": _bool_str(self._punctuate),
+                "smart_format": _bool_str(self._smart_format),
+                "interim_results": _bool_str(self._interim_results),
+                "encoding": "linear16",
+                "sample_rate": "16000",
+                "channels": "1",
+            }
+            if self._endpointing is not None:
+                options["endpointing"] = str(self._endpointing)
+            if self._utterance_end_ms is not None:
+                options["utterance_end_ms"] = str(self._utterance_end_ms)
+            if self._vad_events is not None:
+                options["vad_events"] = _bool_str(self._vad_events)
+            if keyterms:
+                options["keyterm"] = keyterms
+            return options
 
-        self._connection_cm = self._client.listen.v1.connect(**options)
-        self._connection = await self._connection_cm.__aenter__()
+        # Deepgram enforces a cumulative *token* budget across all keyterms,
+        # not just a term-count cap: a real-world dictionary with
+        # multi-word/CJK terms has been observed to 400 well under 100
+        # terms even though each individual term is well-formed (a 100-term
+        # list failed; the same list truncated to 90 connected fine).
+        # Modeling Deepgram's exact tokenizer isn't worth the effort here,
+        # so back off by halving the list on failure instead -- an
+        # ASR-quality optimization must never be able to take the whole
+        # session down with it.
+        active_keyterms = self._keyterms
+        while True:
+            try:
+                self._connection_cm = self._client.listen.v1.connect(
+                    **_build_options(active_keyterms)
+                )
+                self._connection = await self._connection_cm.__aenter__()
+                break
+            except Exception as exc:  # noqa: BLE001
+                if not active_keyterms:
+                    raise
+                dropped = len(active_keyterms)
+                active_keyterms = active_keyterms[: len(active_keyterms) // 2]
+                print(
+                    f"Deepgram connect failed with {dropped} keyterms active "
+                    f"({exc}); retrying with {len(active_keyterms)}"
+                )
+        self._keyterms = active_keyterms
         self._running = True
         self._last_audio_at = time.monotonic()
         self._listener_task = asyncio.create_task(self._listen())
         self._keepalive_task = asyncio.create_task(self._keepalive_loop())
+        if self._max_interim_duration is not None:
+            self._force_finalize_task = asyncio.create_task(
+                self._force_finalize_loop()
+            )
 
     async def finalize(self) -> None:
         """Signal end of audio stream to Deepgram and wait for final results."""
@@ -143,6 +214,10 @@ class DeepgramTranscriber:
             self._keepalive_task.cancel()
             await asyncio.gather(self._keepalive_task, return_exceptions=True)
             self._keepalive_task = None
+        if self._force_finalize_task:
+            self._force_finalize_task.cancel()
+            await asyncio.gather(self._force_finalize_task, return_exceptions=True)
+            self._force_finalize_task = None
         if self._connection_cm:
             await self._connection_cm.__aexit__(None, None, None)
             self._connection_cm = None
@@ -165,6 +240,20 @@ class DeepgramTranscriber:
             callback: Function to call with transcription results
         """
         self._on_transcript = callback
+
+    @property
+    def keyterms(self) -> list[str] | None:
+        """Current keyterm list (read by `connect()`)."""
+        return self._keyterms
+
+    def set_keyterms(self, keyterms: list[str] | None) -> None:
+        """Update the keyterm list before `connect()` is called.
+
+        Lets a caller (e.g. auto-preload) merge new dictionary terms in
+        after construction but before the Deepgram connection opens, since
+        keyterms are only read at `connect()` time.
+        """
+        self._keyterms = keyterms
 
     async def results(self) -> AsyncIterator[TranscriptionResult]:
         """Async iterator for transcription results.
@@ -208,6 +297,87 @@ class DeepgramTranscriber:
         except Exception as exc:  # noqa: BLE001
             self._on_error(exc)
 
+    async def _force_finalize_loop(self) -> None:
+        """Periodically soft-finalize a stalled in-progress utterance.
+
+        Continuous fluent speech can run well past `endpointing` /
+        `utterance_end_ms` without Deepgram ever emitting `is_final` (no
+        long-enough pause occurs). Without this, translation would silently
+        stall for the entire stretch. Checked on a short interval so the
+        forced cut lands close to `max_interim_duration` regardless of when
+        Deepgram's own messages happen to arrive.
+        """
+        try:
+            while self._running:
+                await asyncio.sleep(0.5)
+                if not self._running or self._max_interim_duration is None:
+                    continue
+                if self._utterance_since is None or self._pending_result is None:
+                    continue
+                elapsed = time.monotonic() - self._utterance_since
+                if elapsed >= self._max_interim_duration:
+                    self._soft_finalize_pending(is_utterance_end=False)
+                    # Deepgram's own utterance is still open; only restart
+                    # the timeout window, don't reset utterance tracking.
+                    self._utterance_since = time.monotonic()
+        except asyncio.CancelledError:
+            pass
+        except Exception as exc:  # noqa: BLE001
+            self._on_error(exc)
+
+    def _track_utterance_boundary(self, start: float) -> None:
+        """Reset per-utterance consumption tracking when a new utterance starts."""
+        if self._utterance_start_time is None or abs(
+            start - self._utterance_start_time
+        ) > 1e-6:
+            self._utterance_start_time = start
+            self._utterance_since = time.monotonic()
+            self._consumed_word_count = 0
+            self._consumed_end_time = start
+            self._utterance_id += 1
+
+    def _reset_utterance_state(self) -> None:
+        self._utterance_start_time = None
+        self._utterance_since = None
+        self._consumed_word_count = 0
+        self._consumed_end_time = None
+        self._pending_result = None
+
+    def _soft_finalize_pending(self, *, is_utterance_end: bool) -> None:
+        """Emit unconsumed words from the current pending interim as final.
+
+        Used by both the max-duration safety net (`is_utterance_end=False`:
+        more chunks for this utterance are still expected) and `UtteranceEnd`
+        handling (`is_utterance_end=True`: Deepgram considers the utterance
+        over). Only emits the words not already consumed by a prior
+        soft-finalization, since Deepgram repeats the full cumulative
+        transcript on every message for an utterance, not just new words.
+        """
+        if self._pending_result is None:
+            return
+        words = self._pending_result.text.split()
+        new_words = words[self._consumed_word_count :]
+        if not new_words:
+            return
+        new_text = " ".join(new_words)
+        start = (
+            self._consumed_end_time
+            if self._consumed_end_time is not None
+            else self._pending_result.start_time
+        )
+        chunk = TranscriptionResult(
+            text=new_text,
+            is_final=True,
+            confidence=self._pending_result.confidence,
+            start_time=start,
+            end_time=self._pending_result.end_time,
+            utterance_id=self._utterance_id,
+            is_utterance_end=is_utterance_end,
+        )
+        self._consumed_word_count = len(words)
+        self._consumed_end_time = self._pending_result.end_time
+        self._emit_result(chunk)
+
     def _handle_message(self, result: Any) -> None:
         """Handle transcription message from Deepgram.
 
@@ -217,8 +387,11 @@ class DeepgramTranscriber:
         try:
             message_type = getattr(result, "type", None)
             if message_type == "UtteranceEnd":
-                # Deepgram natively handles endpointing with vad_events / endpointing options.
-                # Ignoring UtteranceEnd prevents duplicate/overlapping outputs.
+                # Flush any words not yet consumed by a natural `is_final`
+                # or a prior soft-finalization, then reset: Deepgram
+                # considers this utterance over.
+                self._soft_finalize_pending(is_utterance_end=True)
+                self._reset_utterance_state()
                 return
             if message_type != "Results":
                 return
@@ -231,26 +404,49 @@ class DeepgramTranscriber:
             if not transcript:
                 return
 
+            start = float(result.start)
+            end = float(result.start + result.duration)
+            self._track_utterance_boundary(start)
+
+            if is_final:
+                words = transcript.split()
+                new_words = words[self._consumed_word_count :]
+                if new_words:
+                    chunk_start = (
+                        self._consumed_end_time
+                        if self._consumed_end_time is not None
+                        else start
+                    )
+                    final_result = TranscriptionResult(
+                        text=" ".join(new_words),
+                        is_final=True,
+                        confidence=float(alternative.confidence),
+                        start_time=chunk_start,
+                        end_time=end,
+                        utterance_id=self._utterance_id,
+                        is_utterance_end=True,
+                    )
+                    self._emit_result(final_result)
+                self._reset_utterance_state()
+                return
+
             transcript_result = TranscriptionResult(
                 text=transcript,
-                is_final=is_final,
+                is_final=False,
                 confidence=float(alternative.confidence),
-                start_time=float(result.start),
-                end_time=float(result.start + result.duration),
+                start_time=self._utterance_start_time
+                if self._utterance_start_time is not None
+                else start,
+                end_time=end,
+                utterance_id=self._utterance_id,
+                is_utterance_end=False,
             )
-
-            if transcript_result.is_final:
-                self._pending_result = None
+            self._pending_result = transcript_result
+            if self._emit_interim:
                 self._emit_result(transcript_result)
-            else:
-                self._pending_result = transcript_result
-                if self._emit_interim:
-                    self._emit_result(transcript_result)
 
         except (AttributeError, IndexError):
             pass  # Ignore malformed results
-
-
 
     def _emit_result(self, transcript_result: TranscriptionResult) -> None:
         if transcript_result.is_final:

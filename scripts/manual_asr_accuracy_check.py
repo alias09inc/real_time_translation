@@ -206,10 +206,10 @@ async def test_accuracy(audio_path: str) -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: uv run python test_asr_accuracy.py <audio_file>")
+        print("Usage: uv run python scripts/manual_asr_accuracy_check.py <audio_file>")
         print("\nSupported formats: WAV, FLAC, MP3, etc.")
         print("\nExample:")
-        print("  uv run python test_asr_accuracy.py clip_386-464.flac")
+        print("  uv run python scripts/manual_asr_accuracy_check.py clip_386-464.flac")
         sys.exit(1)
 
     asyncio.run(test_accuracy(sys.argv[1]))

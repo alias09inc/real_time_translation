@@ -33,6 +33,9 @@ from typing import Any
 
 from real_time_translation.audio.capture import QueueAudioCapture
 from real_time_translation.config import Config
+from real_time_translation.experiments.glossary_metrics import (
+    compute_glossary_adherence,
+)
 from real_time_translation.pipeline import TranslationPipeline, TranslationResult
 
 
@@ -157,6 +160,31 @@ async def _read_all_stderr(proc: asyncio.subprocess.Process) -> str:
     return data.decode("utf-8", errors="replace")
 
 
+def _ensure_csv_header(csv_path: Path, header: list[str]) -> None:
+    """Migrate an existing results.csv to a new (superset) header in place.
+
+    Adding metric columns over time (chrF, glossary adherence, ...) means
+    the header on disk can lag `header` here. Rewriting preserves old rows
+    (missing new columns read back as "") instead of producing a file whose
+    physical header no longer matches later-appended rows' column order.
+    """
+    if not csv_path.exists():
+        return
+
+    with csv_path.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        existing_header = reader.fieldnames
+        if existing_header is None or list(existing_header) == header:
+            return
+        rows = list(reader)
+
+    with csv_path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=header)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({key: row.get(key, "") for key in header})
+
+
 def _maybe_compute_chrf(
     *,
     hypothesis: str,
@@ -200,13 +228,25 @@ async def run_experiment(
     config = Config.from_env(require_zoom=False)
     if endpointing is not None:
         config.deepgram_endpointing = endpointing
+    if domain and domain not in config.domain_packs:
+        pack_path = config.domain_packs_dir / f"{domain}.csv"
+        if pack_path.exists():
+            config.domain_packs = [*config.domain_packs, domain]
     capture = QueueAudioCapture(max_queue_size=2000)
     pipeline = TranslationPipeline(config=config, audio_capture=capture)
 
     records: list[SegmentRecord] = []
 
     def on_result(result: TranslationResult) -> None:
-        if not result.is_final:
+        if not result.is_final or not result.is_translation_complete:
+            return
+        if not result.is_utterance_end:
+            # Soft-finalized mid-utterance chunk (see
+            # deepgram_max_interim_duration) -- more text for this same
+            # utterance is coming and will arrive as a later, larger
+            # accumulated result. Recording this one too would duplicate
+            # its text in full_asr/full_translation and inflate
+            # segment_count.
             return
         if not result.translated_text:
             return
@@ -295,6 +335,12 @@ async def run_experiment(
         reference_text_path=reference_text_path,
     )
 
+    glossary_result = compute_glossary_adherence(
+        pipeline._translator.dictionary,
+        source_text=full_asr,
+        hypothesis_text=full_translation,
+    )
+
     avg_conf = (
         sum(r.confidence for r in records) / len(records) if records else 0.0
     )
@@ -334,6 +380,8 @@ async def run_experiment(
             "translation_queue_size": config.translation_queue_size,
             "deepgram_endpointing": config.deepgram_endpointing,
             "deepgram_utterance_end_ms": config.deepgram_utterance_end_ms,
+            "domain_packs": config.domain_packs,
+            "dictionary_size": len(pipeline._translator.dictionary),
         },
         "results": {
             "segment_count": len(records),
@@ -345,6 +393,10 @@ async def run_experiment(
         "metrics": {
             "chrf_score": chrf_score,
             "xcomet_score": None,
+            "glossary_adherence_rate": glossary_result.rate,
+            "glossary_expected_terms": glossary_result.expected_terms,
+            "glossary_matched_terms": glossary_result.matched_terms,
+            "glossary_missed_terms": glossary_result.missed_terms,
         },
         "notes": notes or "",
         "created_at_utc": now.isoformat(),
@@ -371,6 +423,9 @@ async def run_experiment(
         "avg_confidence",
         "chrf_score",
         "xcomet_score",
+        "glossary_adherence_rate",
+        "glossary_expected_terms",
+        "glossary_matched_terms",
         "notes",
         "json_path",
     ]
@@ -389,9 +444,16 @@ async def run_experiment(
         "avg_confidence": f"{avg_conf:.4f}",
         "chrf_score": "" if chrf_score is None else f"{chrf_score:.3f}",
         "xcomet_score": "",
+        "glossary_adherence_rate": (
+            "" if glossary_result.rate is None else f"{glossary_result.rate:.3f}"
+        ),
+        "glossary_expected_terms": str(glossary_result.expected_terms),
+        "glossary_matched_terms": str(glossary_result.matched_terms),
         "notes": notes or "",
         "json_path": str(json_path),
     }
+
+    _ensure_csv_header(csv_path, header)
 
     write_header = not csv_path.exists()
     with csv_path.open("a", newline="", encoding="utf-8") as f:

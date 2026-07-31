@@ -1,0 +1,449 @@
+{
+  "date": "2026-07-22",
+  "experiment_name": "tuned_2_5s_window",
+  "domain": "llm_lecture_mixed_ja_en",
+  "input": {
+    "type": "local_video",
+    "path": "experiments\\clips\\clip_tune_18s.wav",
+    "start_seconds": 0.0,
+    "duration_seconds": null
+  },
+  "models": {
+    "deepgram_model": "nova-3",
+    "deepgram_language": "multi",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-2.5-flash-lite",
+    "gemini_thinking_budget": 0
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "translation_workers": 4,
+    "gemini_rpm_limit": 9,
+    "deepgram_endpointing": 300,
+    "deepgram_utterance_end_ms": 1000,
+    "deepgram_max_interim_duration": 2.5
+  },
+  "results": {
+    "segment_count": 5,
+    "avg_confidence": 0.95097656,
+    "avg_end_to_end_latency_seconds": 5.0253422532232666,
+    "max_end_to_end_latency_seconds": 5.744197950363159,
+    "avg_mt_latency_seconds": 0.09549598693847657,
+    "segments": [
+      {
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.3,
+        "asr_final_arrival": 4.8796491622924805,
+        "translation_complete_arrival": 4.994447231292725,
+        "translation_first_token_arrival": 4.8796491622924805,
+        "end_to_end_latency": 4.994447231292725,
+        "mt_latency": 0.11479806900024414,
+        "asr": "お話 をして いただ こう と思って ます。 と",
+        "translation": "お話 をして いただ こう と思って ます。 と",
+        "confidence": 0.9819336
+      },
+      {
+        "asr_start_time": 3.14,
+        "asr_end_time": 7.0999998,
+        "asr_final_arrival": 8.764288663864136,
+        "translation_complete_arrival": 8.88419795036316,
+        "translation_first_token_arrival": 8.764288663864136,
+        "end_to_end_latency": 5.744197950363159,
+        "mt_latency": 0.11990928649902344,
+        "asr": "二人 とも 両 者 とも ですね、 Google の 研究 者、",
+        "translation": "二人とも両者ともですね、Googleの研究者、",
+        "confidence": 0.9165039
+      },
+      {
+        "asr_start_time": 7.0999998,
+        "asr_end_time": 9.1999995,
+        "asr_final_arrival": 11.318208694458008,
+        "translation_complete_arrival": 11.416486740112305,
+        "translation_first_token_arrival": 11.318208694458008,
+        "end_to_end_latency": 4.316486940112305,
+        "mt_latency": 0.09827804565429688,
+        "asr": "で、 一人 目が",
+        "translation": "で、 一人 目が",
+        "confidence": 0.95703125
+      },
+      {
+        "asr_start_time": 9.1999995,
+        "asr_end_time": 11.199999,
+        "asr_final_arrival": 13.884982109069824,
+        "translation_complete_arrival": 13.969658613204956,
+        "translation_first_token_arrival": 13.884982109069824,
+        "end_to_end_latency": 4.7696591132049555,
+        "mt_latency": 0.08467650413513184,
+        "asr": "ジャ シャ ン ゴ ー さんで、",
+        "translation": "ジャ シャ ン ゴ ー さんで、",
+        "confidence": 0.94140625
+      },
+      {
+        "asr_start_time": 11.199999,
+        "asr_end_time": 14.3,
+        "asr_final_arrival": 16.442101001739502,
+        "translation_complete_arrival": 16.50191903114319,
+        "translation_first_token_arrival": 16.442101001739502,
+        "end_to_end_latency": 5.301920031143188,
+        "mt_latency": 0.05981802940368652,
+        "asr": "ライブ スト リーミング で リアル タイム で",
+        "translation": "ライブ ストリーミング で リアル タイム で",
+        "confidence": 0.9580078
+      }
+    ],
+    "events": [
+      {
+        "kind": "asr_interim",
+        "playback_offset": 1.4633574485778809,
+        "wall_clock_lag": 1.4633574485778809,
+        "text": "お話",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 1.0,
+        "confidence": 0.87597656
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 2.2770066261291504,
+        "wall_clock_lag": 2.2770066261291504,
+        "text": "お話 をして いただ こう",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.0,
+        "confidence": 0.98535156
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 3.034562826156616,
+        "wall_clock_lag": 3.034562826156616,
+        "text": "お話 をして いただ こう と思って",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.5,
+        "confidence": 0.98095703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 3.6898746490478516,
+        "wall_clock_lag": 3.6898746490478516,
+        "text": "お話 をして いただ こう と思って ます。 と",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.3,
+        "confidence": 0.9819336
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 4.784212112426758,
+        "wall_clock_lag": 4.784212112426758,
+        "text": "お話 をして いただ こう と思って ます。 二人 とも 両 親",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 4.3,
+        "confidence": 0.94189453
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 4.8796491622924805,
+        "wall_clock_lag": 4.8796491622924805,
+        "text": "お",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.3,
+        "confidence": 0.9819336
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 4.993527889251709,
+        "wall_clock_lag": 4.993527889251709,
+        "text": "お話 をして いただ こう と思って ます。 と",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.3,
+        "confidence": 0.9819336
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 4.994447231292725,
+        "wall_clock_lag": 4.994447231292725,
+        "text": "お話 をして いただ こう と思って ます。 と",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.3,
+        "confidence": 0.9819336
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 5.608610391616821,
+        "wall_clock_lag": 2.468610391616821,
+        "text": "二人 とも 両 者 とも ですね、",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 4.999999900000001,
+        "confidence": 0.9248047
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 6.752231121063232,
+        "wall_clock_lag": 3.6122311210632323,
+        "text": "二人 とも 両 者 とも ですね、 Google の 件",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 6.0999998,
+        "confidence": 0.8642578
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 8.066152572631836,
+        "wall_clock_lag": 4.926152572631835,
+        "text": "二人 とも 両 者 とも ですね、 Google の 研究 者、",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 7.0999998,
+        "confidence": 0.9165039
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 8.171442031860352,
+        "wall_clock_lag": 5.031442031860351,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 e",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 7.4,
+        "confidence": 0.9375
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 8.764288663864136,
+        "wall_clock_lag": 5.624288663864135,
+        "text": "二人",
+        "is_final": true,
+        "asr_start_time": 3.14,
+        "asr_end_time": 7.0999998,
+        "confidence": 0.9165039
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 8.882882833480835,
+        "wall_clock_lag": 5.742882833480834,
+        "text": "二人とも両者ともですね、Googleの研究者、",
+        "is_final": true,
+        "asr_start_time": 3.14,
+        "asr_end_time": 7.0999998,
+        "confidence": 0.9165039
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 8.88419795036316,
+        "wall_clock_lag": 5.744197950363159,
+        "text": "二人とも両者ともですね、Googleの研究者、",
+        "is_final": true,
+        "asr_start_time": 3.14,
+        "asr_end_time": 7.0999998,
+        "confidence": 0.9165039
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 9.052992582321167,
+        "wall_clock_lag": 5.912992582321166,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 8.1999995,
+        "confidence": 0.9790039
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 10.117250204086304,
+        "wall_clock_lag": 6.977250204086303,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 9.1999995,
+        "confidence": 0.95703125
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 11.227054357528687,
+        "wall_clock_lag": 8.087054357528686,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さん。",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 10.1999995,
+        "confidence": 0.9375
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 11.318208694458008,
+        "wall_clock_lag": 4.218208894458008,
+        "text": "で",
+        "is_final": true,
+        "asr_start_time": 7.0999998,
+        "asr_end_time": 9.1999995,
+        "confidence": 0.95703125
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 11.415279388427734,
+        "wall_clock_lag": 4.315279588427734,
+        "text": "で、 一人 目が",
+        "is_final": true,
+        "asr_start_time": 7.0999998,
+        "asr_end_time": 9.1999995,
+        "confidence": 0.95703125
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 11.416486740112305,
+        "wall_clock_lag": 4.316486940112305,
+        "text": "で、 一人 目が",
+        "is_final": true,
+        "asr_start_time": 7.0999998,
+        "asr_end_time": 9.1999995,
+        "confidence": 0.95703125
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 12.29738187789917,
+        "wall_clock_lag": 9.15738187789917,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 11.199999,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 13.583503723144531,
+        "wall_clock_lag": 10.44350372314453,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リ ーム",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 12.399999000000001,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 13.884982109069824,
+        "wall_clock_lag": 4.684982609069824,
+        "text": "ジャ",
+        "is_final": true,
+        "asr_start_time": 9.1999995,
+        "asr_end_time": 11.199999,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 13.968177080154419,
+        "wall_clock_lag": 4.768177580154418,
+        "text": "ジャ シャ ン ゴ ー さんで、",
+        "is_final": true,
+        "asr_start_time": 9.1999995,
+        "asr_end_time": 11.199999,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 13.969658613204956,
+        "wall_clock_lag": 4.7696591132049555,
+        "text": "ジャ シャ ン ゴ ー さんで、",
+        "is_final": true,
+        "asr_start_time": 9.1999995,
+        "asr_end_time": 11.199999,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 14.69341230392456,
+        "wall_clock_lag": 11.55341230392456,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で、 リア",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 13.399999000000001,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 15.663282871246338,
+        "wall_clock_lag": 12.523282871246337,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 14.3,
+        "confidence": 0.9580078
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 16.442101001739502,
+        "wall_clock_lag": 5.242102001739502,
+        "text": "ライブ",
+        "is_final": true,
+        "asr_start_time": 11.199999,
+        "asr_end_time": 14.3,
+        "confidence": 0.9580078
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 16.501331329345703,
+        "wall_clock_lag": 5.301332329345703,
+        "text": "ライブ ストリーミング で リアル タイム で",
+        "is_final": true,
+        "asr_start_time": 11.199999,
+        "asr_end_time": 14.3,
+        "confidence": 0.9580078
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 16.50191903114319,
+        "wall_clock_lag": 5.301920031143188,
+        "text": "ライブ ストリーミング で リアル タイム で",
+        "is_final": true,
+        "asr_start_time": 11.199999,
+        "asr_end_time": 14.3,
+        "confidence": 0.9580078
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 16.749918937683105,
+        "wall_clock_lag": 13.609918937683105,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 15.3,
+        "confidence": 0.94750977
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 18.602084636688232,
+        "wall_clock_lag": 15.462084636688232,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 17.0,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 19.6967716217041,
+        "wall_clock_lag": 16.5567716217041,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二 人が ユ ンチ ェ",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 18.0,
+        "confidence": 0.93115234
+      }
+    ],
+    "full_asr": "お話 をして いただ こう と思って ます。 と\n二人 とも 両 者 とも ですね、 Google の 研究 者、\nで、 一人 目が\nジャ シャ ン ゴ ー さんで、\nライブ スト リーミング で リアル タイム で",
+    "full_translation": "お話 をして いただ こう と思って ます。 と\n二人とも両者ともですね、Googleの研究者、\nで、 一人 目が\nジャ シャ ン ゴ ー さんで、\nライブ ストリーミング で リアル タイム で"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null
+  },
+  "notes": "Tuning test v2: max_interim_duration 4.0->2.5s, endpointing 500->300ms, utterance_end_ms left at default 1000ms (700ms was likely below Deepgram's allowed minimum).",
+  "created_at_utc": "2026-07-22T12:28:55.137139+00:00",
+  "elapsed_seconds": 38.491
+}

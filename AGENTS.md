@@ -6,13 +6,26 @@
 
 ```
 real_time_translation/
-├── src/real_time_translation/   # メインパッケージ
+├── src/real_time_translation/   # メインパッケージ（モノリシック実行）
 │   ├── audio/                   # 音声取得モジュール
 │   ├── transcription/           # Deepgram文字起こし
-│   ├── translation/             # LangChain翻訳
+│   ├── translation/             # LLM翻訳・辞書・ドメインパック
+│   ├── preload/                 # スライド/動画からの事前用語抽出
+│   ├── experiments/             # 精度実験ランナー・分析スクリプト
+│   ├── web/                     # オーバーレイ字幕UI (overlay.html)
 │   ├── config.py                # 設定管理
 │   ├── pipeline.py              # パイプライン統合
+│   ├── gradio_demo.py           # Gradio Webデモ
 │   └── main.py                  # CLIエントリーポイント
+├── services/                    # マイクロサービス実行（Docker Compose）
+│   ├── asr/                     # Deepgram文字起こしサービス
+│   ├── translator/              # LLM翻訳サービス
+│   └── ws/                      # WebSocket配信サービス
+│   # services/* は src/ と意図的にコード共有していない独立デプロイ単位
+│   # （機能が分岐しているため、構造リファクタで自動マージはしない）
+├── scripts/                     # スタンドアロンの運用/デバッグツール
+├── experiments/                 # 実験結果 (JSON/CSV) の出力先
+├── dictionaries/                # ドメイン別・セッション別の用語辞書CSV
 ├── tests/                       # テストファイル
 ├── pyproject.toml               # プロジェクト設定
 └── .env.example                 # 環境変数テンプレート
