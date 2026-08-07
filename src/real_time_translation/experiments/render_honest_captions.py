@@ -79,29 +79,70 @@ def _probe_resolution(video_path: Path) -> tuple[int, int]:
         return (1920, 1080)
 
 
-def build_cues(events: list[dict[str, Any]], clip_end: float) -> list[Cue]:
-    """Build sequential caption cues from translation events.
+def build_cues(
+    events: list[dict[str, Any]],
+    clip_end: float,
+    *,
+    min_display_seconds: float = 0.6,
+    seconds_per_char: float = 0.055,
+    utterance_end_hold_seconds: float = 1.2,
+) -> list[Cue]:
+    """Build sequential caption cues from translation events, each held
+    long enough to actually read.
 
-    Each event's text is shown from its own arrival time until the next
-    translation event arrives (or the clip ends), reproducing the true
-    incremental reveal -- and true lag -- of the live run.
+    A naive one-cue-per-event mapping (the original approach) cuts to a new
+    cue on every streamed token -- a fast model can emit those a few tens
+    of milliseconds apart, so most cues flash by faster than a human can
+    read them, which reads as flicker or as text vanishing before it can be
+    read. Instead, each cue is held for at least `min_display_seconds`,
+    scaled up by its own text length (`seconds_per_char`) so longer lines
+    get proportionally more time; any event that arrives *during* that hold
+    just updates what will be shown at the next cut instead of cutting
+    immediately. A just-finished utterance (`is_utterance_end=True`, see
+    TranslationResult) gets extra hold time on top, mirroring the live
+    overlay's behavior of pausing on a completed sentence before it fades.
     """
     translation_kinds = ("translation_partial", "translation_complete")
-    translation_events = [e for e in events if e["kind"] in translation_kinds]
+    translation_events = [
+        e for e in events if e["kind"] in translation_kinds and e["text"].strip()
+    ]
+    if not translation_events:
+        return []
+
+    def _hold_for(text: str, is_utterance_end: bool) -> float:
+        hold = max(min_display_seconds, len(text) * seconds_per_char)
+        if is_utterance_end:
+            hold += utterance_end_hold_seconds
+        return hold
+
     cues: list[Cue] = []
-    for i, event in enumerate(translation_events):
+    cue_start = translation_events[0]["playback_offset"]
+    cue_text = translation_events[0]["text"].strip()
+    cue_is_end = bool(translation_events[0].get("is_utterance_end", True))
+
+    for event in translation_events[1:]:
+        offset = event["playback_offset"]
         text = event["text"].strip()
-        if not text:
+        is_end = bool(event.get("is_utterance_end", True))
+
+        if offset - cue_start < _hold_for(cue_text, cue_is_end):
+            # Still within the current cue's minimum hold: absorb this
+            # update as the content to show at the *next* cut rather than
+            # cutting to a cue too short to read.
+            cue_text = text
+            cue_is_end = is_end
             continue
-        start = event["playback_offset"]
-        end = (
-            translation_events[i + 1]["playback_offset"]
-            if i + 1 < len(translation_events)
-            else clip_end
-        )
-        if end <= start:
-            continue
-        cues.append(Cue(start=start, end=end, text=text))
+
+        if text != cue_text:
+            cues.append(Cue(start=cue_start, end=offset, text=cue_text))
+            cue_start = offset
+        cue_text = text
+        cue_is_end = is_end
+
+    final_hold = _hold_for(cue_text, cue_is_end)
+    cues.append(
+        Cue(start=cue_start, end=max(clip_end, cue_start + final_hold), text=cue_text)
+    )
     return cues
 
 

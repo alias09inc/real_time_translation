@@ -211,11 +211,27 @@ class TranslationPipeline:
         self._next_batch_id = 0
         self._next_emit_batch_id = 0
         self._pending_batches: dict[int, tuple[list[QueuedTranscription], str | None]] = {}
-        # Per-utterance accumulated (source, translation) text, for
-        # utterances split across multiple soft-finalized translation calls
-        # (see TranslationResult.is_utterance_end) -- keyed by
-        # TranscriptionResult.utterance_id.
-        self._utterance_acc: dict[int, tuple[str, str]] = {}
+
+        # Utterances split across multiple soft-finalized translation calls
+        # (see TranslationResult.is_utterance_end) are RE-translated from
+        # scratch each time with the full text heard so far, not just the
+        # new delta -- gluing together independently-translated fragments
+        # produces grammatically incoherent output (each fragment was
+        # translated blind, with no idea what would come next), whereas
+        # giving the model the whole growing utterance each time lets it
+        # produce one coherent sentence, self-correcting earlier word
+        # choices as later context arrives (the same "re-translation"
+        # strategy production simultaneous-translation systems use).
+        # A continuation batch MUST NOT start translating until the prior
+        # batch for the same utterance has updated this state -- see
+        # `_get_utterance_lock` -- otherwise two continuations could race
+        # and one would retranslate from stale/incomplete prior text.
+        # Keyed by TranscriptionResult.utterance_id; entries are removed
+        # once `is_utterance_end` commits the utterance (see
+        # `_emit_batch_result`), so this doesn't grow unboundedly.
+        self._utterance_target_text: dict[int, str] = {}  # text fed to the model
+        self._utterance_source_text: dict[int, str] = {}  # raw ASR text, for display
+        self._utterance_locks: dict[int, asyncio.Lock] = {}
 
         self._running = False
         self._on_result: Callable[[TranslationResult], None] | None = None
@@ -407,13 +423,47 @@ class TranslationPipeline:
             total_chars += len(item.text_for_translation)
         return batch
 
-    async def _stream_batch(
-        self, batch_id: int, batch: list[QueuedTranscription], combined_text: str
-    ) -> str:
-        """Stream a translation for a coalesced batch, emitting live updates.
+    def _get_utterance_lock(self, utterance_id: int) -> asyncio.Lock:
+        """Get-or-create the lock serializing translation calls for one utterance.
 
-        Live (`is_translation_complete=False`) updates are only forwarded to
-        `_on_result` while this batch is the head of the emit order
+        Only ever contended when the SAME utterance has more than one batch
+        in flight (i.e. a soft-finalized continuation arrived before the
+        previous part finished translating) -- unrelated utterances never
+        touch each other's lock, so this doesn't limit cross-utterance
+        concurrency.
+        """
+        lock = self._utterance_locks.get(utterance_id)
+        if lock is None:
+            lock = asyncio.Lock()
+            self._utterance_locks[utterance_id] = lock
+        return lock
+
+    async def _stream_batch(
+        self,
+        batch_id: int,
+        batch: list[QueuedTranscription],
+        full_target_text: str,
+        *,
+        live: bool,
+    ) -> str:
+        """Stream a translation of `full_target_text`, optionally live.
+
+        `full_target_text` is everything heard for this utterance so far
+        (see `_translation_worker`), not just this batch's new fragments --
+        the return value is therefore always the complete, coherent
+        translation of the utterance up to this point, never a fragment to
+        be glued onto a previous one.
+
+        `live=False` (a continuation of an in-progress utterance) skips the
+        `is_translation_complete=False` progress updates entirely: this
+        call retranslates from scratch, so streaming its growing output
+        would visibly blank the caption and regrow it instead of extending
+        smoothly. Better to leave the previous (already coherent) text on
+        screen unchanged and snap directly to the new coherent result once
+        it's ready, than to show a mid-retranslation half-sentence.
+
+        Even when `live=True`, updates are only forwarded to `_on_result`
+        while this batch is the head of the emit order
         (`batch_id == self._next_emit_batch_id`); a batch that raced ahead
         of an earlier one still-in-flight accumulates silently and is
         delivered in one shot by `_finish_batch` once its turn comes, so
@@ -422,22 +472,18 @@ class TranslationPipeline:
 
         Returns the accumulated (stripped) translation text.
         """
-        _, prefix = self._utterance_acc.get(
-            batch[0].original.utterance_id, ("", "")
-        )
         accumulated = ""
         async for chunk in self._translator.translate_stream(
-            combined_text,
+            full_target_text,
             context_lines=batch[0].context,
             update_context=False,
         ):
             accumulated += chunk
-            if self._on_result and batch_id == self._next_emit_batch_id:
-                live_text = f"{prefix} {accumulated}".strip() if prefix else accumulated
+            if live and self._on_result and batch_id == self._next_emit_batch_id:
                 self._on_result(
                     TranslationResult(
                         original_text=" ".join(q.original.text for q in batch),
-                        translated_text=live_text,
+                        translated_text=accumulated,
                         is_final=True,
                         is_translation_complete=False,
                         confidence=min(q.original.confidence for q in batch),
@@ -472,46 +518,43 @@ class TranslationPipeline:
     def _emit_batch_result(
         self, batch: list[QueuedTranscription], translation: str
     ) -> None:
-        """Commit context, fold in utterance accumulation, and notify."""
-        combined_source = " ".join(q.text_for_translation for q in batch)
-        self._translator.commit_context(combined_source, translation)
-        slide_window = self._translator.slide_window
+        """Notify, and commit to rolling context once the utterance ends.
 
-        first_utterance_id = batch[0].original.utterance_id
+        `translation` is already the complete, coherent text for the
+        utterance up to this batch (see `_stream_batch`) -- nothing to glue
+        together here anymore.
+        """
         last = batch[-1].original
-        prev_source, prev_translation = self._utterance_acc.get(
-            first_utterance_id, ("", "")
-        )
-        source_text = " ".join(q.original.text for q in batch)
-        acc_source = f"{prev_source} {source_text}".strip() if prev_source else source_text
-        acc_translation = (
-            f"{prev_translation} {translation}".strip() if prev_translation else translation
+        utterance_id = last.utterance_id
+        acc_source = self._utterance_source_text.get(utterance_id) or " ".join(
+            q.original.text for q in batch
         )
 
-        # Drop any leftover accumulator entries this batch subsumed (e.g. a
-        # batch that spans more than one utterance under heavy backlog) so
-        # they can't be resurrected by a later, unrelated utterance_id. If
-        # the batch's last fragment isn't the utterance's true end, re-add
-        # the running accumulation under its id so the next continuation
-        # picks up where this one left off.
-        for q in batch:
-            self._utterance_acc.pop(q.original.utterance_id, None)
-        if not last.is_utterance_end:
-            self._utterance_acc[last.utterance_id] = (acc_source, acc_translation)
+        if last.is_utterance_end:
+            # Whole utterance is done: commit ONE coherent (source,
+            # translation) pair to the rolling context/slide_window --
+            # never the per-fragment deltas -- and drop this utterance's
+            # scratch state (bounds `_utterance_*` dict growth).
+            full_target_text = self._utterance_target_text.pop(utterance_id, None)
+            if full_target_text is None:
+                full_target_text = " ".join(q.text_for_translation for q in batch)
+            self._translator.commit_context(full_target_text, translation)
+            self._utterance_source_text.pop(utterance_id, None)
+            self._utterance_locks.pop(utterance_id, None)
 
         if self._on_result:
             self._on_result(
                 TranslationResult(
                     original_text=acc_source,
-                    translated_text=acc_translation,
+                    translated_text=translation,
                     is_final=True,
                     is_translation_complete=True,
                     confidence=min(q.original.confidence for q in batch),
                     start_time=batch[0].original.start_time,
                     end_time=last.end_time,
-                    slide_window=slide_window,
+                    slide_window=self._translator.slide_window,
                     is_utterance_end=last.is_utterance_end,
-                    utterance_id=last.utterance_id,
+                    utterance_id=utterance_id,
                 )
             )
 
@@ -524,6 +567,13 @@ class TranslationPipeline:
         don't race on the translator's internal context buffer; completed
         batches are committed and delivered in speech order by
         `_finish_batch` regardless of which worker finishes first.
+
+        A batch belonging to an utterance that's still in progress (see
+        `_get_utterance_lock`) is retranslated together with everything
+        heard so far for that utterance, so it must wait for the prior
+        batch of the *same* utterance to finish and record its state
+        first -- unrelated utterances are unaffected and keep translating
+        fully concurrently.
 
         A hung provider call (observed in practice: `generate_content_stream`
         can stall indefinitely with no error) must never permanently strand
@@ -538,28 +588,56 @@ class TranslationPipeline:
                 batch_id = self._next_batch_id
                 self._next_batch_id += 1
 
-                await self._translation_rate_limiter.acquire()
-
-                combined_text = " ".join(q.text_for_translation for q in batch)
-                timeout = self._translation_timeout + 2.0 * (len(batch) - 1)
+                utterance_id = batch[-1].original.utterance_id
+                utterance_lock = self._get_utterance_lock(utterance_id)
 
                 translation: str | None = None
-                for attempt in range(2):
-                    try:
-                        translation = await asyncio.wait_for(
-                            self._stream_batch(batch_id, batch, combined_text),
-                            timeout=timeout,
+                async with utterance_lock:
+                    prior_target = self._utterance_target_text.get(utterance_id, "")
+                    new_text = " ".join(q.text_for_translation for q in batch)
+                    full_target_text = (
+                        f"{prior_target} {new_text}".strip()
+                        if prior_target
+                        else new_text
+                    )
+                    is_continuation = bool(prior_target)
+
+                    await self._translation_rate_limiter.acquire()
+                    timeout = self._translation_timeout + 2.0 * (len(batch) - 1)
+
+                    for attempt in range(2):
+                        try:
+                            translation = await asyncio.wait_for(
+                                self._stream_batch(
+                                    batch_id,
+                                    batch,
+                                    full_target_text,
+                                    live=not is_continuation,
+                                ),
+                                timeout=timeout,
+                            )
+                            break
+                        except TimeoutError:
+                            print(
+                                f"Translation worker {worker_id}: timed out after "
+                                f"{timeout}s (attempt {attempt + 1}/2)"
+                                f" on {full_target_text[:50]!r}"
+                            )
+                        except Exception as exc:  # noqa: BLE001
+                            print(f"Translation worker {worker_id}: error: {exc}")
+                            break
+
+                    if translation is not None:
+                        self._utterance_target_text[utterance_id] = full_target_text
+                        prior_source = self._utterance_source_text.get(
+                            utterance_id, ""
                         )
-                        break
-                    except TimeoutError:
-                        print(
-                            f"Translation worker {worker_id}: timed out after "
-                            f"{timeout}s (attempt {attempt + 1}/2)"
-                            f" on {combined_text[:50]!r}"
+                        new_source = " ".join(q.original.text for q in batch)
+                        self._utterance_source_text[utterance_id] = (
+                            f"{prior_source} {new_source}".strip()
+                            if prior_source
+                            else new_source
                         )
-                    except Exception as exc:  # noqa: BLE001
-                        print(f"Translation worker {worker_id}: error: {exc}")
-                        break
 
                 await self._finish_batch(batch_id, batch, translation)
         except asyncio.CancelledError:

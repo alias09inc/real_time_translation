@@ -52,6 +52,7 @@ Strict Rules:
 5. IGNORE PADDING: Ignore any content inside <cache_padding>...</cache_padding>.
 6. TERMINOLOGY DICTIONARY: A <dictionary> block may appear below, or inline with the current message alongside <context>/<target>. Either way, use its exact target-language translations for any matching terms.
 7. LOW-CONFIDENCE MARKER: If <target> is wrapped exactly as `[uncertain: ...]`, that wrapper is a confidence hint for you, not literal content to translate. Translate only the text inside it (favor a cautious, literal reading over a confident guess) and NEVER reproduce the `[uncertain: ...]`/`[不確か: ...]` wrapper itself in your output.
+8. SMOOTH DISFLUENCY, DON'T TRANSCRIBE IT: <target> is live, unedited speech, not prose -- it will contain filler words ('um', 'uh', 'like', 'you know'), false starts, and immediate stutter-repeats (e.g. 'I I think', 'made made', 'and also and also'). Act like a human simultaneous interpreter, not a transcriptionist: drop filler words and collapse an immediate exact stutter-repeat into a single instance, producing a clean, natural target-language sentence. NEVER drop or alter substantive content, technical terms, numbers, or the speaker's actual meaning -- when a repetition might be deliberate emphasis rather than disfluency, keep it rather than guess wrong.
 
 Maintain the original tone and style.
 {dictionary_section}"""

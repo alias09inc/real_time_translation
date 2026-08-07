@@ -80,6 +80,12 @@ class TimedEvent:
     asr_start_time: float | None = None
     asr_end_time: float | None = None
     confidence: float = 0.0
+    # True once the underlying utterance has actually ended (vs. a
+    # soft-finalized mid-utterance chunk with more still coming -- see
+    # TranslationResult.is_utterance_end). Consumers rendering these events
+    # as captions use this to hold a just-completed sentence on screen
+    # longer before cutting to the next one.
+    is_utterance_end: bool = True
 
 
 @dataclass
@@ -255,6 +261,7 @@ async def run_experiment(
                     asr_start_time=result.start_time,
                     asr_end_time=result.end_time,
                     confidence=result.confidence,
+                    is_utterance_end=result.is_utterance_end,
                 )
             )
             seg = open_segments.setdefault(
@@ -289,6 +296,7 @@ async def run_experiment(
                 asr_start_time=result.start_time,
                 asr_end_time=result.end_time,
                 confidence=result.confidence,
+                is_utterance_end=result.is_utterance_end,
             )
         )
         if not result.is_utterance_end:
