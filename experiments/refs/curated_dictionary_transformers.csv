@@ -1,0 +1,28 @@
+source_term,target_term,notes
+attention,アテンション,
+transformer,トランスフォーマー,ニューラルネットワークのアーキテクチャ
+GPT,GPT,Generative Pretrained Transformerの略
+Generative Pretrained Transformer,Generative Pretrained Transformer,GPTの正式名称
+GPT-3,GPT-3,
+ChatGPT,ChatGPT,
+multi-layer perceptron,多層パーセプトロン,MLP
+MLP,MLP,多層パーセプトロン
+token,トークン,
+tokenization,トークン化,
+embedding,埋め込み,embeddingベクトル
+matrix,行列,
+matrices,行列,matrixの複数形
+probability distribution,確率分布,
+system prompt,システムプロンプト,
+neural network,ニューラルネットワーク,
+softmax,ソフトマックス,
+dot product,内積,
+positional encoding,位置エンコーディング,
+normalization,正規化,
+chatbot,チャットボット,
+autocomplete,自動補完,
+self-attention,セルフアテンション,
+context window,コンテキストウィンドウ,
+vector,ベクトル,
+weights,重み,
+parameters,パラメータ,
