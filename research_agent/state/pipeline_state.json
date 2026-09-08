@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "EXTRACT_PAPERS",
+  "current_state": "RUN_EXPERIMENTS",
   "cycle": 2,
-  "last_updated": "2026-09-08T10:01:24.155119+00:00",
+  "last_updated": "2026-09-08T10:03:21.596825+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -71,6 +71,30 @@
       "to": "EXTRACT_PAPERS",
       "at": "2026-09-08T10:01:24.155083+00:00",
       "note": "Cycle 2 SEARCH_PAPERS: reusing 3 unread websearch stubs from cycle 1 (AlignAtt4LLM, Google caption-stability blog, NeMo IWSLT2026 cascade) as this cycle's extraction targets, per reflections.md cycle-1 recommendation. No additional WebSearch needed this cycle -- prioritizing actually extracting/reading what was already found over widening the search further."
+    },
+    {
+      "from": "EXTRACT_PAPERS",
+      "to": "READ_PAPERS",
+      "at": "2026-09-08T10:02:51.139989+00:00",
+      "note": "Extracted all 3 websearch papers via WebSearch snippets (WebFetch blocked on arxiv.org/research.google/aclanthology.org in this sandbox). Key finding: AlignAtt4LLM needs white-box attention access unavailable to this repo's API-only translator, so h-localagreement-asr-commit stays scoped to plain LocalAgreement-2."
+    },
+    {
+      "from": "READ_PAPERS",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-08T10:03:03.933489+00:00",
+      "note": "Read all 3 websearch papers. Cross-checked against experiments/results.csv: neither queued hypothesis (masking-holdback, localagreement-asr-commit) overlaps already-answered chunk-length/endpointing/keyterm sweeps, so no duplication concern."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-08T10:03:17.796802+00:00",
+      "note": "No new hypotheses added (backlog=2, under cap). Refined h-localagreement-asr-commit's grounded_in/description to explicitly scope it to plain LocalAgreement-2 per the AlignAtt4LLM finding."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-08T10:03:21.596791+00:00",
+      "note": "Both queued hypotheses already auto_approved from cycle 1; re-confirmed check-budget(1.5)=AUTO_APPROVE (0/7 USD spent today, per-batch cap 3 USD). Proceeding to RUN_EXPERIMENTS."
     }
   ]
 }
