@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "GENERATE_HYPOTHESES",
+  "current_state": "HUMAN_APPROVAL",
   "cycle": 2,
-  "last_updated": "2026-09-08T10:47:50.972058+00:00",
+  "last_updated": "2026-09-08T12:16:55.030835+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -155,6 +155,12 @@
       "to": "GENERATE_HYPOTHESES",
       "at": "2026-09-08T10:47:50.972030+00:00",
       "note": "Cycle 3 complete. Skipping SEARCH_PAPERS for cycle 4 -- existing literature (arivazhagan2020-retranslation, arivazhagan2019-erasure) already grounds the recommended next hypothesis (cross-utterance/cross-continuation translation NE, a $0 retroactive analysis fixing a real gap in h-flicker-metric's methodology found this cycle -- see reflections.md). GENERATE_HYPOTHESES next cycle should add that as a new hypothesis (backlog would go to 5, still under the 6 cap) before deciding whether to also revisit the blocked live-ASR hypotheses."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-08T12:16:55.030778+00:00",
+      "note": "Cycle 4 GENERATE_HYPOTHESES: added h-cross-utterance-flicker ($0 retroactive analysis) per cycle-3 reflection plan, fixing flicker_metrics.py's group_translation() blind spot (within-batch only, misses cross-continuation from-scratch retranslation drift across _stream_batch calls for the same utterance). Also corrected a factual error found while scoping it: h-gemini-only-masking-replay's description wrongly claimed utterance_id is a logged per-event field in results.events/TimedEvent -- verified against video_segment.py and an actual experiment JSON that only is_utterance_end is present; corrected that entry's description in place. Backlog now 4 queued/proposed (under 6 cap): h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay (all queued, still blocked on Deepgram infra per their blocked_reason), h-cross-utterance-flicker (new, proposed, not yet approval-checked). Stopping here per this session's scope (one bounded state transition) -- HUMAN_APPROVAL's check-budget pass for h-cross-utterance-flicker is next session's/next invocation's unit of work."
     }
   ]
 }
