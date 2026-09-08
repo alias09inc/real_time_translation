@@ -1,0 +1,60 @@
+{
+  "_schema": {
+    "id": "short slug, unique",
+    "title": "one line",
+    "description": "what to change / measure and why",
+    "grounded_in": ["paper ids from papers.json"],
+    "predicted_effect": "what we expect to see and why",
+    "required_changes": "code/config changes needed",
+    "uses_existing_clips": "bool -- must be true for auto-approval under current budget policy",
+    "estimated_cost_usd": "rough estimate of *new* Deepgram+LLM spend (0 if purely retroactive analysis of already-saved experiment JSON)",
+    "approval": "auto_approved | approved_by_human | needs_human | rejected",
+    "status": "proposed | queued | testing | tested | abandoned",
+    "experiment_ids": [],
+    "result_summary": ""
+  },
+  "hypotheses": [
+    {
+      "id": "h-flicker-metric",
+      "title": "Instrument normalized erasure (NE) as a first-class metric",
+      "description": "Every experiment JSON already logs a timestamped event stream (asr_interim / translation_partial / translation_complete) with full text at each revision, but experiments/results.csv only ever tracks chrF/latency/glossary -- there is currently zero visibility into caption flicker/revision, which the survey identifies as one of the two things (with latency) that offline metrics completely miss. Compute character-level normalized erasure (per Arivazhagan et al.) retroactively over every existing experiment JSON's event stream, both for ASR interim text and for translation_partial text, and add it to results.csv going forward.",
+      "grounded_in": ["arivazhagan2019-erasure", "papi2025-howreal", "arivazhagan2020-retranslation"],
+      "predicted_effect": "No effect on the system itself (pure measurement); expected to reveal that translation-level NE is non-trivial today since interim ASR text is re-translated on every update with no masking/biasing.",
+      "required_changes": "New analysis script under src/real_time_translation/experiments/ (or scripts/) that consumes the existing event log format; no changes to the live pipeline.",
+      "uses_existing_clips": true,
+      "estimated_cost_usd": 0.0,
+      "approval": "auto_approved",
+      "status": "tested",
+      "experiment_ids": ["retroactive: all experiments/*.json with a results.events list"],
+      "result_summary": "Implemented src/real_time_translation/experiments/flicker_metrics.py (uv run real-time-translation-exp-flicker) and ran it over all 47 parseable experiment JSON files. Result: translation-level NE (char-level, per committed ASR window) is ~0.0001 -- essentially zero across the whole corpus, meaning the LLM-translation layer never rewrites already-shown text once a chunk commits (append-only streaming). ASR-level NE (word-level, per in-progress Deepgram interim hypothesis) is ~0.20 on average across 47 files (range roughly 0.01-0.32 per file) -- i.e. about 1/5 of the final word-length gets revised before the ASR hypothesis settles. This number independently matches a public description of NE found via WebSearch ('NE score of 0.2' = ~1/5 of tokens change before settling), which is a useful sanity check on the metric implementation. Conclusion: today's flicker risk lives entirely in the ASR interim layer, not in translation -- so h-masking-holdback and h-localagreement-asr-commit should be evaluated primarily on how much they reduce ASR-level NE (and, if TRANSLATE_INTERIM is ever turned on for live preview, whether that ASR instability leaks into translation-level NE, which it currently doesn't because translation only fires on committed windows). Caveat: NE formula was reconstructed from the survey's description, not verified against the Arivazhagan et al. primary source yet; the 4 oldest experiment JSON files (2026-04-xx) predate the current event-logging schema and were skipped (0 groups, not an error)."
+    },
+    {
+      "id": "h-masking-holdback",
+      "title": "Hold-back masking on translation input to reduce flicker",
+      "description": "Per Arivazhagan et al., truncate the last 1-3 words of the growing ASR hypothesis before sending to the LLM for re-translation (masking), instead of translating the full raw interim text every update. Compare NE, chrF, and end-to-end latency against the unmasked baseline on the same cached clip.",
+      "grounded_in": ["arivazhagan2020-retranslation"],
+      "predicted_effect": "Lower normalized erasure (less visible rewriting) at the cost of a small latency increase (the last few words are deliberately withheld); chrF should be roughly neutral or slightly improved since the LLM sees less unstable trailing text.",
+      "required_changes": "Add a hold-back-N-words step to the ASR-interim -> translation-input path (pipeline.py, near the existing masked_text low-confidence path at pipeline.py:381) gated by an env var so it can be A/B'd; add an experiment CLI flag to toggle it.",
+      "uses_existing_clips": true,
+      "estimated_cost_usd": 1.5,
+      "approval": "auto_approved",
+      "status": "queued",
+      "experiment_ids": [],
+      "result_summary": ""
+    },
+    {
+      "id": "h-localagreement-asr-commit",
+      "title": "LocalAgreement-2 gating before translation is triggered",
+      "description": "Instead of sending every Deepgram interim update to the LLM, only trigger (re-)translation once two consecutive interim hypotheses agree on a longest-common-prefix (LocalAgreement-2, per whisper-streaming). Compare against baseline and against h-masking-holdback on NE/latency/chrF using the same cached clip.",
+      "grounded_in": ["machacek2023-whisperstreaming"],
+      "predicted_effect": "Fewer, more stable translation calls -> lower NE and possibly lower LLM cost per segment, at the cost of added latency while waiting for two-hypothesis agreement.",
+      "required_changes": "New commit-gating layer between Deepgram interim callback and the translation queue in pipeline.py; needs its own toggle so it can run independently of h-masking-holdback.",
+      "uses_existing_clips": true,
+      "estimated_cost_usd": 1.5,
+      "approval": "auto_approved",
+      "status": "queued",
+      "experiment_ids": [],
+      "result_summary": ""
+    }
+  ]
+}

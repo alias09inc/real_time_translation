@@ -42,6 +42,7 @@ real-time-translation-preload-video = "real_time_translation.preload.video_prelo
 real-time-translation-exp-find-hardest = "real_time_translation.experiments.find_hardest_segment:main"
 real-time-translation-exp-compare-dictionary = "real_time_translation.experiments.compare_dictionary_runs:main"
 real-time-translation-exp-compare-models = "real_time_translation.experiments.compare_translation_models:main"
+real-time-translation-exp-flicker = "real_time_translation.experiments.flicker_metrics:main"
 
 [build-system]
 requires = ["hatchling"]

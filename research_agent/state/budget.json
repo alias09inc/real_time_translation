@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-08",
+  "spent_today_usd": 0.0,
+  "daily_cap_usd": 7.0,
+  "per_batch_cap_usd": 3.0,
+  "total_spent_usd": 0.0,
+  "cost_log": [
+    {
+      "at": "2026-09-08T07:28:31.381613+00:00",
+      "amount_usd": 0.0,
+      "note": "h-flicker-metric: implemented flicker_metrics.py, ran over 47 existing experiment JSON files, zero new API spend"
+    }
+  ]
+}

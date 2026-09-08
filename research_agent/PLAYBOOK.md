@@ -1,0 +1,227 @@
+# Research Agent Playbook
+
+You are resuming an autonomous research pipeline for the `real_time_translation`
+repo (Zoom/YouTube English->Japanese live-subtitle SimulST system). You are
+likely a **fresh Claude session with no memory of any prior conversation** --
+possibly woken up by a cron schedule. Everything you need is either in this
+file or in `research_agent/state/*.json`. Read this whole file before doing
+anything.
+
+## Goal
+
+Run the research loop below to find and validate concrete improvements to
+this repo's real-time ASR->LLM-translation pipeline, grounded in simultaneous
+speech translation literature, and to keep a truthful, resumable record of
+progress so the human (rm-2278) never has to babysit it.
+
+```
+SEARCH_PAPERS -> EXTRACT_PAPERS -> READ_PAPERS -> GENERATE_HYPOTHESES
+   -> HUMAN_APPROVAL (-> WAITING_APPROVAL if escalated) -> RUN_EXPERIMENTS
+   -> ANALYZE_RESULTS -> WRITE_REPORT -> REFLECT -> back to SEARCH_PAPERS
+      or GENERATE_HYPOTHESES
+```
+
+## Step 0: orient yourself every time
+
+```bash
+cd /Users/riki/Desktop/GitHub/real_time_translation
+git status && git log --oneline -5
+python3 research_agent/orchestrator.py status
+cat research_agent/state/hypotheses.json
+tail -c 3000 research_agent/state/reflections.md 2>/dev/null
+```
+
+The `current_state` field tells you which section below to execute. Do
+**one bounded unit of work** for that state (not the whole remaining
+pipeline) per invocation, then advance the state and commit. If you have
+budget/time left after finishing a unit cleanly, you may continue into the
+next state in the same session -- but always leave the repo in a
+consistent, committed state before you stop, since you may be interrupted
+(context limit, session end) at any point.
+
+## State: SEARCH_PAPERS
+
+- Use WebSearch to look for simultaneous speech translation / streaming MT
+  research published after the existing literature base (see
+  `research_agent/state/papers.json` -- everything with `"source": "survey"`
+  is already-known baseline literature from a 2026-09-08 survey). Look
+  specifically for things the survey flagged as caveats or gaps: newer
+  cascade-vs-end-to-end comparisons, new stability/flicker policies, new
+  LLM-as-MT prompting techniques, updated vendor ASR latency numbers.
+- Prefer arXiv, ACL Anthology, Semantic Scholar, OpenReview (open access,
+  no login needed). Do not attempt to set up browser automation -- it was
+  explicitly decided WebSearch/WebFetch are sufficient.
+- For each promising paper, append a stub entry to `papers.json` with
+  `"status": "found"` and whatever metadata you have (title/url/venue/year).
+- Advance: `python3 research_agent/orchestrator.py advance EXTRACT_PAPERS --note "..."`
+
+## State: EXTRACT_PAPERS
+
+- For each `"status": "found"` paper, WebFetch the abstract (and intro/
+  conclusion if the fetch gives you the full text) to pull out the concrete
+  claims/numbers, not just the abstract's marketing language.
+- Update `status` to `"extracted"`.
+- Advance to `READ_PAPERS`.
+
+## State: READ_PAPERS
+
+- Turn each extracted paper into a real `summary` (2-4 sentences, in your
+  own words) and 2-5 `key_findings` bullets in `papers.json`. Mark
+  `status: "read"`.
+- Cross-reference against what's already in `experiments/results.csv` and
+  `experiments/*.json` (50+ prior runs) -- do NOT propose re-testing
+  something already conclusively answered there (e.g. chunk-length/
+  endpointing sweeps and ASR keyterm on/off are already covered; see the
+  filenames under `experiments/`).
+- Advance to `GENERATE_HYPOTHESES`.
+
+## State: GENERATE_HYPOTHESES
+
+- Write 1-3 new concrete, testable hypotheses into `hypotheses.json`
+  following the existing schema. Each hypothesis MUST specify:
+  `required_changes`, `uses_existing_clips` (bool), and
+  `estimated_cost_usd` (rough Deepgram+LLM spend for the new experiment
+  runs it needs -- 0 if it's a purely retroactive analysis over existing
+  experiment JSON, which is the cheapest and highest-priority kind of
+  hypothesis to pursue).
+- Do not let the backlog exceed ~6 `queued`/`proposed` hypotheses at once --
+  prioritize depth (fully testing and reflecting on a few) over breadth.
+- Advance to `HUMAN_APPROVAL`.
+
+## State: HUMAN_APPROVAL
+
+For every hypothesis with `approval` still unset or `"proposed"`:
+
+```bash
+python3 research_agent/orchestrator.py check-budget <estimated_cost_usd>
+```
+
+- If it prints `AUTO_APPROVE` **and** `uses_existing_clips` is `true`: set
+  `"approval": "auto_approved"`, `"status": "queued"` in `hypotheses.json`.
+  This is the normal path -- current policy is: reuse cached YouTube clips
+  under `experiments/refs/`, no new downloads, per-batch cap $3, daily cap
+  $7 (see `research_agent/state/budget.json`).
+- If it prints `ESCALATE_TO_HUMAN`, OR the hypothesis needs a new YouTube
+  clip/download, OR it requires touching the live production pipeline
+  paths that are not behind an experiment-only flag: set
+  `"approval": "needs_human"`, write a short entry to
+  `research_agent/state/pending_approval.json` (create it if absent; a
+  list of `{hypothesis_id, reason, estimated_cost_usd, asked_at}`), and
+  notify the user (use the PushNotification tool if available; otherwise
+  make sure it's clearly flagged in the next Japanese report). Do NOT run
+  that experiment. Move on to other queued hypotheses instead of blocking.
+- Advance to `RUN_EXPERIMENTS` once at least one hypothesis is `queued`
+  with `approval != "needs_human"`. If none are approvable right now,
+  advance to `WAITING_APPROVAL` instead and stop for this session.
+
+## State: WAITING_APPROVAL
+
+- Check `pending_approval.json`. If the human has approved an entry
+  (however they signal it -- e.g. editing the file, or a later message in
+  a live session), move that hypothesis's `approval` to
+  `"approved_by_human"`, `"status": "queued"`, remove it from
+  `pending_approval.json`, and advance to `RUN_EXPERIMENTS`.
+- Otherwise, just re-check `hypotheses.json` for anything that's already
+  auto-approvable (e.g. a new hypothesis added since last run) and advance
+  to `RUN_EXPERIMENTS` if so. If truly nothing is runnable, stay in
+  `WAITING_APPROVAL` and stop for this session (no-op is fine -- do not
+  force progress that would violate the approval gate).
+
+## State: RUN_EXPERIMENTS
+
+- Pick one `queued` hypothesis (prefer $0 retroactive-analysis hypotheses
+  first, then cheapest `estimated_cost_usd`).
+- Implement `required_changes` if it needs code (small, focused diff --
+  follow this repo's existing style, run `uv run ruff check .` after).
+- Run the experiment via the existing runner, e.g.:
+  ```bash
+  uv run real-time-translation-exp-youtube --url <cached clip URL already
+    used in experiments/refs/> --start <..> --end <..> --name <exp_name> \
+    --domain <..>
+  ```
+  Reuse a clip/time-range already present under `experiments/refs/` --
+  do not download new YouTube content under current policy.
+- **Immediately after the run**, estimate actual spend (Deepgram audio
+  seconds + LLM tokens are visible in the experiment JSON's `results` and
+  `models` sections) and log it:
+  ```bash
+  python3 research_agent/orchestrator.py log-cost <actual_usd> --note "<exp_name>"
+  ```
+- Follow `CLAUDE.md`'s experiment logging rule: the runner already writes
+  `experiments/YYYYMMDD_<name>.json` and appends to `experiments/results.csv`.
+  Set `hypothesis.experiment_ids` to the new JSON path(s).
+- Set `hypothesis.status = "testing"`. Commit (`git add`, `git commit`) now
+  -- do not wait until analysis is done, in case you get interrupted.
+- Advance to `ANALYZE_RESULTS`.
+
+## State: ANALYZE_RESULTS
+
+- Compare the new experiment's metrics (chrF, latency, and, once
+  `h-flicker-metric` has landed, normalized erasure) against the relevant
+  baseline row(s) in `experiments/results.csv`.
+- Write `hypothesis.result_summary` (a few sentences: was the prediction
+  right, wrong, or inconclusive, with the actual numbers).
+- Set `hypothesis.status = "tested"` (or `"abandoned"` if the implementation
+  turned out to be unsound and shouldn't be pursued further -- explain why).
+- Advance to `WRITE_REPORT`.
+
+## State: WRITE_REPORT
+
+- Write a **Japanese** report to
+  `research_agent/reports/YYYYMMDD_cycle<N>_report.md` covering: what was
+  searched/read this cycle, which hypotheses were generated/approved/
+  rejected and why, what was actually run, and the results in plain
+  language a non-specialist can follow. This satisfies the standing
+  instruction to update results reports in Japanese periodically -- do
+  this at least once per cycle (every time you pass through this state),
+  not just occasionally.
+- Also touch `research_agent/reports/00_pipeline_overview_ja.md` if the
+  pipeline's shape has materially changed since it was last written (new
+  states, changed budget policy, etc.) -- that file is the standing
+  Japanese explainer of the *pipeline itself* (architecture), separate
+  from the per-cycle *results* reports.
+- Commit.
+- Advance to `REFLECT`.
+
+## State: REFLECT (self-improvement)
+
+This is the self-improvement/self-reflection step. Append a dated entry to
+`research_agent/state/reflections.md` (English is fine here -- it's your own
+working memory, not a human-facing report) answering honestly:
+
+1. What worked this cycle? What didn't?
+2. Was the hypothesis backlog well-calibrated (too ambitious / too timid /
+   duplicating past work)? Should search queries change next cycle?
+3. Is the auto-approval budget policy still right, or should you propose
+   (to the human, via the next report -- do not silently change
+   `budget.json`'s caps yourself) a change?
+4. **Should this playbook itself change?** If you find yourself repeatedly
+   working around an unclear or wrong instruction in this file, EDIT THIS
+   FILE to fix it for next time, and note what you changed and why in
+   `reflections.md`. This file is allowed to evolve -- that is the point
+   of the self-improvement step. Do not remove the approval-gate or
+   budget-check steps themselves without an explicit human instruction to
+   do so.
+- Advance to `SEARCH_PAPERS` (new cycle, `cycle` counter auto-increments)
+  or directly to `GENERATE_HYPOTHESES` if the existing paper base already
+  clearly supports more untested hypotheses and a fresh search isn't
+  likely to add much this cycle.
+- Commit.
+
+## Hard rules (do not relax these without an explicit human instruction)
+
+- **Never** download new YouTube content or use API budget beyond what
+  `orchestrator.py check-budget` auto-approves without going through
+  `WAITING_APPROVAL` and getting a human signal first.
+- **Never** skip `log-cost` after an experiment that used real API calls.
+- **Commit often.** After every state transition, and after every file you
+  write (state JSON, papers, hypotheses, reports, code), run `git add` on
+  the specific paths and commit with a short message. This repo's
+  instructions (`CLAUDE.md`) already require committing experiment
+  artifacts; treat pipeline state the same way so a session that gets cut
+  off mid-cycle can always be resumed from the last commit.
+- Follow this repo's existing experiment-logging convention in `CLAUDE.md`
+  for every experiment run (JSON + results.csv row + commit) in addition
+  to this playbook's own bookkeeping.
+- If `uv run ruff check .` fails on code you wrote, fix it before
+  committing.

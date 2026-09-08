@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "current_state": "SEARCH_PAPERS",
+  "cycle": 2,
+  "last_updated": "2026-09-08T07:29:25.076930+00:00",
+  "active_hypothesis_ids": [],
+  "active_experiment_batch": null,
+  "history": [
+    {
+      "from": null,
+      "to": "SEARCH_PAPERS",
+      "at": "2026-09-08T00:00:00Z",
+      "note": "Pipeline initialized. Cycle 0 literature base is the survey already delivered in-conversation (2026-09-08); cycle 1 starts from GENERATE_HYPOTHESES territory but formally begins at SEARCH_PAPERS to pick up anything published after the survey and to fill gaps it flagged (see PLAYBOOK.md)."
+    },
+    {
+      "from": "SEARCH_PAPERS",
+      "to": "EXTRACT_PAPERS",
+      "at": "2026-09-08T07:28:21.438611+00:00",
+      "note": "Ran one real WebSearch pass for post-survey literature; found 3 candidate papers (AlignAtt4LLM IWSLT2026, Google live-caption-stability blog, NeMo@IWSLT2026 cascade), added as 'found' stubs to papers.json"
+    },
+    {
+      "from": "EXTRACT_PAPERS",
+      "to": "READ_PAPERS",
+      "at": "2026-09-08T07:28:21.464386+00:00",
+      "note": "Extraction deferred to next cycle for the 3 new websearch papers (snippet-level only so far); the 4 survey papers were already read in the seed data"
+    },
+    {
+      "from": "READ_PAPERS",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-08T07:28:21.489085+00:00",
+      "note": "3 hypotheses already seeded at init (h-flicker-metric, h-masking-holdback, h-localagreement-asr-commit); no new ones added this cycle to keep depth over breadth per PLAYBOOK"
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-08T07:28:21.513850+00:00",
+      "note": "Checking budget for h-flicker-metric (/bin/zsh, retroactive-only)"
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-08T07:28:31.353720+00:00",
+      "note": "h-flicker-metric auto-approved (cost 0 USD, retroactive only, no new API calls)"
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-08T07:28:31.405609+00:00",
+      "note": "Ran uv run real-time-translation-exp-flicker over experiments/*.json -> experiments/flicker_metrics.csv"
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-08T07:29:25.026594+00:00",
+      "note": "Wrote research_agent/reports/20260908_cycle1_report.md (Japanese) and updated 00_pipeline_overview_ja.md"
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-08T07:29:25.052686+00:00",
+      "note": "Reflection appended to reflections.md"
+    },
+    {
+      "from": "REFLECT",
+      "to": "SEARCH_PAPERS",
+      "at": "2026-09-08T07:29:25.076828+00:00",
+      "note": "Cycle 1 complete, starting cycle 2 (to be picked up by the scheduled cloud agent)"
+    }
+  ]
+}

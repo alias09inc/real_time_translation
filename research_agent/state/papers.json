@@ -1,0 +1,121 @@
+{
+  "_schema": {
+    "id": "short slug, unique",
+    "title": "paper title",
+    "authors": "et al. form is fine",
+    "year": "int",
+    "venue": "conference/journal/arXiv",
+    "url": "canonical URL (arXiv abstract page preferred over PDF)",
+    "source": "how it was found: 'survey' (already in the 2026-09-08 conversation survey) | 'websearch' | 'citation-chase'",
+    "status": "found | extracted | read",
+    "summary": "2-4 sentence summary in the reader's own words",
+    "key_findings": ["bullet", "bullet"],
+    "relevant_to": ["hypothesis ids this could ground, filled in during GENERATE_HYPOTHESES"]
+  },
+  "papers": [
+    {
+      "id": "papi2025-howreal",
+      "title": "How 'Real' is Your Real-Time Simultaneous Speech-to-Text Translation System?",
+      "authors": "Papi, Polak, Machacek, Bojar",
+      "year": 2025,
+      "venue": "TACL vol. 13, pp. 281-313",
+      "url": "",
+      "source": "survey",
+      "status": "read",
+      "summary": "Survey/critique arguing most SimulST research over-simplifies (pre-segmented speech, inconsistent terminology) and should adopt computation-aware latency, unbounded-speech evaluation, and SimulEval-based joint quality-latency curves.",
+      "key_findings": [
+        "SimulEval is the dominant eval framework (61/110 papers surveyed)",
+        "computation-aware latency (incl. real compute time / RTF) is essential for honest benchmarking",
+        "cascade vs end-to-end: end-to-end trends better for simultaneous settings due to cascades accumulating ASR+MT delay and error propagation"
+      ],
+      "relevant_to": []
+    },
+    {
+      "id": "arivazhagan2020-retranslation",
+      "title": "Re-Translation Strategies for Long Form, Simultaneous, Spoken Language Translation / Re-translation versus Streaming for Simultaneous Translation",
+      "authors": "Arivazhagan et al.",
+      "year": 2020,
+      "venue": "ICASSP 2020 / IWSLT 2020",
+      "url": "",
+      "source": "survey",
+      "status": "read",
+      "summary": "Shows re-translation (re-translate the whole growing source on every ASR update) can match or beat streaming systems on final quality, but causes caption flicker; proposes masking (truncate last few words) and biasing (bias decoding toward the previous output) to nearly eliminate erasure while preserving quality.",
+      "key_findings": [
+        "re-translation alone can be 'as good or better than SOTA streaming systems, even under constraints allowing very few revisions'",
+        "masking + biasing nearly eliminate erasure",
+        "directly describes this repo's current behavior: interim ASR results are re-translated (pipeline.py is_final=False path), i.e. re-translation without masking/biasing"
+      ],
+      "relevant_to": ["h-flicker-metric", "h-masking-holdback"]
+    },
+    {
+      "id": "machacek2023-whisperstreaming",
+      "title": "Turning Whisper into Real-Time Transcription System",
+      "authors": "Machacek, Dabre, Bojar",
+      "year": 2023,
+      "venue": "IJCNLP-AACL 2023 demo, arXiv:2307.14743",
+      "url": "https://arxiv.org/abs/2307.14743",
+      "source": "survey",
+      "status": "read",
+      "summary": "LocalAgreement-n policy: only commit the longest common prefix agreed across n consecutive hypotheses from overlapping buffers. CUNI-KIT found n=2 most effective.",
+      "key_findings": [
+        "LocalAgreement-2 is a simple, rule-based stability policy applicable to any incremental hypothesis stream, including our Deepgram interim-result -> LLM-translation stream"
+      ],
+      "relevant_to": ["h-localagreement-asr-commit"]
+    },
+    {
+      "id": "arivazhagan2019-erasure",
+      "title": "Normalized erasure metric (definition)",
+      "authors": "Arivazhagan et al.",
+      "year": 2019,
+      "venue": "cited within the 2026-09-08 survey, Section 4",
+      "url": "",
+      "source": "survey",
+      "status": "read",
+      "summary": "Defines normalized erasure (NE): tokens deleted from the previous partial's suffix to produce the next partial (via longest common prefix), normalized by output length. NE=0 means no displayed token was ever revised.",
+      "key_findings": [
+        "this repo currently logs chrF/latency/glossary but has zero instrumentation for revision/flicker -- direct, cheap, high-value gap to close first"
+      ],
+      "relevant_to": ["h-flicker-metric"]
+    },
+    {
+      "id": "alignatt4llm-iwslt2026",
+      "title": "AlignAtt4LLM: Fast AlignAtt for Decoder-Only LLMs at IWSLT 2026 Simultaneous Speech Translation Task",
+      "authors": "unread -- found via WebSearch 2026-09-08",
+      "year": 2026,
+      "venue": "arXiv:2606.03967",
+      "url": "https://arxiv.org/pdf/2606.03967",
+      "source": "websearch",
+      "status": "found",
+      "summary": "Not yet extracted. Search snippet: uses an ASR component with a forced aligner and stabilizes adjacent ASR hypotheses with a longest-common-prefix commit rule -- i.e. LocalAgreement-style gating applied specifically in an LLM-cascade setting, which is exactly this repo's architecture (Deepgram ASR -> LLM translation).",
+      "key_findings": [],
+      "relevant_to": ["h-localagreement-asr-commit"]
+    },
+    {
+      "id": "google-live-caption-stability-blog",
+      "title": "Modeling and improving text stability in live captions",
+      "authors": "Google Research",
+      "year": 2026,
+      "venue": "research.google blog",
+      "url": "https://research.google/blog/modeling-and-improving-text-stability-in-live-captions/",
+      "source": "websearch",
+      "status": "found",
+      "summary": "Not yet extracted. Search snippet: proposes a vision-based flicker metric (luminance contrast + discrete Fourier transform on the rendered caption image) as an alternative/complement to text-based normalized erasure -- measures what the viewer actually perceives, not just the token diff.",
+      "key_findings": [],
+      "relevant_to": ["h-flicker-metric"]
+    },
+    {
+      "id": "nemo-iwslt2026-cascade",
+      "title": "NeMo@IWSLT 2026: Cascaded System for Simultaneous Speech Translation",
+      "authors": "NVIDIA NeMo team",
+      "year": 2026,
+      "venue": "ACL Anthology 2026.iwslt-1.23",
+      "url": "https://aclanthology.org/2026.iwslt-1.23/",
+      "source": "websearch",
+      "status": "found",
+      "summary": "Not yet extracted. Search snippet: cascade combining a dual-mode unified ASR transducer with a multilingual LLM; reported to use stability metrics (character erasure + update frequency) alongside quality/latency, i.e. a 2026 example of exactly the joint quality-latency-stability evaluation this pipeline is missing.",
+      "key_findings": [],
+      "relevant_to": ["h-flicker-metric", "h-localagreement-asr-commit"]
+    }
+  ],
+  "_websearch_note": "One real WebSearch pass was run on 2026-09-08 (query: '2026 normalized erasure caption flicker simultaneous speech translation LLM cascade stability metric') to check for post-survey literature. It also cross-validated this pipeline's NE implementation: an independent summary described 'NE score of 0.2' as meaning roughly 1/5 of tokens change before settling, which matches what src/real_time_translation/experiments/flicker_metrics.py measured for this repo's own ASR-interim stream (asr_ne_word_mean ~= 0.20 across the existing experiment corpus)."
+}

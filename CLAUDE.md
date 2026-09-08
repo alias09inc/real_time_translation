@@ -45,3 +45,11 @@ uv run real-time-translation-exp-youtube --reference-ja reference_ja.txt
 
 - `ffmpeg` がホストに必要です。
 - YouTube等のコンテンツは、取り扱い権限/利用規約に従ってください。
+
+# Autonomous Research Agent
+
+`research_agent/` に、文献調査→仮説生成→実験→分析→レポートを自律的に回す
+リサーチエージェントの状態機械があります。新しいセッション（特にスケジュール
+実行されたセッション）がこのリポジトリで研究サイクルを再開する場合は、必ず
+**`research_agent/PLAYBOOK.md` を最初に読んでください**。現在の状態は
+`python3 research_agent/orchestrator.py status` で確認できます。
