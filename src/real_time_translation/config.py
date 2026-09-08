@@ -97,6 +97,16 @@ class Config:
     # google-genai's async streaming call can hang indefinitely with no
     # error, which would otherwise permanently strand a worker.
     translation_timeout: float = 15.0
+    # Experimental (h-masking-holdback, research_agent/state/hypotheses.json):
+    # withhold the last N words of a not-yet-utterance-ending accumulated
+    # ASR hypothesis from translation, per Arivazhagan et al.'s masking
+    # strategy for reducing re-translation erasure/flicker. The held-back
+    # words are still recorded in `_utterance_target_text` (so they're
+    # included once the utterance actually ends, or pushed off the tail by
+    # later words on the next continuation) -- only what gets *sent to the
+    # translator this round* is truncated. 0 (default) disables masking
+    # entirely, preserving today's behavior.
+    masking_holdback_words: int = 0
 
     # Dictionary
     dictionary_path: Path | None = None
@@ -251,6 +261,7 @@ class Config:
             ),
             gemini_rpm_limit=int(os.getenv("GEMINI_RPM_LIMIT", "9")),
             translation_timeout=float(os.getenv("TRANSLATION_TIMEOUT", "15.0")),
+            masking_holdback_words=int(os.getenv("MASKING_HOLDBACK_WORDS", "0")),
             dictionary_path=dictionary_path,
             dictionary_dynamic_threshold=int(
                 os.getenv("DICTIONARY_DYNAMIC_THRESHOLD", "80")

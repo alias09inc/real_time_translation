@@ -497,6 +497,7 @@ async def run_experiment(
             "deepgram_endpointing": config.deepgram_endpointing,
             "deepgram_utterance_end_ms": config.deepgram_utterance_end_ms,
             "deepgram_max_interim_duration": config.deepgram_max_interim_duration,
+            "masking_holdback_words": config.masking_holdback_words,
             "domain_packs": config.domain_packs,
             "dictionary_size": len(pipeline._translator.dictionary),
         },

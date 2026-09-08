@@ -602,6 +602,21 @@ class TranslationPipeline:
                     )
                     is_continuation = bool(prior_target)
 
+                    # h-masking-holdback: hold back the last N words of the
+                    # accumulated hypothesis from translation while the
+                    # utterance is still in progress (more soft-finalized
+                    # continuations may still arrive). `full_target_text`
+                    # itself stays untruncated -- it's what gets stored as
+                    # `_utterance_target_text` below, so held-back words are
+                    # never lost, just deferred to a later round.
+                    holdback = self._config.masking_holdback_words
+                    is_last_of_utterance = batch[-1].original.is_utterance_end
+                    text_to_translate = full_target_text
+                    if holdback > 0 and not is_last_of_utterance:
+                        words = full_target_text.split(" ")
+                        if len(words) > holdback:
+                            text_to_translate = " ".join(words[:-holdback])
+
                     await self._translation_rate_limiter.acquire()
                     timeout = self._translation_timeout + 2.0 * (len(batch) - 1)
 
@@ -611,7 +626,7 @@ class TranslationPipeline:
                                 self._stream_batch(
                                     batch_id,
                                     batch,
-                                    full_target_text,
+                                    text_to_translate,
                                     live=not is_continuation,
                                 ),
                                 timeout=timeout,
