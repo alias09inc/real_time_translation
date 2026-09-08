@@ -80,42 +80,55 @@
     {
       "id": "alignatt4llm-iwslt2026",
       "title": "AlignAtt4LLM: Fast AlignAtt for Decoder-Only LLMs at IWSLT 2026 Simultaneous Speech Translation Task",
-      "authors": "unread -- found via WebSearch 2026-09-08",
+      "authors": "unread -- found via WebSearch 2026-09-08, extracted via WebSearch 2026-09-08 (WebFetch blocked on arxiv.org in this environment, see note below)",
       "year": 2026,
-      "venue": "arXiv:2606.03967",
-      "url": "https://arxiv.org/pdf/2606.03967",
+      "venue": "arXiv:2606.03967 / ACL Anthology 2026.iwslt-1.32",
+      "url": "https://arxiv.org/abs/2606.03967",
       "source": "websearch",
-      "status": "found",
-      "summary": "Not yet extracted. Search snippet: uses an ASR component with a forced aligner and stabilizes adjacent ASR hypotheses with a longest-common-prefix commit rule -- i.e. LocalAgreement-style gating applied specifically in an LLM-cascade setting, which is exactly this repo's architecture (Deepgram ASR -> LLM translation).",
-      "key_findings": [],
+      "status": "extracted",
+      "summary": "A synchronous cascade for En->De/It/Zh: Qwen3-ASR with forced alignment produces an incrementally updated source transcript, and Gemma-4 E4B-it translates that prefix under an MT-side AlignAtt policy -- the first application of AlignAtt (attention-based emit-decision) to a decoder-only LLM, recovered despite the LLM lacking the encoder-decoder cross-attention earlier AlignAtt systems relied on, via (1) an explicit source span in the prompt, (2) offline-selected translation-specific alignment heads, (3) selective qk-fast replay of the draft-to-source attention block, and (4) runtime query/key capture that reproduces model outputs bit-identically. Outperforms IWSLT2026 baselines for En->De/It in both low-latency (~2s) and high-latency (<4s) regimes.",
+      "key_findings": [
+        "AlignAtt's commit rule is fundamentally different from LocalAgreement-2: it inspects the LLM's own internal attention weights (which source tokens the next target token is attending to) to decide when enough of the source has been 'seen' to safely emit, not a longest-common-prefix agreement across repeated ASR hypotheses",
+        "Requires white-box access to the translating model's attention internals (offline alignment-head selection + runtime query/key capture) -- NOT reproducible against an API-only model like this repo's Gemini/OpenAI translator, where internal attention is inaccessible",
+        "Therefore this repo's h-localagreement-asr-commit should stay scoped to plain LocalAgreement-2 (agreement across consecutive Deepgram ASR hypotheses, both externally observable as text) rather than attempting an AlignAtt-style policy -- the reflections.md cycle-1 concern that AlignAtt4LLM's rule 'may differ from plain LocalAgreement-2 in a way that matters' is confirmed true, but the difference is a hard architectural blocker, not just a design nuance to account for"
+      ],
       "relevant_to": ["h-localagreement-asr-commit"]
     },
     {
       "id": "google-live-caption-stability-blog",
-      "title": "Modeling and improving text stability in live captions",
-      "authors": "Google Research",
-      "year": 2026,
-      "venue": "research.google blog",
+      "title": "Modeling and Improving Text Stability in Live Captions",
+      "authors": "Liu, Zhang, Du, et al. (Google Research)",
+      "year": 2023,
+      "venue": "ACM CHI 2023 (research.google blog post is a 2026-visible summary of the 2023 CHI paper, not a new 2026 paper)",
       "url": "https://research.google/blog/modeling-and-improving-text-stability-in-live-captions/",
       "source": "websearch",
-      "status": "found",
-      "summary": "Not yet extracted. Search snippet: proposes a vision-based flicker metric (luminance contrast + discrete Fourier transform on the rendered caption image) as an alternative/complement to text-based normalized erasure -- measures what the viewer actually perceives, not just the token diff.",
-      "key_findings": [],
+      "status": "extracted",
+      "summary": "Proposes a vision-based flicker metric -- luminance contrast + discrete Fourier transform applied to the *rendered* caption image, not a text/token diff -- to quantify what a viewer actually perceives as caption instability. Validated the metric against real viewer-reported distraction (moderate correlation, |r|~0.3) and introduced a stabilization algorithm (tokenized alignment + semantic merging + smooth animation) that a crowdsourced study (N=123) showed significantly reduces viewer distraction/fatigue and improves reading comfort.",
+      "key_findings": [
+        "Vision-based (pixel/DFT) flicker measurement captures something text-based normalized erasure (NE) cannot: NE treats any token revision as equally bad, but a rendered-pixel metric would weight a revision by how visually jarring it actually is (position on screen, animation, font) -- NE is a reasonable cheap proxy but not a perceptual ground truth",
+        "The correlation with viewer experience is only moderate (~0.3), i.e. even a well-designed stability metric explains a minority of viewer-reported distraction -- a caution against over-indexing on any single flicker number (including this repo's own NE) as a proxy for caption quality",
+        "Out of scope for this repo right now: implementing this would require actually rendering captions to pixels and running DFT analysis, a much heavier lift than the retroactive text-level NE analysis already done in h-flicker-metric -- worth flagging as a possible future hypothesis (rendered-caption flicker) rather than pursuing this cycle"
+      ],
       "relevant_to": ["h-flicker-metric"]
     },
     {
       "id": "nemo-iwslt2026-cascade",
       "title": "NeMo@IWSLT 2026: Cascaded System for Simultaneous Speech Translation",
-      "authors": "NVIDIA NeMo team",
+      "authors": "NVIDIA NeMo team (incl. Boris Ginsburg)",
       "year": 2026,
       "venue": "ACL Anthology 2026.iwslt-1.23",
       "url": "https://aclanthology.org/2026.iwslt-1.23/",
       "source": "websearch",
-      "status": "found",
-      "summary": "Not yet extracted. Search snippet: cascade combining a dual-mode unified ASR transducer with a multilingual LLM; reported to use stability metrics (character erasure + update frequency) alongside quality/latency, i.e. a 2026 example of exactly the joint quality-latency-stability evaluation this pipeline is missing.",
-      "key_findings": [],
+      "status": "extracted",
+      "summary": "NVIDIA's IWSLT 2026 submission cascades a dual-mode Unified ASR Transducer (trained to deliver stable transcriptions across a wide range of latencies) with a multilingual LLM for translation, covering En->De/It/Zh (standard and contextualized) and Cs->En. The key design choice is pushing stability into the ASR model itself via training, so the downstream LLM translation stage receives an already-stable source stream instead of needing its own stabilization logic.",
+      "key_findings": [
+        "Confirms stability is being treated as a first-class training/architecture concern by 2026 SOTA cascade systems, not just a post-hoc metric -- validates this repo's decision (h-flicker-metric) to start measuring it at all",
+        "NeMo's approach (train the ASR model itself for cross-latency stability) is not retrofittable to this repo, which uses Deepgram as an off-the-shelf hosted ASR API with no training access -- this repo's realistic options remain post-hoc: masking (h-masking-holdback) or commit-gating (h-localagreement-asr-commit) applied to Deepgram's existing interim/final hypothesis stream",
+        "WebSearch could not surface NeMo's specific stability metric formula or numeric results (only the architecture-level design rationale) -- the full ACL Anthology paper (WebFetch to aclanthology.org is blocked in this environment, see note below) would be needed for a numeric comparison; not blocking any current hypothesis since NeMo's approach isn't applicable here anyway"
+      ],
       "relevant_to": ["h-flicker-metric", "h-localagreement-asr-commit"]
     }
   ],
-  "_websearch_note": "One real WebSearch pass was run on 2026-09-08 (query: '2026 normalized erasure caption flicker simultaneous speech translation LLM cascade stability metric') to check for post-survey literature. It also cross-validated this pipeline's NE implementation: an independent summary described 'NE score of 0.2' as meaning roughly 1/5 of tokens change before settling, which matches what src/real_time_translation/experiments/flicker_metrics.py measured for this repo's own ASR-interim stream (asr_ne_word_mean ~= 0.20 across the existing experiment corpus)."
+  "_websearch_note": "One real WebSearch pass was run on 2026-09-08 (query: '2026 normalized erasure caption flicker simultaneous speech translation LLM cascade stability metric') to check for post-survey literature. It also cross-validated this pipeline's NE implementation: an independent summary described 'NE score of 0.2' as meaning roughly 1/5 of tokens change before settling, which matches what src/real_time_translation/experiments/flicker_metrics.py measured for this repo's own ASR-interim stream (asr_ne_word_mean ~= 0.20 across the existing experiment corpus).",
+  "_extraction_note_cycle2": "EXTRACT_PAPERS for the 3 websearch-found papers (2026-09-08, cycle 2) hit an environment gap: WebFetch returned EGRESS_BLOCKED for arxiv.org, research.google, and aclanthology.org in this sandbox (the network egress proxy blocks these domains outright; WebSearch itself works fine and was used instead). All three 'extracted' summaries/key_findings above are therefore built from WebSearch result snippets, not full-text extraction -- they're substantive and specific (not marketing language), but a session with working WebFetch to these domains should verify against full text before treating any numeric claim as precise, especially NeMo's actual stability-metric formula/numbers which WebSearch snippets did not surface."
 }
