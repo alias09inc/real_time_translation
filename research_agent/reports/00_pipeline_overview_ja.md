@@ -129,6 +129,19 @@ JSON/Markdownファイルを読み書きして管理します。`orchestrator.py
 （`curl` で直接叩いてHTTPステータスを見る）も確認すると、原因の切り分けが
 速くなります。
 
+**続報（サイクル3で判明）**: ネットワーク許可状態はセッションをまたぐと
+変わり得ます。サイクル3では `api.deepgram.com` の REST エンドポイント
+（`/v1/projects`）は 200 で通るようになっていましたが、実験ランナーが
+実際に使う **Listen 用 WebSocket**（`wss://api.deepgram.com/v1/listen`）
+は依然 403 で拒否されました。つまり「同じホストの REST が通る」ことは
+「その上のストリーミング/WebSocketも通る」ことを保証しません。
+`PLAYBOOK.md` の環境チェックには、実際に Listen WebSocket への接続を
+試すコードを追加済みです。また `uv sync`/`uv run` は全 extras
+（`zoom` の `rtms`、testpypi 限定）をまとめて解決しようとして失敗する
+ことがあるため、実験用の依存関係だけが必要な場合は
+`uv pip install -e ".[experiments]"`（venv を手動で作って使う）の方が
+安全です。
+
 ## 8. 今のところ分かっていること（初回サイクルの立ち上げ時点）
 
 - 既存の実験ログ（`experiments/*.json`）には、ASRの中間結果・翻訳の
