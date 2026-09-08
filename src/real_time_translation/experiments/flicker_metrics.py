@@ -153,6 +153,84 @@ def group_translation(events: list[dict]) -> list[UtteranceGroupStats]:
     return groups
 
 
+def group_translation_by_utterance(events: list[dict]) -> list[UtteranceGroupStats]:
+    """Cross-batch (across-continuation) translation NE.
+
+    `group_translation` above groups by `(asr_start_time, asr_end_time)`, i.e.
+    a single `_stream_batch()` call -- so it only ever sees token-by-token
+    streaming within one call, which is append-only by construction and
+    therefore always ~0. Per `_stream_batch`'s own docstring, a continuation
+    batch for an in-progress (not yet utterance-ending) utterance
+    re-translates the *entire* accumulated source text from scratch, so nothing
+    guarantees a later batch's `full_target_text` keeps the same prefix as an
+    earlier batch's -- that cross-batch rewriting is invisible to
+    `group_translation`. This function groups instead by utterance span,
+    reusing each batch's *last* (most complete) text, and computes NE across
+    the ordered sequence of per-batch full texts within a span.
+
+    `results.events`/`TimedEvent` carries no `utterance_id` field (only
+    `is_utterance_end`, verified against video_segment.py's TimedEvent and an
+    actual experiment JSON) -- so span boundaries here are a sequential
+    heuristic: a new span starts immediately after any batch whose last event
+    has `is_utterance_end=True`. This is valid for these single-speaker
+    sequential-utterance experiments but is not a true utterance_id join --
+    callers/reports should state that caveat explicitly.
+    """
+    # Step 1: collapse into per-batch (asr_start_time, asr_end_time) groups,
+    # same key logic as group_translation, keeping each batch's last text and
+    # its last event's is_utterance_end flag.
+    batches: list[tuple[tuple[float, float], str, bool]] = []
+    current_key: tuple[float, float] | None = None
+    current_texts: list[str] = []
+    current_end_flag = True
+
+    def flush_batch() -> None:
+        if current_texts:
+            batches.append(
+                (current_key or (0.0, 0.0), current_texts[-1], current_end_flag)
+            )
+
+    for e in events:
+        if e.get("kind") not in ("translation_partial", "translation_complete"):
+            continue
+        key = (e.get("asr_start_time", 0.0), e.get("asr_end_time", 0.0))
+        if current_key is None or key != current_key:
+            flush_batch()
+            current_key = key
+            current_texts = []
+        current_texts.append(e.get("text", ""))
+        current_end_flag = e.get("is_utterance_end", True)
+    flush_batch()
+
+    # Step 2: chain consecutive batches into utterance spans, breaking right
+    # after a batch that ended the utterance.
+    groups: list[UtteranceGroupStats] = []
+    span_key: tuple[float, float] | None = None
+    span_texts: list[str] = []
+
+    def flush_span() -> None:
+        if span_texts:
+            groups.append(
+                UtteranceGroupStats(
+                    key=span_key or (0.0, 0.0),
+                    num_hypotheses=len(span_texts),
+                    ne=normalized_erasure(span_texts),
+                    final_text=span_texts[-1],
+                )
+            )
+
+    prev_ended = True
+    for key, text, ended in batches:
+        if prev_ended:
+            flush_span()
+            span_key = key
+            span_texts = []
+        span_texts.append(text)
+        prev_ended = ended
+    flush_span()
+    return groups
+
+
 def _mean(values: list[float]) -> float | None:
     return sum(values) / len(values) if values else None
 
@@ -165,6 +243,8 @@ class FlickerReport:
     asr_ne_word_mean: float | None
     num_translation_utterance_groups: int
     translation_ne_char_mean: float | None
+    num_translation_utterance_spans: int
+    translation_ne_char_cross_batch_mean: float | None
 
 
 def analyze_experiment(path: Path) -> FlickerReport:
@@ -172,8 +252,10 @@ def analyze_experiment(path: Path) -> FlickerReport:
     events = data.get("results", {}).get("events", [])
     asr_groups = group_asr_interim(events)
     tr_groups = group_translation(events)
+    tr_spans = group_translation_by_utterance(events)
     asr_ne = [g.ne for g in asr_groups if g.ne is not None]
     tr_ne = [g.ne for g in tr_groups if g.ne is not None]
+    tr_span_ne = [g.ne for g in tr_spans if g.ne is not None]
     return FlickerReport(
         json_path=str(path),
         experiment_name=data.get("experiment_name", path.stem),
@@ -181,6 +263,8 @@ def analyze_experiment(path: Path) -> FlickerReport:
         asr_ne_word_mean=_mean(asr_ne),
         num_translation_utterance_groups=len(tr_groups),
         translation_ne_char_mean=_mean(tr_ne),
+        num_translation_utterance_spans=len(tr_spans),
+        translation_ne_char_cross_batch_mean=_mean(tr_span_ne),
     )
 
 
@@ -228,6 +312,8 @@ def main() -> None:
                 "asr_ne_word_mean",
                 "num_translation_utterance_groups",
                 "translation_ne_char_mean",
+                "num_translation_utterance_spans",
+                "translation_ne_char_cross_batch_mean",
             ]
         )
         for r in reports:
@@ -239,6 +325,8 @@ def main() -> None:
                     r.asr_ne_word_mean,
                     r.num_translation_utterance_groups,
                     r.translation_ne_char_mean,
+                    r.num_translation_utterance_spans,
+                    r.translation_ne_char_cross_batch_mean,
                 ]
             )
 
@@ -251,6 +339,16 @@ def main() -> None:
     if scored_asr:
         overall_asr = _mean([r.asr_ne_word_mean for r in scored_asr])  # type: ignore[list-item]
         print(f"asr_ne_word_mean across corpus: {overall_asr:.4f}")
+    scored_cross = [
+        r for r in reports if r.translation_ne_char_cross_batch_mean is not None
+    ]
+    if scored_cross:
+        overall_cross = _mean(
+            [r.translation_ne_char_cross_batch_mean for r in scored_cross]  # type: ignore[list-item]
+        )
+        print(
+            f"translation_ne_char_cross_batch_mean across corpus: {overall_cross:.4f}"
+        )
 
 
 if __name__ == "__main__":

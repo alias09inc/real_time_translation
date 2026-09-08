@@ -9,6 +9,11 @@
       "at": "2026-09-08T07:28:31.381613+00:00",
       "amount_usd": 0.0,
       "note": "h-flicker-metric: implemented flicker_metrics.py, ran over 47 existing experiment JSON files, zero new API spend"
+    },
+    {
+      "at": "2026-09-08T12:51:37.592696+00:00",
+      "amount_usd": 0.0,
+      "note": "h-cross-utterance-flicker: added group_translation_by_utterance() to flicker_metrics.py, reran over 47 existing experiment JSON files, zero new API spend"
     }
   ]
 }
