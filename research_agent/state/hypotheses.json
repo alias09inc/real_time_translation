@@ -45,8 +45,8 @@
     {
       "id": "h-localagreement-asr-commit",
       "title": "LocalAgreement-2 gating before translation is triggered",
-      "description": "Instead of sending every Deepgram interim update to the LLM, only trigger (re-)translation once two consecutive interim hypotheses agree on a longest-common-prefix (LocalAgreement-2, per whisper-streaming). Compare against baseline and against h-masking-holdback on NE/latency/chrF using the same cached clip.",
-      "grounded_in": ["machacek2023-whisperstreaming"],
+      "description": "Instead of sending every Deepgram interim update to the LLM, only trigger (re-)translation once two consecutive interim hypotheses agree on a longest-common-prefix (LocalAgreement-2, per whisper-streaming). Compare against baseline and against h-masking-holdback on NE/latency/chrF using the same cached clip. Explicitly scoped to plain text-level LocalAgreement-2, NOT an AlignAtt-style attention-based policy (see alignatt4llm-iwslt2026: that requires white-box access to the translating model's attention internals, which this repo's API-only Gemini/OpenAI translator does not expose) -- LocalAgreement-2 only needs externally observable ASR hypothesis text, which Deepgram already provides.",
+      "grounded_in": ["machacek2023-whisperstreaming", "alignatt4llm-iwslt2026"],
       "predicted_effect": "Fewer, more stable translation calls -> lower NE and possibly lower LLM cost per segment, at the cost of added latency while waiting for two-hypothesis agreement.",
       "required_changes": "New commit-gating layer between Deepgram interim callback and the translation queue in pipeline.py; needs its own toggle so it can run independently of h-masking-holdback.",
       "uses_existing_clips": true,
