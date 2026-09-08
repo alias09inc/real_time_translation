@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "SEARCH_PAPERS",
+  "current_state": "EXTRACT_PAPERS",
   "cycle": 2,
-  "last_updated": "2026-09-08T07:29:25.076930+00:00",
+  "last_updated": "2026-09-08T10:01:24.155119+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -65,6 +65,12 @@
       "to": "SEARCH_PAPERS",
       "at": "2026-09-08T07:29:25.076828+00:00",
       "note": "Cycle 1 complete, starting cycle 2 (to be picked up by the scheduled cloud agent)"
+    },
+    {
+      "from": "SEARCH_PAPERS",
+      "to": "EXTRACT_PAPERS",
+      "at": "2026-09-08T10:01:24.155083+00:00",
+      "note": "Cycle 2 SEARCH_PAPERS: reusing 3 unread websearch stubs from cycle 1 (AlignAtt4LLM, Google caption-stability blog, NeMo IWSLT2026 cascade) as this cycle's extraction targets, per reflections.md cycle-1 recommendation. No additional WebSearch needed this cycle -- prioritizing actually extracting/reading what was already found over widening the search further."
     }
   ]
 }
