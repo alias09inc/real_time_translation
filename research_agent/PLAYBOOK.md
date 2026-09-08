@@ -146,15 +146,64 @@ python3 research_agent/orchestrator.py check-budget <estimated_cost_usd>
   # googleapis.com reachable, api.deepgram.com rejected with a 403 at
   # the proxy/CONNECT level, org policy, even with a valid key). Check
   # both directly instead of assuming a set key means a reachable API:
-  curl -sS -o /dev/null -w "deepgram reachable: %{http_code}\n" \
+  curl -sS -o /dev/null -w "deepgram REST reachable: %{http_code}\n" \
     -H "Authorization: Token $DEEPGRAM_API_KEY" https://api.deepgram.com/v1/projects
   curl -sS -o /dev/null -w "gemini reachable: %{http_code}\n" \
     "https://generativelanguage.googleapis.com/v1beta/models?key=$GOOGLE_API_KEY"
+  # IMPORTANT (found cycle 3, 2026-09-08, same day as the note above but a
+  # different session): a 200 on the REST check above is NOT sufficient
+  # evidence that a live experiment can actually run. Observed same day:
+  # REST /v1/projects returned 200, but the real experiment runner's
+  # Deepgram *listen/streaming websocket* handshake still failed with a
+  # distinct 403 ("Unexpected error when initializing websocket
+  # connection"), confirmed independent of keyterms. REST and WS-upgrade
+  # traffic to the same host can be allowed/blocked independently by an
+  # egress proxy (or Deepgram itself may scope REST vs streaming access
+  # differently for some keys) -- do not assume one implies the other.
+  # Test the actual websocket endpoint the experiment runner will use
+  # (requires the venv's `deepgram-sdk`/`websockets` deps installed --
+  # see the environment-setup note below if `uv sync` fails):
+  python3 -c "
+import asyncio, os, ssl
+import websockets
+
+async def main():
+    ctx = ssl.create_default_context()
+    cafile = os.environ.get('SSL_CERT_FILE')
+    if cafile:
+        try:
+            ctx.load_verify_locations(cafile=cafile)
+        except ssl.SSLError:
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+    url = 'wss://api.deepgram.com/v1/listen?model=nova-3-general&language=en&encoding=linear16&sample_rate=16000'
+    headers = {'Authorization': f\"Token {os.environ.get('DEEPGRAM_API_KEY', '')}\"}
+    try:
+        async with websockets.connect(url, additional_headers=headers, ssl=ctx):
+            print('deepgram listen-websocket: OK')
+    except Exception as e:
+        print(f'deepgram listen-websocket: FAILED ({type(e).__name__}: {e})')
+
+asyncio.run(main())
+"
   ```
+  # Environment-setup note (found cycle 3): `uv sync`/`uv run` in this repo
+  # can fail even for a plain (non-zoom) experiment, because uv locks
+  # ALL optional-dependency groups together by default, including the
+  # `zoom` extra's `rtms` package which only exists on `test.pypi.org` --
+  # a host this sandbox's egress proxy has rejected (distinct from the
+  # `api.deepgram.com`/`generativelanguage.googleapis.com` blocks above,
+  # and unrelated to them). Experiments never need the zoom extra
+  # (`Config.from_env(require_zoom=False)`). Workaround that avoids ever
+  # touching the zoom/rtms dependency: `python3 -m venv .venv && source
+  # .venv/bin/activate && uv pip install -e ".[experiments]"` (uv pip
+  # install does a normal per-package resolve, not a universal
+  # all-extras lock) instead of `uv sync`/`uv run`.
   If any of these fail (this can legitimately happen -- e.g. a cloud
   sandbox where secrets haven't been provisioned yet, a fresh
   environment without ffmpeg, or -- distinct from a missing/bad key --
-  the egress proxy blocking one specific API host while others remain
+  the egress proxy blocking one specific API host, or even one specific
+  protocol (REST vs websocket) on a host, while others remain
   reachable), **do not treat it as a crash**: log a
   clear note (`python3 research_agent/orchestrator.py advance
   RUN_EXPERIMENTS --note "blocked: <what's missing>"` is not itself a

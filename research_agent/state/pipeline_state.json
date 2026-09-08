@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "RUN_EXPERIMENTS",
+  "current_state": "WRITE_REPORT",
   "cycle": 2,
-  "last_updated": "2026-09-08T10:41:11.778379+00:00",
+  "last_updated": "2026-09-08T10:46:20.166628+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -131,6 +131,18 @@
       "to": "RUN_EXPERIMENTS",
       "at": "2026-09-08T10:41:11.778352+00:00",
       "note": "Cycle 3 HUMAN_APPROVAL: re-verified environment before picking a hypothesis -- unlike cycle 2, api.deepgram.com now returns 200 (curl -H Authorization: Token $DEEPGRAM_API_KEY https://api.deepgram.com/v1/projects) and ffmpeg was successfully installed via apt-get (was missing this session). Both env blockers from cycle 2 are resolved. All 3 non-tested hypotheses (h-masking-holdback $1.5, h-localagreement-asr-commit $1.5 not yet implemented, h-gemini-only-masking-replay $0.3 not yet implemented) remain auto_approved/queued; check-budget(1.5) = AUTO_APPROVE (0/7 USD spent today). Deviating from strict cheapest-first ordering: picking h-masking-holdback over the cheaper h-gemini-only-masking-replay workaround because (a) its code was already implemented and committed in cycle 2 and only needs a live run now that the blocker is gone, (b) a real live run answers the hypothesis directly instead of via an approximation the hypothesis's own required_changes flagged as needing care to be apples-to-apples, (c) h-gemini-only-masking-replay stays queued as a fallback for a future session if the Deepgram block recurs."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-08T10:46:13.207592+00:00",
+      "note": "No experiment ran this cycle either -- h-masking-holdback blocked by Deepgram listen-websocket 403 (see hypotheses.json blocked_reason cycle-3 update), h-localagreement-asr-commit blocked by the same root cause and not yet implemented, h-gemini-only-masking-replay needs new code (replay_masking.py) that was deliberately NOT rushed this cycle after discovering mid-design that flicker_metrics.py's translation-NE grouping is per-batch not per-utterance (see hypotheses.json note_cycle3) -- building the replay harness against the wrong metric would produce a misleading result, worse than not running it. Nothing to analyze, nothing fabricated. Proceeding to WRITE_REPORT per PLAYBOOK's degraded-mode instructions."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-08T10:46:20.166598+00:00",
+      "note": "Cycle 3 ANALYZE_RESULTS: confirmed no billable experiment ran (Deepgram REST reachable but listen-websocket 403; see blocked_reason). Writing cycle 3 Japanese report covering: environment re-check (partial unblock: REST yes, streaming WS no, ffmpeg now installed), the new WS-specific blocker, the translation-NE grouping design gap found before implementing h-gemini-only-masking-replay, and the PLAYBOOK.md self-improvements made (WS-level connectivity check, uv-sync-zoom-extra workaround)."
     }
   ]
 }
