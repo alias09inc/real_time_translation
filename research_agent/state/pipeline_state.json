@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "REFLECT",
-  "cycle": 2,
-  "last_updated": "2026-09-08T12:53:30.804771+00:00",
+  "current_state": "SEARCH_PAPERS",
+  "cycle": 3,
+  "last_updated": "2026-09-08T12:54:34.243820+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -185,6 +185,12 @@
       "to": "REFLECT",
       "at": "2026-09-08T12:53:30.804712+00:00",
       "note": "Cycle 4 WRITE_REPORT: wrote research_agent/reports/20260908_cycle4_report.md (Japanese) covering h-cross-utterance-flicker's result (cross-batch translation NE ~1.47 vs ~0.0001 within-batch, 6.2% of utterances affected), and added a section-8 addendum to 00_pipeline_overview_ja.md noting the metric-granularity lesson."
+    },
+    {
+      "from": "REFLECT",
+      "to": "SEARCH_PAPERS",
+      "at": "2026-09-08T12:54:34.243783+00:00",
+      "note": "Cycle 4 REFLECT: appended reflection entry. Key takeaways: h-cross-utterance-flicker's result raises priority of the blocked live-ASR hypotheses; uv-run-still-resyncs-zoom-extra gap found and documented in PLAYBOOK.md (use 'python3 -m <module>' directly for pure-analysis scripts instead); literature search hasn't run fresh since cycle 1 (3 cycles reusing/skipping) -- advancing to SEARCH_PAPERS for cycle 5 rather than GENERATE_HYPOTHESES to address that, with a concrete new angle (multi-batch/continuation retranslation stability policies) from this cycle's finding."
     }
   ]
 }

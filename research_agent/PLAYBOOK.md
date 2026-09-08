@@ -194,11 +194,30 @@ asyncio.run(main())
   # a host this sandbox's egress proxy has rejected (distinct from the
   # `api.deepgram.com`/`generativelanguage.googleapis.com` blocks above,
   # and unrelated to them). Experiments never need the zoom extra
-  # (`Config.from_env(require_zoom=False)`). Workaround that avoids ever
-  # touching the zoom/rtms dependency: `python3 -m venv .venv && source
-  # .venv/bin/activate && uv pip install -e ".[experiments]"` (uv pip
-  # install does a normal per-package resolve, not a universal
-  # all-extras lock) instead of `uv sync`/`uv run`.
+  # (`Config.from_env(require_zoom=False)`). This repo also requires
+  # Python >=3.13 -- if `python3 -m venv` picks up a 3.11/3.12
+  # interpreter, `uv pip install -e ".[experiments]"` will fail to
+  # resolve; check `uv python list` for an already-installed 3.13 (e.g.
+  # `/usr/bin/python3.13`) and use that explicitly:
+  # `python3.13 -m venv .venv && source .venv/bin/activate && uv pip
+  # install -e ".[experiments]"` (uv pip install does a normal
+  # per-package resolve, not a universal all-extras lock) instead of
+  # `uv sync`/`uv run`.
+  # IMPORTANT (found cycle 4): that workaround fixes *install* time, but
+  # `uv run <console-script-name>` (e.g. `uv run
+  # real-time-translation-exp-flicker`) still re-triggers a full `uv
+  # sync` first and hits the same zoom/rtms testpypi block, even inside
+  # an already-installed `.venv`. For any script that needs no live
+  # ASR/LLM API access (retroactive analysis scripts like
+  # flicker_metrics.py), skip `uv run` entirely and call the module
+  # directly through the activated venv's own python instead, e.g.:
+  # `source .venv/bin/activate && python3 -m
+  # real_time_translation.experiments.flicker_metrics` (check
+  # `pyproject.toml`'s `[project.scripts]` table for the
+  # console-script-name -> module:function mapping). This only avoids
+  # `uv run`'s sync step -- a script that genuinely needs the `zoom`
+  # extra still needs that dependency resolved some other way, which no
+  # experiment does.
   If any of these fail (this can legitimately happen -- e.g. a cloud
   sandbox where secrets haven't been provisioned yet, a fresh
   environment without ffmpeg, or -- distinct from a missing/bad key --

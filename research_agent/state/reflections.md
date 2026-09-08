@@ -172,3 +172,80 @@ loop.
    for the human-facing pipeline explainer.
 
 Did not touch the approval-gate or budget-check steps themselves.
+
+## Cycle 4 (2026-09-08, later session, scheduled/automated run)
+
+**What worked:** Following through on cycle 3's own plan
+(h-cross-utterance-flicker was flagged there as the recommended next
+hypothesis) paid off immediately -- it needed no live API access at all,
+so it was runnable regardless of whether the Deepgram infra blocker had
+recurred this session (it wasn't even re-checked at the WS level this
+cycle, deliberately, since it wasn't needed). The result was also a
+genuine, non-trivial finding, not a null result: cross-batch translation
+NE (~1.47 mean, 275 multi-batch spans out of 4471 total) is three to
+four orders of magnitude higher than the within-batch figure
+h-flicker-metric reported in cycle 1, and manual inspection of raw
+events (the smoketest file) confirmed it's real -- successive batches
+for the same utterance produce unrelated Japanese wording, not a shared
+prefix. Also worked: sanity-checking a surprising aggregate number (NE >
+1, which isn't intuitive) against the underlying raw event text before
+writing it into the human-facing report, rather than trusting the
+aggregate alone.
+
+**What didn't work / gaps:** `uv run` still fails on the unrelated `zoom`
+extra even after cycle 3 documented the workaround -- worth being more
+precise next time: `uv pip install -e ".[experiments]"` avoids it at
+*install* time, but `uv run <console-script>` re-triggers a sync anyway.
+The actual fix used this cycle was calling
+`python3 -m real_time_translation.experiments.flicker_metrics` directly
+via the activated venv, bypassing `uv run` entirely for pure-analysis
+scripts that need no live API access. Documenting this precisely in
+PLAYBOOK.md now (see change #1 below) so a future session doesn't
+rediscover the same "workaround didn't actually work" gap. Also: did not
+re-verify the Deepgram Listen WebSocket or install ffmpeg this cycle,
+since the chosen hypothesis needed neither -- that's a deliberate scope
+choice, not an oversight, but it does mean cycle 5 starts with the
+live-ASR environment status unknown again and should re-check before
+picking among the three still-blocked hypotheses.
+
+**Backlog calibration:** 5 queued/proposed hypotheses now (under the cap
+of 6), one newly tested this cycle. This cycle's result also changes the
+calculus for the backlog: h-masking-holdback and
+h-localagreement-asr-commit are no longer just "blocked on infra" --
+they now target a confirmed, sizeable problem (not a hypothetical one),
+which raises their priority once Deepgram access is restored. Also
+worth flagging: the survey-derived literature base (papers.json) has not
+had a fresh WebSearch pass since cycle 1 (cycles 2-4 all reused or
+skipped search, per each cycle's own REFLECT decision) -- three cycles
+running now. That was a reasonable call each individual time (there was
+always a clearer, more valuable non-search action available), but
+"reasonable every time" can still add up to "the search step has quietly
+atrophied." Recommending cycle 5 actually run a fresh SEARCH_PAPERS pass
+(targeting: multi-batch/continuation retranslation stability policies
+specifically, given this cycle's finding) rather than deferring again by
+default.
+
+**Budget policy:** Still $0 total spent, four cycles running, entirely
+because every hypothesis actually executed so far has been a $0
+retroactive analysis (by design -- PLAYBOOK.md prioritizes these) while
+the three hypotheses that need real spend remain blocked on Deepgram
+Listen-WebSocket access. This is worth surfacing to the human plainly
+(also stated in this cycle's Japanese report): the auto-approval budget
+policy itself has never actually been exercised end-to-end. No proposed
+change to the caps themselves -- there's still no data suggesting they're
+wrong, just no evidence yet that they're right either.
+
+**Playbook changes made this cycle:**
+1. Will document the `uv run` vs `python3 -m <module>` distinction for
+   pure-analysis scripts (`uv run` still re-triggers the zoom-extra sync
+   even inside an installed `.venv`; use `python3 -m
+   real_time_translation.experiments.<script>` directly instead) --
+   adding this to PLAYBOOK.md's RUN_EXPERIMENTS environment-setup note
+   now.
+
+**Next state:** Advancing to `SEARCH_PAPERS` (new cycle) rather than
+`GENERATE_HYPOTHESES` directly, per the backlog-calibration note above --
+it's been three cycles since the last real search and this cycle's
+finding (large cross-batch retranslation drift) gives a concrete new
+angle to search for (streaming MT continuation/re-translation stability
+policies) rather than repeating the cycle-1 query blindly.
