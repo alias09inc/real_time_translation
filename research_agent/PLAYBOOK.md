@@ -129,8 +129,29 @@ python3 research_agent/orchestrator.py check-budget <estimated_cost_usd>
 
 ## State: RUN_EXPERIMENTS
 
-- Pick one `queued` hypothesis (prefer $0 retroactive-analysis hypotheses
-  first, then cheapest `estimated_cost_usd`).
+- **First, verify the environment can actually run a live experiment**
+  before picking anything that needs one:
+  ```bash
+  echo "DEEPGRAM_API_KEY set: $([ -n "$DEEPGRAM_API_KEY" ] && echo yes || echo no)"
+  echo "LLM key set: $([ -n "$GOOGLE_API_KEY$OPENAI_API_KEY" ] && echo yes || echo no)"
+  command -v ffmpeg >/dev/null && echo "ffmpeg: ok" || echo "ffmpeg: MISSING"
+  ls experiments/refs/audio/*.webm 2>/dev/null || echo "no cached clips found"
+  ```
+  If any of these fail (this can legitimately happen -- e.g. a cloud
+  sandbox where secrets haven't been provisioned yet, or a fresh
+  environment without ffmpeg), **do not treat it as a crash**: log a
+  clear note (`python3 research_agent/orchestrator.py advance
+  RUN_EXPERIMENTS --note "blocked: <what's missing>"` is not itself a
+  legal transition, so just append the reason to the hypothesis's
+  `result_summary` as `"blocked_reason": "..."` instead, e.g. via a
+  dedicated field), skip straight to $0/no-new-experiment hypotheses if
+  any remain queued, otherwise advance to `WRITE_REPORT` anyway (mention
+  the environment gap in the Japanese report so the human can fix it) and
+  then `REFLECT`. Never fabricate experiment results if the environment
+  can't actually run one.
+- If the environment check passes: pick one `queued` hypothesis (prefer
+  $0 retroactive-analysis hypotheses first, then cheapest
+  `estimated_cost_usd`).
 - Implement `required_changes` if it needs code (small, focused diff --
   follow this repo's existing style, run `uv run ruff check .` after).
 - Run the experiment via the existing runner, e.g.:
