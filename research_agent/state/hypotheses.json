@@ -40,7 +40,8 @@
       "approval": "auto_approved",
       "status": "queued",
       "experiment_ids": [],
-      "result_summary": ""
+      "result_summary": "",
+      "blocked_reason": "Cycle 2 (2026-09-08): implemented the masking-holdback code (Config.masking_holdback_words + pipeline.py truncation, env-gated MASKING_HOLDBACK_WORDS) and attempted a live run via real-time-translation-exp-video on the cached wjZofJX0v4M clip, but the Deepgram websocket connection failed with a 403 -- root-caused to the sandbox's network egress proxy rejecting the CONNECT to api.deepgram.com outright (org policy denial, confirmed via direct curl: 'connect_rejected'), not an invalid/missing key (DEEPGRAM_API_KEY is set) or a code bug. generativelanguage.googleapis.com (Gemini) IS reachable (curl 200), so only the ASR leg is blocked. Code changes are committed and ready to run as soon as api.deepgram.com is allowlisted in this environment's egress proxy; no experiment result yet, nothing fabricated. See h-gemini-only-masking-replay for a $0 workaround that doesn't need Deepgram at all."
     },
     {
       "id": "h-localagreement-asr-commit",
@@ -51,6 +52,21 @@
       "required_changes": "New commit-gating layer between Deepgram interim callback and the translation queue in pipeline.py; needs its own toggle so it can run independently of h-masking-holdback.",
       "uses_existing_clips": true,
       "estimated_cost_usd": 1.5,
+      "approval": "auto_approved",
+      "status": "queued",
+      "experiment_ids": [],
+      "result_summary": "",
+      "blocked_reason": "Same environment blocker as h-masking-holdback (see its blocked_reason): api.deepgram.com egress rejected by this sandbox's network proxy. Not yet implemented (code) since the same live run would be needed to test it and is currently blocked."
+    },
+    {
+      "id": "h-gemini-only-masking-replay",
+      "title": "Deepgram-bypass replay harness: test masking-holdback using only Gemini calls",
+      "description": "This sandbox's network egress proxy blocks api.deepgram.com (confirmed 2026-09-08, see h-masking-holdback.blocked_reason) but NOT generativelanguage.googleapis.com -- so ASR-dependent live experiments (h-masking-holdback, h-localagreement-asr-commit) are stuck, but LLM-only ones are not. Every existing experiments/*.json already has a full `results.events` list (asr_interim/translation_partial/translation_complete, with utterance_id/is_utterance_end/text at each step -- the same schema src/real_time_translation/experiments/flicker_metrics.py already parses). Build a small standalone script that replays a chosen experiment JSON's already-recorded ASR event stream (treating it as if it came from Deepgram live) through the same masking/batching/utterance-continuation logic as pipeline.py._translation_worker, but calling the real LLMTranslator directly instead of running the full TranslationPipeline+DeepgramTranscriber -- with/without masking_holdback_words toggled, on the same replayed ASR stream. This tests the real effect of h-masking-holdback on real Gemini output using zero new Deepgram spend and zero new Gemini spend beyond the replay's own translation calls (small, since it reuses already-transcribed text instead of re-running ASR).",
+      "grounded_in": ["arivazhagan2020-retranslation"],
+      "predicted_effect": "Should reproduce (at lower cost, no Deepgram spend) the same NE/quality comparison h-masking-holdback was designed to measure, and unblocks progress on h-masking-holdback/h-localagreement-asr-commit even if api.deepgram.com stays blocked in future sessions.",
+      "required_changes": "New script under src/real_time_translation/experiments/ (e.g. replay_masking.py) that: (1) loads an existing experiments/*.json's results.events, (2) reconstructs the per-utterance ASR text stream in order, (3) drives it through LLMTranslator with the same masking-holdback truncation logic as pipeline.py, (4) writes a normal experiments/YYYYMMDD_<name>.json + results.csv row so it's directly comparable via flicker_metrics.py. Needs care to faithfully reproduce _translation_worker's batching/utterance-lock semantics (pipeline.py:585-641) so the comparison is apples-to-apples with what a real run would do, not a simplified approximation.",
+      "uses_existing_clips": true,
+      "estimated_cost_usd": 0.3,
       "approval": "auto_approved",
       "status": "queued",
       "experiment_ids": [],
