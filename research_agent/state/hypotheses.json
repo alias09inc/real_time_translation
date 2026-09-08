@@ -82,7 +82,8 @@
       "required_changes": "Add a new grouping function to src/real_time_translation/experiments/flicker_metrics.py, e.g. group_translation_by_utterance(events), that walks translation_partial/translation_complete events in file order and starts a new utterance-span group immediately after any event with is_utterance_end=True (the prior group's boundary). IMPORTANT: results.events/TimedEvent has no utterance_id field at all (verified cycle 4, 2026-09-08 by reading video_segment.py's TimedEvent dataclass and an actual experiment JSON -- only is_utterance_end is logged; the claim otherwise in h-gemini-only-masking-replay's original description was wrong and has been corrected there). So this grouping is a sequential is_utterance_end-boundary heuristic, valid for these single-speaker sequential-utterance experiments, not a true utterance_id join -- state this caveat explicitly in any report that cites the result. Within each utterance-span group, take the last (most complete) event's text per distinct (asr_start_time, asr_end_time) batch, in that order, and compute char-level normalized_erasure() (already implemented, reused as-is) over that ordered list of per-batch full texts -- this is the across-batch analogue of the existing within-batch group_translation(). Add the new column(s) (e.g. num_translation_utterance_spans, translation_ne_char_cross_batch_mean) to flicker_metrics.csv's writer and to analyze_experiment()/FlickerReport, and print a corpus-wide mean alongside the existing two, exactly like h-flicker-metric did. No changes to the live pipeline; this only reruns the existing `uv run real-time-translation-exp-flicker` script over the same 47 experiment JSON files h-flicker-metric already used.",
       "uses_existing_clips": true,
       "estimated_cost_usd": 0.0,
-      "status": "proposed",
+      "approval": "auto_approved",
+      "status": "queued",
       "experiment_ids": [],
       "result_summary": ""
     }
