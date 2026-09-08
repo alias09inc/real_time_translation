@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "GENERATE_HYPOTHESES",
+  "current_state": "RUN_EXPERIMENTS",
   "cycle": 2,
-  "last_updated": "2026-09-08T10:08:07.488021+00:00",
+  "last_updated": "2026-09-08T10:41:11.778379+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -119,6 +119,18 @@
       "to": "GENERATE_HYPOTHESES",
       "at": "2026-09-08T10:08:07.487991+00:00",
       "note": "Cycle 2 complete. Skipping SEARCH_PAPERS for cycle 3 -- the existing literature base already grounds h-gemini-only-masking-replay, which just needs to be implemented and run next. GENERATE_HYPOTHESES next cycle should mostly be a no-op (confirm backlog, don't add more) before moving straight to implementing that hypothesis."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-08T10:41:06.091541+00:00",
+      "note": "Cycle 3 GENERATE_HYPOTHESES: no-op confirmed per cycle-2 reflection plan. Backlog stays at 4 (h-flicker-metric tested, h-masking-holdback queued, h-localagreement-asr-commit queued, h-gemini-only-masking-replay queued), under the 6 cap. No new hypotheses added -- prioritizing depth (actually running queued work) over breadth this cycle."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-08T10:41:11.778352+00:00",
+      "note": "Cycle 3 HUMAN_APPROVAL: re-verified environment before picking a hypothesis -- unlike cycle 2, api.deepgram.com now returns 200 (curl -H Authorization: Token $DEEPGRAM_API_KEY https://api.deepgram.com/v1/projects) and ffmpeg was successfully installed via apt-get (was missing this session). Both env blockers from cycle 2 are resolved. All 3 non-tested hypotheses (h-masking-holdback $1.5, h-localagreement-asr-commit $1.5 not yet implemented, h-gemini-only-masking-replay $0.3 not yet implemented) remain auto_approved/queued; check-budget(1.5) = AUTO_APPROVE (0/7 USD spent today). Deviating from strict cheapest-first ordering: picking h-masking-holdback over the cheaper h-gemini-only-masking-replay workaround because (a) its code was already implemented and committed in cycle 2 and only needs a live run now that the blocker is gone, (b) a real live run answers the hypothesis directly instead of via an approximation the hypothesis's own required_changes flagged as needing care to be apples-to-apples, (c) h-gemini-only-masking-replay stays queued as a fallback for a future session if the Deepgram block recurs."
     }
   ]
 }
