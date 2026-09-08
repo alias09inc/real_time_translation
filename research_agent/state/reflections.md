@@ -105,3 +105,70 @@ haven't actually spent anything against it yet to have an opinion.
    reading the pipeline overview (not just PLAYBOOK.md).
 
 Did not touch the approval-gate or budget-check steps themselves.
+
+## Cycle 3 (2026-09-08, later session)
+
+**What worked:** Verifying the environment fresh rather than trusting
+cycle 2's blocked_reason at face value paid off -- the sandbox's network
+state had genuinely changed (Deepgram REST reachable, ffmpeg installed
+cleanly again) within the same day, across sessions. Re-checking instead
+of assuming "still blocked" is the right default for anything
+environment-dependent. Also good: reading `pipeline.py`'s
+`_stream_batch`/`_translation_worker` in detail *before* writing
+`replay_masking.py`, which surfaced that `flicker_metrics.py`'s
+translation-NE grouping is per-batch, not per-utterance, and would not
+have actually measured what h-masking-holdback is meant to fix
+(cross-continuation retranslation drift). Stopping short of implementing
+against a metric known to be wrong, instead of rushing a "looks done"
+result, matches the playbook's "never fabricate results" spirit even
+though this wasn't literally a fabrication risk -- it would have been a
+*real* experiment measuring the *wrong thing* and reporting a false
+negative, which is arguably worse because it looks legitimate.
+
+**What didn't work / gaps:** Assumed a 200 on Deepgram's REST endpoint
+meant streaming would work too -- wrong again, in a new way (cycle 2 was
+REST+WS both blocked at the proxy CONNECT level; cycle 3 is REST fine,
+WS-upgrade specifically 403). Two cycles in a row where an environment
+check that looked sufficient turned out not to be. Fixed by adding an
+actual WS-connect test to PLAYBOOK.md's RUN_EXPERIMENTS section this
+cycle -- if a future session hits the same thing a third time, that's a
+sign to look harder at *why* (proxy WS-upgrade policy vs. a Deepgram
+key/plan scope difference) rather than just re-documenting the symptom
+again. Separately, `uv sync`/`uv run` failing on an unrelated `zoom`
+extra (testpypi's `rtms`, blocked by the proxy) cost real time to
+diagnose -- worth having caught in cycle 1 or 2 already since experiments
+never need that extra; documented the `uv pip install -e ".[experiments]"`
+workaround now so it's a non-issue going forward.
+
+**Backlog calibration:** Still 4 hypotheses, unchanged this cycle
+(GENERATE_HYPOTHESES was correctly a no-op per the cycle-2 plan). Next
+cycle's GENERATE_HYPOTHESES should consider adding a small, scoped
+hypothesis for cross-utterance/cross-continuation translation NE
+(diffing successive full-utterance retranslations directly, per the
+note on h-gemini-only-masking-replay) -- this is arguably higher-value
+than either blocked live-ASR hypothesis right now, since it's a $0
+retroactive analysis (like h-flicker-metric was) that doesn't depend on
+Deepgram at all and fixes a real gap in already-tested h-flicker-metric's
+methodology.
+
+**Budget policy:** Still $0 spent, three cycles running. No proposal to
+change caps -- there's simply been no successful billable run yet to
+have data-driven grounds to revisit them. Not concerning yet, but if
+cycle 4 also fails to spend anything, worth flagging in the report to
+the human as a "the auto-approved backlog has been stuck on
+infra for three cycles" signal rather than silently repeating the same
+loop.
+
+**Playbook changes made this cycle:**
+1. RUN_EXPERIMENTS's environment check now also tests the actual
+   Deepgram listen-websocket directly (Python + `websockets`), not just
+   the REST `/v1/projects` endpoint -- REST-reachable was proven
+   insufficient evidence twice now.
+2. Documented the `uv sync`/`uv run` all-extras-lock problem (pulls in
+   the unreachable `zoom`/`rtms` testpypi dependency even for a plain
+   experiment run) and the `uv pip install -e ".[experiments]"`
+   workaround.
+3. Updated `00_pipeline_overview_ja.md` section 7 with both of the above
+   for the human-facing pipeline explainer.
+
+Did not touch the approval-gate or budget-check steps themselves.
