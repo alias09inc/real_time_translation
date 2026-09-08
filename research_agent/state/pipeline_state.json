@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "RUN_EXPERIMENTS",
+  "current_state": "ANALYZE_RESULTS",
   "cycle": 2,
-  "last_updated": "2026-09-08T10:03:21.596825+00:00",
+  "last_updated": "2026-09-08T10:06:07.014348+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -95,6 +95,12 @@
       "to": "RUN_EXPERIMENTS",
       "at": "2026-09-08T10:03:21.596791+00:00",
       "note": "Both queued hypotheses already auto_approved from cycle 1; re-confirmed check-budget(1.5)=AUTO_APPROVE (0/7 USD spent today, per-batch cap 3 USD). Proceeding to RUN_EXPERIMENTS."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-08T10:06:07.014313+00:00",
+      "note": "No experiment ran (Deepgram egress blocked, see hypotheses.json blocked_reason). Nothing to analyze -- not fabricating results. Proceeding to WRITE_REPORT per PLAYBOOK's degraded-mode instructions to report the environment gap."
     }
   ]
 }
