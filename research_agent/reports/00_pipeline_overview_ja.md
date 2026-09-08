@@ -110,11 +110,24 @@ JSON/Markdownファイルを読み書きして管理します。`orchestrator.py
 
 ## 7. 実験実行と記録
 
-実験の実行自体は既存の `real-time-translation-exp-youtube` ランナーを
-そのまま使います。新しいコードは書かず、既存のCLAUDE.mdの実験記録ルール
-（`experiments/YYYYMMDD_<実験名>.json` 作成 + `results.csv` 追記 +
-git commit）にそのまま従います。リサーチエージェント側の状態ファイルも
-同じタイミングでコミットするようにしています。
+実験の実行自体は既存の `real-time-translation-exp-youtube` /
+`real-time-translation-exp-video` ランナーをそのまま使います。仮説の
+`required_changes` に応じて、`src/real_time_translation/` 側に小さな
+実験用トグル（環境変数で有効化、デフォルトは現状の挙動を維持）を追加
+することもあります（例: サイクル2の `MASKING_HOLDBACK_WORDS`）。
+いずれの場合も既存のCLAUDE.mdの実験記録ルール（`experiments/YYYYMMDD_<実験名>.json`
+作成 + `results.csv` 追記 + git commit）にそのまま従います。リサーチ
+エージェント側の状態ファイルも同じタイミングでコミットするようにしています。
+
+**サンドボックス環境特有の注意（サイクル2で判明）**: クラウド実行環境
+（`Claude Code on the web` 等）のネットワーク egress プロキシが、
+使用する外部ホストごとに個別に許可/拒否を設定していることがあります。
+サイクル2の時点では `generativelanguage.googleapis.com`（Gemini）は
+疎通するが `api.deepgram.com`（ASR）は組織ポリシーで拒否される、
+という非対称な状態が確認されました。`RUN_EXPERIMENTS` 状態の環境
+チェックで単に「キーが設定されているか」だけでなく、実際に疎通するか
+（`curl` で直接叩いてHTTPステータスを見る）も確認すると、原因の切り分けが
+速くなります。
 
 ## 8. 今のところ分かっていること（初回サイクルの立ち上げ時点）
 

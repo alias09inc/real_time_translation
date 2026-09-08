@@ -135,11 +135,27 @@ python3 research_agent/orchestrator.py check-budget <estimated_cost_usd>
   echo "DEEPGRAM_API_KEY set: $([ -n "$DEEPGRAM_API_KEY" ] && echo yes || echo no)"
   echo "LLM key set: $([ -n "$GOOGLE_API_KEY$OPENAI_API_KEY" ] && echo yes || echo no)"
   command -v ffmpeg >/dev/null && echo "ffmpeg: ok" || echo "ffmpeg: MISSING"
+  # If missing, try `apt-get update && apt-get install -y --no-install-recommends
+  # ffmpeg` before giving up -- worked cleanly in a 2026-09-08 cloud sandbox
+  # (had sudo/apt-get available; some mirror 404s on unrelated GPU-driver
+  # packages were harmless noise, ffmpeg itself still installed fine).
   ls experiments/refs/audio/*.webm 2>/dev/null || echo "no cached clips found"
+  # Keys being *set* isn't the same as being *reachable* -- a cloud
+  # sandbox's network egress proxy can allow one API host and reject
+  # another independently (observed 2026-09-08: generativelanguage.
+  # googleapis.com reachable, api.deepgram.com rejected with a 403 at
+  # the proxy/CONNECT level, org policy, even with a valid key). Check
+  # both directly instead of assuming a set key means a reachable API:
+  curl -sS -o /dev/null -w "deepgram reachable: %{http_code}\n" \
+    -H "Authorization: Token $DEEPGRAM_API_KEY" https://api.deepgram.com/v1/projects
+  curl -sS -o /dev/null -w "gemini reachable: %{http_code}\n" \
+    "https://generativelanguage.googleapis.com/v1beta/models?key=$GOOGLE_API_KEY"
   ```
   If any of these fail (this can legitimately happen -- e.g. a cloud
-  sandbox where secrets haven't been provisioned yet, or a fresh
-  environment without ffmpeg), **do not treat it as a crash**: log a
+  sandbox where secrets haven't been provisioned yet, a fresh
+  environment without ffmpeg, or -- distinct from a missing/bad key --
+  the egress proxy blocking one specific API host while others remain
+  reachable), **do not treat it as a crash**: log a
   clear note (`python3 research_agent/orchestrator.py advance
   RUN_EXPERIMENTS --note "blocked: <what's missing>"` is not itself a
   legal transition, so just append the reason to the hypothesis's
