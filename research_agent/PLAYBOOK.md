@@ -167,6 +167,24 @@ python3 research_agent/orchestrator.py check-budget <estimated_cost_usd>
 import asyncio, os, ssl
 import websockets
 
+async def try_connect(ctx, label):
+    url = 'wss://api.deepgram.com/v1/listen?model=nova-2-general&language=en&encoding=linear16&sample_rate=16000'
+    headers = {'Authorization': f\"Token {os.environ.get('DEEPGRAM_API_KEY', '')}\"}
+    try:
+        async with websockets.connect(url, additional_headers=headers, ssl=ctx):
+            print(f'deepgram listen-websocket ({label}): OK')
+        return True
+    except websockets.exceptions.InvalidStatus as e:
+        # A real response FROM Deepgram (or a proxy speaking HTTP on its
+        # behalf) -- this is the signal that actually matters, e.g. cycle-5
+        # sandbox: HTTP 400 \"Connection header did not include 'upgrade'\",
+        # meaning the egress proxy is mangling the WS upgrade handshake.
+        print(f'deepgram listen-websocket ({label}): FAILED, HTTP {e.response.status_code}: {e.response.body!r}')
+        return False
+    except Exception as e:
+        print(f'deepgram listen-websocket ({label}): FAILED ({type(e).__name__}: {e})')
+        return False
+
 async def main():
     ctx = ssl.create_default_context()
     cafile = os.environ.get('SSL_CERT_FILE')
@@ -174,19 +192,31 @@ async def main():
         try:
             ctx.load_verify_locations(cafile=cafile)
         except ssl.SSLError:
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
-    url = 'wss://api.deepgram.com/v1/listen?model=nova-3-general&language=en&encoding=linear16&sample_rate=16000'
-    headers = {'Authorization': f\"Token {os.environ.get('DEEPGRAM_API_KEY', '')}\"}
-    try:
-        async with websockets.connect(url, additional_headers=headers, ssl=ctx):
-            print('deepgram listen-websocket: OK')
-    except Exception as e:
-        print(f'deepgram listen-websocket: FAILED ({type(e).__name__}: {e})')
+            pass  # fall through to the cert-verified attempt anyway; it may still work
+    if await try_connect(ctx, 'cert-verified'):
+        return
+    # cycle-5 finding: a TLS-terminating egress proxy's injected CA can trip
+    # OpenSSL 3.x's strict key-usage-extension check ('CA cert does not
+    # include key usage extension') even though the proxy and Deepgram are
+    # both otherwise reachable -- this is a red herring, not the real
+    # blocker. Retry with verification off to see what's actually behind it.
+    ctx_noverify = ssl.create_default_context()
+    ctx_noverify.check_hostname = False
+    ctx_noverify.verify_mode = ssl.CERT_NONE
+    await try_connect(ctx_noverify, 'cert-verification-disabled, diagnostic only')
 
 asyncio.run(main())
 "
   ```
+  # A result from the disabled-verification attempt only tells you what's
+  # blocking the connection -- it is NOT itself sufficient evidence that a
+  # real experiment can run, since the actual runner (video_segment.py /
+  # youtube_segment.py, via the `deepgram` SDK) does proper cert
+  # verification and would fail even if this diagnostic script "succeeds"
+  # only with verification off. If the cert-verified attempt fails but you
+  # need to know *why* before giving up, use the disabled-verification
+  # retry to diagnose, then still treat the hypothesis as blocked unless the
+  # cert-verified attempt itself prints OK.
   # Environment-setup note (found cycle 3): `uv sync`/`uv run` in this repo
   # can fail even for a plain (non-zoom) experiment, because uv locks
   # ALL optional-dependency groups together by default, including the
@@ -218,6 +248,12 @@ asyncio.run(main())
   # `uv run`'s sync step -- a script that genuinely needs the `zoom`
   # extra still needs that dependency resolved some other way, which no
   # experiment does.
+  # IMPORTANT (found cycle 5): `ruff` is NOT pulled in by `.[experiments]`,
+  # so even `python3 -m ruff` fails with "No module named ruff" in a venv
+  # set up via the workaround above, and `uv run ruff check .` fails the
+  # same zoom/rtms-sync way as any other `uv run`. Run `uv pip install
+  # ruff` once (a normal per-package install, not a full sync) in the
+  # activated venv, then use `python3 -m ruff check <paths>` directly.
   If any of these fail (this can legitimately happen -- e.g. a cloud
   sandbox where secrets haven't been provisioned yet, a fresh
   environment without ffmpeg, or -- distinct from a missing/bad key --

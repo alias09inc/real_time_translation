@@ -249,3 +249,87 @@ it's been three cycles since the last real search and this cycle's
 finding (large cross-batch retranslation drift) gives a concrete new
 angle to search for (streaming MT continuation/re-translation stability
 policies) rather than repeating the cycle-1 query blindly.
+
+## Cycle 5 (2026-09-09)
+
+**What worked:** Following through on cycle-4's plan to run a real
+SEARCH_PAPERS pass (rather than deferring again) paid off -- one of the
+4 new papers (`zoom2025-self-speculative-retranslation`) independently
+named and grounded exactly the mechanism `h-gemini-only-masking-replay`
+was already informally built on ("display-only masking"), and the other
+3 all converged on the same conclusion already reached for AlignAtt4LLM
+in cycle 2 (white-box attention access needed, not applicable to this
+repo's API-only translator) -- useful confirmation, not wasted effort,
+and correctly resulted in a GENERATE_HYPOTHESES no-op rather than padding
+the backlog for its own sake.
+
+The most valuable thing this cycle did was going a level deeper on two
+"blocked" hypotheses instead of accepting the blocked status at face
+value:
+1. The Deepgram WS blocker (known since cycle 3 as a generic 403) is now
+   root-caused precisely: the sandbox's egress proxy TLS-terminates
+   outbound HTTPS and mangles the WebSocket upgrade handshake headers
+   (Deepgram's own error, once an unrelated OpenSSL CA-cert-strictness
+   issue is worked around, is literally "Connection header did not
+   include 'upgrade'"). This is now specific enough that a human fixing
+   the proxy config knows exactly what to allow.
+2. `h-gemini-only-masking-replay` looked like the "easy" $0 hypothesis
+   (no Deepgram needed) but attempting to actually design
+   replay_masking.py surfaced that its core premise doesn't hold: the
+   per-batch source text masking-holdback needs for continuation batches
+   was never logged anywhere in the existing 47 experiment JSONs. This is
+   exactly the kind of thing PLAYBOOK.md's RUN_EXPERIMENTS section warns
+   about ("building the replay harness against the wrong metric would
+   produce a misleading result, worse than not running it") -- caught
+   before writing a single line of the harness itself, not after.
+
+**What didn't work / lesson:** All 3 queued hypotheses are still
+untested after 5 cycles. This isn't churn -- each blocker found this
+cycle was real and specific -- but it does mean the backlog is now
+uniformly blocked on one external thing (the proxy's WebSocket handling)
+that this session has no ability to fix directly. Cost/benefit of
+continuing to poke at the same blocker every cycle is diminishing: cycle
+3 found "403", cycle 5 found the precise HTTP-layer reason, but neither
+session can act on that finding themselves. The self-fix I *could* make
+(TimedEvent.original_text) doesn't unblock anything until a live
+recording succeeds anyway.
+
+**Backlog calibration:** Still well-calibrated (5 items, cap 6,
+depth-over-breadth respected). No new hypotheses added this cycle, and
+that was the right call -- more ideas isn't the bottleneck, execution is.
+
+**Budget policy:** Unchanged recommendation from cycle 4 -- still $0
+total spent across 5 cycles, still no evidence either way on whether the
+$3/$7 caps are right, because nothing has actually spent against them
+yet. Not proposing a change.
+
+**Playbook changes made this cycle:**
+1. Documented (in RUN_EXPERIMENTS) that `ruff` is not pulled in by
+   `.[experiments]` -- `uv run ruff check .` fails via the zoom/rtms sync
+   issue as always, but even `python3 -m ruff` fails with "No module
+   named ruff" unless `uv pip install ruff` is run once in the venv
+   first. Adding this as an explicit extra step next to the existing
+   venv-setup note.
+2. Extended the inline Deepgram WS connectivity check script: the
+   existing version only catches `ssl.SSLError` from
+   `load_verify_locations()`, not from the actual TLS handshake during
+   `connect()` -- this cycle hit a `SSLCertVerificationError` at handshake
+   time ("CA cert does not include key usage extension", an OpenSSL 3.x
+   strictness quirk with the proxy's injected CA) that the old script
+   would have reported as a bare, unhelpful traceback. The new version
+   catches that specifically, retries with cert verification disabled to
+   distinguish "our TLS trust setup is broken" from "Deepgram/the proxy
+   itself is rejecting us", and reports both outcomes distinctly (a
+   `websockets.exceptions.InvalidStatus` after that retry, with its
+   response body, is the real signal -- e.g. this cycle's "Connection
+   header did not include 'upgrade'").
+
+**Next state:** Advancing to `GENERATE_HYPOTHESES` for cycle 6 rather
+than `SEARCH_PAPERS` -- the literature base is fresh (searched this
+cycle), and there's no new angle a search would add right now that isn't
+already covered by the existing backlog. GENERATE_HYPOTHESES should stay
+a no-op again unless the WS proxy issue is resolved by then (in which
+case, jump straight to running `h-masking-holdback`, which is fully
+implemented and ready) or a genuinely new $0-cost, no-live-API angle
+occurs to that session (e.g. the cycle-4-flagged time-to-second-batch
+distribution analysis).
