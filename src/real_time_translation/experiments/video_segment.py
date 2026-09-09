@@ -80,6 +80,19 @@ class TimedEvent:
     asr_start_time: float | None = None
     asr_end_time: float | None = None
     confidence: float = 0.0
+    # Source (ASR) text paired with `text` (the translation) for
+    # translation_partial/translation_complete events. NOT the same as
+    # this batch's new ASR fragment alone -- TranslationResult.original_text
+    # is `pipeline._emit_batch_result`'s `acc_source`, i.e. the WHOLE
+    # utterance's accumulated source up through this batch, so consecutive
+    # same-utterance events' original_text values are prefix-nested and a
+    # given batch's own new-fragment text can be recovered by stripping the
+    # previous batch's original_text as a prefix (see
+    # research_agent/state/hypotheses.json h-gemini-only-masking-replay,
+    # which needs exactly this to replay masking-holdback without new
+    # Deepgram calls -- added retroactively cycle 5, 2026-09-09; older
+    # experiment JSONs predate this field and have it empty).
+    original_text: str = ""
     # True once the underlying utterance has actually ended (vs. a
     # soft-finalized mid-utterance chunk with more still coming -- see
     # TranslationResult.is_utterance_end). Consumers rendering these events
@@ -244,6 +257,7 @@ async def run_experiment(
                     asr_start_time=result.start_time,
                     asr_end_time=result.end_time,
                     confidence=result.confidence,
+                    original_text=result.original_text,
                 )
             )
             return
@@ -262,6 +276,7 @@ async def run_experiment(
                     asr_end_time=result.end_time,
                     confidence=result.confidence,
                     is_utterance_end=result.is_utterance_end,
+                    original_text=result.original_text,
                 )
             )
             seg = open_segments.setdefault(
@@ -297,6 +312,7 @@ async def run_experiment(
                 asr_end_time=result.end_time,
                 confidence=result.confidence,
                 is_utterance_end=result.is_utterance_end,
+                original_text=result.original_text,
             )
         )
         if not result.is_utterance_end:

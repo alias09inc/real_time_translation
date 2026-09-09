@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "RUN_EXPERIMENTS",
+  "current_state": "ANALYZE_RESULTS",
   "cycle": 3,
-  "last_updated": "2026-09-09T12:20:20.017460+00:00",
+  "last_updated": "2026-09-09T12:27:22.705705+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -221,6 +221,12 @@
       "to": "RUN_EXPERIMENTS",
       "at": "2026-09-09T12:20:20.017440+00:00",
       "note": "Cycle 5 HUMAN_APPROVAL: re-confirmed check-budget for all 3 queued hypotheses (h-masking-holdback 1.5, h-localagreement-asr-commit 1.5, h-gemini-only-masking-replay 0.3) -> all AUTO_APPROVE (0/7 USD spent today). All already had approval=auto_approved from prior cycles, uses_existing_clips=true, so no state change needed on the hypotheses themselves. Proceeding to RUN_EXPERIMENTS to re-verify the Deepgram listen-websocket blocker found in cycle 3-4 before picking one."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-09T12:27:22.705680+00:00",
+      "note": "Cycle 5 RUN_EXPERIMENTS: environment check found ffmpeg missing (installed via apt-get, clean) and set up a fresh python3.13 venv (uv pip install -e '.[experiments]') to get websockets/deepgram-sdk deps for a real listen-websocket handshake test. Root-caused the Deepgram blocker precisely: the egress proxy TLS-terminates and mangles the WebSocket upgrade handshake (Deepgram responds HTTP 400 'Connection header did not include upgrade' once TLS verification is bypassed to get past an unrelated OpenSSL CA quirk) -- a proxy capability gap, not a key/quota/code issue. h-masking-holdback and h-localagreement-asr-commit both still blocked on this (updated their blocked_reason with the precise signature for whoever fixes the proxy). Attempted h-gemini-only-masking-replay (the one hypothesis that doesn't need Deepgram) and found a genuine structural blocker while designing replay_masking.py: masking-holdback only affects continuation batches of multi-batch utterances, but TimedEvent never logged per-batch SOURCE (English) text for continuation batches -- only the translated Japanese text -- so none of the 47 existing experiment JSONs contain the data this hypothesis's 'replay existing JSON, zero new Deepgram spend' premise needs. Fixed the root gap for FUTURE recordings only (/bin/bash, no API calls): added TimedEvent.original_text to video_segment.py, populated at all 3 event sites, verified with ruff check and a full flicker_metrics.py re-run over the existing 47-file corpus (numbers unchanged: asr_ne_word_mean=0.2004, translation_ne_char_mean=0.0001, translation_ne_char_cross_batch_mean=1.4430, matching cycle 4). This does NOT unblock replay against the 47 existing JSONs (they predate the field) -- h-gemini-only-masking-replay now also effectively needs one live Deepgram recording once the proxy is fixed, same as the other two. No experiment ran, 0 USD spent, nothing fabricated. All 3 queued hypotheses remain blocked for cycle 5; only the code fix (video_segment.py) and hypothesis bookkeeping changed."
     }
   ]
 }
