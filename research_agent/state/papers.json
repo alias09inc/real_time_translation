@@ -155,7 +155,7 @@
       "venue": "ICASSP 2024, arXiv:2310.04399",
       "url": "https://arxiv.org/abs/2310.04399",
       "source": "websearch",
-      "status": "extracted",
+      "status": "read",
       "summary": "Introduces an 'allowed revision window' into the beam-search pruning step of a streaming translation decoder: candidate continuations whose new output would revise more than a bounded number of previously-emitted tokens are pruned out during beam search itself, rather than emitted and corrected later. Because the constraint sits inside decoding (not as a post-hoc mask/filter on top of an unconstrained re-translation), the revision window can be tuned continuously from 0 (completely eliminates flicker) to unbounded (behaves like ordinary unconstrained re-translation), letting a system pick any point on the stability/quality tradeoff curve rather than only two fixed regimes.",
       "key_findings": [
         "Revision budget is enforced during beam search/pruning, not as a separate masking step applied after generation -- structurally different from Arivazhagan et al. 2020's masking (truncate last k words of already-generated output) and biasing (soft preference for previous output), which post-process an unconstrained re-translation",
@@ -175,7 +175,7 @@
       "venue": "arXiv:2509.21740 (submitted 2025-09-26, rev. 2026-01-04)",
       "url": "https://arxiv.org/abs/2509.21740",
       "source": "websearch",
-      "status": "extracted",
+      "status": "read",
       "summary": "Targets the *compute cost* of re-translation (not directly flicker): re-translating the whole growing source on every ASR update is redundant because most of the new output matches the previous output. Self-Speculative Biased Decoding (SSBD) reuses the model's own previous output as a speculative draft for the updated (longer) input, verifies the whole draft in one forward pass with a lightweight bias term, and only resumes normal autoregressive decoding from the first token where the draft and the verified continuation diverge -- a tuning-free inference-time trick, no fine-tuning required. Separately, it introduces a 'display-only masking' UI trick: hide the unstable tail of the output from the viewer while still keeping it internally as the speculative draft for the next round's verification.",
       "key_findings": [
         "Directly names and formalizes exactly the caption-visible-vs-internally-fluid distinction that this repo's h-gemini-only-masking-replay hypothesis is built on ('display-only masking' = show only the stable prefix, keep computing/holding the unstable suffix) -- this is now real published grounding for that hypothesis's core mechanism, not just an informal design choice",
@@ -195,7 +195,7 @@
       "venue": "ACL 2026 (Oral), arXiv:2604.21045 (submitted 2026-04-22)",
       "url": "https://arxiv.org/abs/2604.21045",
       "source": "websearch",
-      "status": "extracted",
+      "status": "read",
       "summary": "Builds on prior work that reformulates simultaneous speech translation as a multi-turn dialogue task so the LLM's KV-cache can be reused across turns instead of recomputing from scratch on every input growth (directly the same 'full re-translation every update is wasteful' problem SSBD above addresses, but solved via training instead of inference-time tricks). That prior multi-turn-SFT approach needs dialogue-form training data that's scarce and hard to synthesize well. This paper's contribution is Hierarchical Policy Optimization (HPO), an RL post-training step on top of imperfect SFT data, using a hierarchical reward balancing translation quality against latency. Reports En->Zh/De/Ja results: +7 COMET and +1.25 MetricX over the SFT-only baseline at a fixed 1.5s latency budget.",
       "key_findings": [
         "Explicitly evaluates En->Japanese (this repo's exact language pair) and reports it improves substantially with RL post-training over a naive multi-turn SFT baseline -- concrete evidence that multi-turn/KV-cache-reuse framing for streaming translation continuations works for En->Ja specifically, not just European-language pairs",
@@ -214,7 +214,7 @@
       "venue": "arXiv:2605.31432 (submitted 2026-05-29)",
       "url": "https://arxiv.org/abs/2605.31432",
       "source": "websearch",
-      "status": "extracted",
+      "status": "read",
       "summary": "Addresses the same READ/WRITE emit-timing problem as AlignAtt(4LLM), but for decoder-only Speech-LLMs that (unlike encoder-decoder AlignAtt systems) have no explicit cross-attention between source audio and generated text to read an alignment signal from. DOA derives a proxy alignment purely from the decoder's own self-attention weights (attention from generated text tokens back onto the audio/prompt tokens in the shared decoder stream), training-free, and uses it as the emit-decision policy for long-form (not just single-utterance) simultaneous translation.",
       "key_findings": [
         "Same family as AlignAtt4LLM (already read, cycle 2): both need white-box access to the translating model's attention weights at inference time (offline-selected alignment heads for AlignAtt4LLM, self-attention proxy for DOA) -- neither is implementable against this repo's API-only Gemini/OpenAI translator, which exposes no attention weights",

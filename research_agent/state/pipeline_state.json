@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "READ_PAPERS",
+  "current_state": "GENERATE_HYPOTHESES",
   "cycle": 3,
-  "last_updated": "2026-09-09T12:19:29.822607+00:00",
+  "last_updated": "2026-09-09T12:20:02.812039+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -203,6 +203,12 @@
       "to": "READ_PAPERS",
       "at": "2026-09-09T12:19:29.822584+00:00",
       "note": "Cycle 5 EXTRACT_PAPERS: extracted all 4 new websearch-found papers via WebSearch snippets (WebFetch confirmed still EGRESS_BLOCKED on arxiv.org, same as cycles 2-4). chen2024-revision-controllable-decoding: beam-search-internal revision window, continuous stability/quality tradeoff -- not implementable API-side but supports h-masking-holdback's approach. zoom2025-self-speculative-retranslation: names 'display-only masking' explicitly, directly grounds h-gemini-only-masking-replay; speculative-decoding speedup itself not applicable (API-only, no draft/verify access). cmu-nvidia2026-hierarchical-policy-simulst: RL multi-turn/KV-cache training fix for cross-continuation drift, evaluated incl. En->Ja (+7 COMET/+1.25 MetricX @1.5s) -- training-time only, not applicable, but strong contextual grounding for h-cross-utterance-flicker's finding (NE~1.47 cross-batch) being a recognized problem; reinforces the repo's realistic fix is prompt-level context-passing, not architectural. papi2026-doa-decoder-only-attention-policy: same AlignAtt-family white-box-attention constraint as alignatt4llm-iwslt2026, reconfirms h-localagreement-asr-commit's LocalAgreement-2-only scoping, no new action."
+    },
+    {
+      "from": "READ_PAPERS",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-09T12:20:02.812018+00:00",
+      "note": "Cycle 5 READ_PAPERS: marked all 4 new papers status=read (summaries/key_findings already written during EXTRACT_PAPERS were substantive, not just snippets, so no additional rewrite needed). Cross-referenced against hypotheses.json and experiments/: zoom2025-self-speculative-retranslation's 'display-only masking' term directly and independently grounds the existing h-gemini-only-masking-replay hypothesis (still queued, blocked on Deepgram infra, not yet implemented) -- strengthens its literature grounding but doesn't change its scope, so no new hypothesis needed for it. cmu-nvidia2026-hierarchical-policy-simulst and papi2026-doa/chen2024 are both training-time or white-box-attention methods not implementable against this repo's API-only translator (same conclusion as alignatt4llm-iwslt2026 in cycle 2) -- confirms no new experiment-worthy hypothesis should be generated from those 3 papers alone. Backlog remains 3 queued (h-masking-holdback .5, h-localagreement-asr-commit .5, h-gemini-only-masking-replay /bin/bash.3), all still blocked on the Deepgram listen-websocket 403 first seen cycle 3 and not yet re-verified this cycle. Per PLAYBOOK depth-over-breadth guidance and the fact all 3 queued hypotheses are unimplemented/unrun (not lack of hypotheses), GENERATE_HYPOTHESES this cycle is a no-op: no new hypotheses added, backlog stays at 3 (well under the 6 cap). Next unit of work: HUMAN_APPROVAL check-budget pass (all 3 already auto_approved from prior cycles, so this should re-confirm and move straight to RUN_EXPERIMENTS with a fresh environment/Deepgram-websocket check)."
     }
   ]
 }
