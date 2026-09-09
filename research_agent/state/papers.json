@@ -146,6 +146,58 @@
         "h-flicker-metric",
         "h-localagreement-asr-commit"
       ]
+    },
+    {
+      "id": "chen2024-revision-controllable-decoding",
+      "title": "Improving Stability in Simultaneous Speech Translation: A Revision-Controllable Decoding Approach",
+      "authors": "Junkun Chen et al. (Microsoft Research)",
+      "year": 2024,
+      "venue": "ICASSP 2024",
+      "url": "https://arxiv.org/abs/2310.04399",
+      "source": "websearch",
+      "status": "found",
+      "summary": "",
+      "key_findings": [],
+      "relevant_to": []
+    },
+    {
+      "id": "zoom2025-self-speculative-retranslation",
+      "title": "Self-Speculative Biased Decoding for Faster Re-Translation",
+      "authors": "Zoom Communications (et al.)",
+      "year": 2025,
+      "venue": "arXiv preprint",
+      "url": "https://arxiv.org/abs/2509.21740",
+      "source": "websearch",
+      "status": "found",
+      "summary": "",
+      "key_findings": [],
+      "relevant_to": []
+    },
+    {
+      "id": "cmu-nvidia2026-hierarchical-policy-simulst",
+      "title": "Hierarchical Policy Optimization for Simultaneous Translation of Unbounded Speech",
+      "authors": "CMU + NVIDIA (et al.)",
+      "year": 2026,
+      "venue": "arXiv preprint",
+      "url": "https://arxiv.org/abs/2604.21045",
+      "source": "websearch",
+      "status": "found",
+      "summary": "",
+      "key_findings": [],
+      "relevant_to": []
+    },
+    {
+      "id": "papi2026-doa-decoder-only-attention-policy",
+      "title": "DOA: Training-Free Decoder-Only Attention Policy for Long-Form Simultaneous Translation with SpeechLLMs",
+      "authors": "Sara Papi, Luisa Bentivogli (Fondazione Bruno Kessler)",
+      "year": 2026,
+      "venue": "arXiv preprint",
+      "url": "https://arxiv.org/abs/2605.31432",
+      "source": "websearch",
+      "status": "found",
+      "summary": "",
+      "key_findings": [],
+      "relevant_to": []
     }
   ],
   "_websearch_note": "One real WebSearch pass was run on 2026-09-08 (query: '2026 normalized erasure caption flicker simultaneous speech translation LLM cascade stability metric') to check for post-survey literature. It also cross-validated this pipeline's NE implementation: an independent summary described 'NE score of 0.2' as meaning roughly 1/5 of tokens change before settling, which matches what src/real_time_translation/experiments/flicker_metrics.py measured for this repo's own ASR-interim stream (asr_ne_word_mean ~= 0.20 across the existing experiment corpus).",

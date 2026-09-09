@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "SEARCH_PAPERS",
+  "current_state": "EXTRACT_PAPERS",
   "cycle": 3,
-  "last_updated": "2026-09-08T12:54:34.243820+00:00",
+  "last_updated": "2026-09-09T00:13:56.201590+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -191,6 +191,12 @@
       "to": "SEARCH_PAPERS",
       "at": "2026-09-08T12:54:34.243783+00:00",
       "note": "Cycle 4 REFLECT: appended reflection entry. Key takeaways: h-cross-utterance-flicker's result raises priority of the blocked live-ASR hypotheses; uv-run-still-resyncs-zoom-extra gap found and documented in PLAYBOOK.md (use 'python3 -m <module>' directly for pure-analysis scripts instead); literature search hasn't run fresh since cycle 1 (3 cycles reusing/skipping) -- advancing to SEARCH_PAPERS for cycle 5 rather than GENERATE_HYPOTHESES to address that, with a concrete new angle (multi-batch/continuation retranslation stability policies) from this cycle's finding."
+    },
+    {
+      "from": "SEARCH_PAPERS",
+      "to": "EXTRACT_PAPERS",
+      "at": "2026-09-09T00:13:56.201558+00:00",
+      "note": "Cycle 5 SEARCH_PAPERS: ran fresh WebSearch pass (first since cycle 1) targeting the concrete angle flagged in cycle-4 reflection -- multi-batch/continuation retranslation stability policies, given h-cross-utterance-flicker's confirmed large cross-batch drift (NE~1.47). Found 4 new relevant papers as 'found' stubs: chen2024-revision-controllable-decoding (ICASSP 2024, Microsoft, beam-search revision-window + chunk preservation to bound flicker -- most directly on-target), zoom2025-self-speculative-retranslation (arXiv 2509.21740, display-only masking separating shown-stable vs internally-fluid suffix for LLM re-translation), cmu-nvidia2026-hierarchical-policy-simulst (arXiv 2604.21045, LLM multi-turn/KV-cache-reuse framing for streaming translation continuations, evaluated incl. En->Ja), papi2026-doa-decoder-only-attention-policy (arXiv 2605.31432, training-free decoder self-attention READ/WRITE policy for long-form SimulST with SpeechLLMs). Also found but not added as a paper stub: hlt-mt/simulstream (arXiv 2512.17648, IWSLT2026's official eval toolkit with emission+deletion tracking -- noted as a tooling reference, not a hypothesis-grounding finding, so skipped per stub-only-for-promising-hypothesis-material scope) and arXiv:2407.11010 (cascaded-system beam-search instability, tangential to this repo's non-cascaded LLM translator)."
     }
   ]
 }
