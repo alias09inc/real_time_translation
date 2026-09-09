@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "GENERATE_HYPOTHESES",
+  "current_state": "RUN_EXPERIMENTS",
   "cycle": 3,
-  "last_updated": "2026-09-09T12:20:02.812039+00:00",
+  "last_updated": "2026-09-09T12:20:20.017460+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -209,6 +209,18 @@
       "to": "GENERATE_HYPOTHESES",
       "at": "2026-09-09T12:20:02.812018+00:00",
       "note": "Cycle 5 READ_PAPERS: marked all 4 new papers status=read (summaries/key_findings already written during EXTRACT_PAPERS were substantive, not just snippets, so no additional rewrite needed). Cross-referenced against hypotheses.json and experiments/: zoom2025-self-speculative-retranslation's 'display-only masking' term directly and independently grounds the existing h-gemini-only-masking-replay hypothesis (still queued, blocked on Deepgram infra, not yet implemented) -- strengthens its literature grounding but doesn't change its scope, so no new hypothesis needed for it. cmu-nvidia2026-hierarchical-policy-simulst and papi2026-doa/chen2024 are both training-time or white-box-attention methods not implementable against this repo's API-only translator (same conclusion as alignatt4llm-iwslt2026 in cycle 2) -- confirms no new experiment-worthy hypothesis should be generated from those 3 papers alone. Backlog remains 3 queued (h-masking-holdback .5, h-localagreement-asr-commit .5, h-gemini-only-masking-replay /bin/bash.3), all still blocked on the Deepgram listen-websocket 403 first seen cycle 3 and not yet re-verified this cycle. Per PLAYBOOK depth-over-breadth guidance and the fact all 3 queued hypotheses are unimplemented/unrun (not lack of hypotheses), GENERATE_HYPOTHESES this cycle is a no-op: no new hypotheses added, backlog stays at 3 (well under the 6 cap). Next unit of work: HUMAN_APPROVAL check-budget pass (all 3 already auto_approved from prior cycles, so this should re-confirm and move straight to RUN_EXPERIMENTS with a fresh environment/Deepgram-websocket check)."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-09T12:20:19.982984+00:00",
+      "note": "Cycle 5: moving to HUMAN_APPROVAL to re-check budget for the 3 queued hypotheses before running."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-09T12:20:20.017440+00:00",
+      "note": "Cycle 5 HUMAN_APPROVAL: re-confirmed check-budget for all 3 queued hypotheses (h-masking-holdback 1.5, h-localagreement-asr-commit 1.5, h-gemini-only-masking-replay 0.3) -> all AUTO_APPROVE (0/7 USD spent today). All already had approval=auto_approved from prior cycles, uses_existing_clips=true, so no state change needed on the hypotheses themselves. Proceeding to RUN_EXPERIMENTS to re-verify the Deepgram listen-websocket blocker found in cycle 3-4 before picking one."
     }
   ]
 }
