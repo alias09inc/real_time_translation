@@ -152,52 +152,78 @@
       "title": "Improving Stability in Simultaneous Speech Translation: A Revision-Controllable Decoding Approach",
       "authors": "Junkun Chen et al. (Microsoft Research)",
       "year": 2024,
-      "venue": "ICASSP 2024",
+      "venue": "ICASSP 2024, arXiv:2310.04399",
       "url": "https://arxiv.org/abs/2310.04399",
       "source": "websearch",
-      "status": "found",
-      "summary": "",
-      "key_findings": [],
-      "relevant_to": []
+      "status": "extracted",
+      "summary": "Introduces an 'allowed revision window' into the beam-search pruning step of a streaming translation decoder: candidate continuations whose new output would revise more than a bounded number of previously-emitted tokens are pruned out during beam search itself, rather than emitted and corrected later. Because the constraint sits inside decoding (not as a post-hoc mask/filter on top of an unconstrained re-translation), the revision window can be tuned continuously from 0 (completely eliminates flicker) to unbounded (behaves like ordinary unconstrained re-translation), letting a system pick any point on the stability/quality tradeoff curve rather than only two fixed regimes.",
+      "key_findings": [
+        "Revision budget is enforced during beam search/pruning, not as a separate masking step applied after generation -- structurally different from Arivazhagan et al. 2020's masking (truncate last k words of already-generated output) and biasing (soft preference for previous output), which post-process an unconstrained re-translation",
+        "The window size is a single continuous knob: window=0 gives zero flicker (nothing already shown is ever revised), and results show quality degrades only modestly as the window shrinks toward 0, i.e. most of the achievable quality is retained even under a tight/no-revision budget",
+        "NOT directly applicable to this repo without white-box decoder access: this repo's translator is an API-only LLM (Gemini/OpenAI) where beam-search pruning internals are not exposed by the API, so the revision-window mechanism itself can't be implemented -- but the *result* (a continuous stability/quality tradeoff curve exists and near-zero-flicker costs little quality) is useful evidence that this repo's own masking-based approach (h-masking-holdback) is a reasonable API-accessible approximation of the same idea, and suggests reporting a similar quality-vs-mask-window curve rather than a single on/off comparison"
+      ],
+      "relevant_to": [
+        "h-masking-holdback",
+        "h-flicker-metric"
+      ]
     },
     {
       "id": "zoom2025-self-speculative-retranslation",
       "title": "Self-Speculative Biased Decoding for Faster Re-Translation",
-      "authors": "Zoom Communications (et al.)",
+      "authors": "Linxiao Zeng, Haoyun Deng, Kangyuan Shu, Shizhen Wang (Zoom Communications)",
       "year": 2025,
-      "venue": "arXiv preprint",
+      "venue": "arXiv:2509.21740 (submitted 2025-09-26, rev. 2026-01-04)",
       "url": "https://arxiv.org/abs/2509.21740",
       "source": "websearch",
-      "status": "found",
-      "summary": "",
-      "key_findings": [],
-      "relevant_to": []
+      "status": "extracted",
+      "summary": "Targets the *compute cost* of re-translation (not directly flicker): re-translating the whole growing source on every ASR update is redundant because most of the new output matches the previous output. Self-Speculative Biased Decoding (SSBD) reuses the model's own previous output as a speculative draft for the updated (longer) input, verifies the whole draft in one forward pass with a lightweight bias term, and only resumes normal autoregressive decoding from the first token where the draft and the verified continuation diverge -- a tuning-free inference-time trick, no fine-tuning required. Separately, it introduces a 'display-only masking' UI trick: hide the unstable tail of the output from the viewer while still keeping it internally as the speculative draft for the next round's verification.",
+      "key_findings": [
+        "Directly names and formalizes exactly the caption-visible-vs-internally-fluid distinction that this repo's h-gemini-only-masking-replay hypothesis is built on ('display-only masking' = show only the stable prefix, keep computing/holding the unstable suffix) -- this is now real published grounding for that hypothesis's core mechanism, not just an informal design choice",
+        "The speculative-decoding speedup mechanism itself (verify-then-resume-from-divergence) targets LLM inference cost/latency, which this repo doesn't control at the API level (Gemini/OpenAI are called as black-box completion endpoints, no access to draft/verify at the token level) -- not implementable here, but its stated motivation (repeated full re-translation is wasteful because most output is unchanged) is exactly the same waste this repo's re-translate-every-interim-update pipeline.py path exhibits",
+        "'Tuning-free' and applied at inference time on an off-the-shelf LLM (not a custom-trained model) -- same deployment constraint as this repo (Gemini/OpenAI, not self-hosted), reinforcing that this is the most relevant of the 4 new papers found this cycle for this repo's actual architecture"
+      ],
+      "relevant_to": [
+        "h-gemini-only-masking-replay",
+        "h-masking-holdback"
+      ]
     },
     {
       "id": "cmu-nvidia2026-hierarchical-policy-simulst",
       "title": "Hierarchical Policy Optimization for Simultaneous Translation of Unbounded Speech",
-      "authors": "CMU + NVIDIA (et al.)",
+      "authors": "Siqi Ouyang, Shuoyang Ding, Oleksii Hrinchuk, Vitaly Lavrukhin, Brian Yan, Boris Ginsburg, Lei Li (CMU + NVIDIA)",
       "year": 2026,
-      "venue": "arXiv preprint",
+      "venue": "ACL 2026 (Oral), arXiv:2604.21045 (submitted 2026-04-22)",
       "url": "https://arxiv.org/abs/2604.21045",
       "source": "websearch",
-      "status": "found",
-      "summary": "",
-      "key_findings": [],
-      "relevant_to": []
+      "status": "extracted",
+      "summary": "Builds on prior work that reformulates simultaneous speech translation as a multi-turn dialogue task so the LLM's KV-cache can be reused across turns instead of recomputing from scratch on every input growth (directly the same 'full re-translation every update is wasteful' problem SSBD above addresses, but solved via training instead of inference-time tricks). That prior multi-turn-SFT approach needs dialogue-form training data that's scarce and hard to synthesize well. This paper's contribution is Hierarchical Policy Optimization (HPO), an RL post-training step on top of imperfect SFT data, using a hierarchical reward balancing translation quality against latency. Reports En->Zh/De/Ja results: +7 COMET and +1.25 MetricX over the SFT-only baseline at a fixed 1.5s latency budget.",
+      "key_findings": [
+        "Explicitly evaluates En->Japanese (this repo's exact language pair) and reports it improves substantially with RL post-training over a naive multi-turn SFT baseline -- concrete evidence that multi-turn/KV-cache-reuse framing for streaming translation continuations works for En->Ja specifically, not just European-language pairs",
+        "Entirely a training-time method (RL fine-tuning of an open-weights model with accessible KV-cache) -- NOT applicable to this repo, which calls Gemini/OpenAI as closed API endpoints with no fine-tuning or KV-cache access exposed for this use case",
+        "Useful negative/contextual finding for h-cross-utterance-flicker: this paper's whole premise (treat each new utterance/continuation as a new turn reusing cached context, rather than as an independent from-scratch re-translation) is precisely the training-time fix for the cross-batch 'near-total rewrite' problem this repo measured empirically in cycle 4 (cross-batch translation NE ~1.47). Confirms the cross-batch drift this repo found is a recognized, actively-researched problem in 2026 SOTA systems, but the SOTA fix requires model access this repo doesn't have -- reinforces that any fix here must be prompt-engineering-level (e.g. explicitly passing prior-utterance translation as context in the prompt) rather than architectural"
+      ],
+      "relevant_to": [
+        "h-cross-utterance-flicker"
+      ]
     },
     {
       "id": "papi2026-doa-decoder-only-attention-policy",
       "title": "DOA: Training-Free Decoder-Only Attention Policy for Long-Form Simultaneous Translation with SpeechLLMs",
       "authors": "Sara Papi, Luisa Bentivogli (Fondazione Bruno Kessler)",
       "year": 2026,
-      "venue": "arXiv preprint",
+      "venue": "arXiv:2605.31432 (submitted 2026-05-29)",
       "url": "https://arxiv.org/abs/2605.31432",
       "source": "websearch",
-      "status": "found",
-      "summary": "",
-      "key_findings": [],
-      "relevant_to": []
+      "status": "extracted",
+      "summary": "Addresses the same READ/WRITE emit-timing problem as AlignAtt(4LLM), but for decoder-only Speech-LLMs that (unlike encoder-decoder AlignAtt systems) have no explicit cross-attention between source audio and generated text to read an alignment signal from. DOA derives a proxy alignment purely from the decoder's own self-attention weights (attention from generated text tokens back onto the audio/prompt tokens in the shared decoder stream), training-free, and uses it as the emit-decision policy for long-form (not just single-utterance) simultaneous translation.",
+      "key_findings": [
+        "Same family as AlignAtt4LLM (already read, cycle 2): both need white-box access to the translating model's attention weights at inference time (offline-selected alignment heads for AlignAtt4LLM, self-attention proxy for DOA) -- neither is implementable against this repo's API-only Gemini/OpenAI translator, which exposes no attention weights",
+        "'Training-free' here means no fine-tuning of the SpeechLLM is needed, not that it works with a black-box API -- it still requires the caller to run the model locally and read internal activations, which this repo's API-based architecture structurally cannot do",
+        "Reconfirms (a second time, independently of AlignAtt4LLM) that attention-based emit policies are the dominant 2026 research direction for LLM-based SimulST, but also reconfirms this repo's earlier decision to scope h-localagreement-asr-commit to plain LocalAgreement-2 (observable-text-only) is the right call given the API-only constraint -- no new action needed, just additional grounding for a decision already made"
+      ],
+      "relevant_to": [
+        "h-localagreement-asr-commit"
+      ]
     }
   ],
   "_websearch_note": "One real WebSearch pass was run on 2026-09-08 (query: '2026 normalized erasure caption flicker simultaneous speech translation LLM cascade stability metric') to check for post-survey literature. It also cross-validated this pipeline's NE implementation: an independent summary described 'NE score of 0.2' as meaning roughly 1/5 of tokens change before settling, which matches what src/real_time_translation/experiments/flicker_metrics.py measured for this repo's own ASR-interim stream (asr_ne_word_mean ~= 0.20 across the existing experiment corpus).",

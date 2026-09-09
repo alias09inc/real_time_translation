@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "EXTRACT_PAPERS",
+  "current_state": "READ_PAPERS",
   "cycle": 3,
-  "last_updated": "2026-09-09T00:13:56.201590+00:00",
+  "last_updated": "2026-09-09T12:19:29.822607+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -197,6 +197,12 @@
       "to": "EXTRACT_PAPERS",
       "at": "2026-09-09T00:13:56.201558+00:00",
       "note": "Cycle 5 SEARCH_PAPERS: ran fresh WebSearch pass (first since cycle 1) targeting the concrete angle flagged in cycle-4 reflection -- multi-batch/continuation retranslation stability policies, given h-cross-utterance-flicker's confirmed large cross-batch drift (NE~1.47). Found 4 new relevant papers as 'found' stubs: chen2024-revision-controllable-decoding (ICASSP 2024, Microsoft, beam-search revision-window + chunk preservation to bound flicker -- most directly on-target), zoom2025-self-speculative-retranslation (arXiv 2509.21740, display-only masking separating shown-stable vs internally-fluid suffix for LLM re-translation), cmu-nvidia2026-hierarchical-policy-simulst (arXiv 2604.21045, LLM multi-turn/KV-cache-reuse framing for streaming translation continuations, evaluated incl. En->Ja), papi2026-doa-decoder-only-attention-policy (arXiv 2605.31432, training-free decoder self-attention READ/WRITE policy for long-form SimulST with SpeechLLMs). Also found but not added as a paper stub: hlt-mt/simulstream (arXiv 2512.17648, IWSLT2026's official eval toolkit with emission+deletion tracking -- noted as a tooling reference, not a hypothesis-grounding finding, so skipped per stub-only-for-promising-hypothesis-material scope) and arXiv:2407.11010 (cascaded-system beam-search instability, tangential to this repo's non-cascaded LLM translator)."
+    },
+    {
+      "from": "EXTRACT_PAPERS",
+      "to": "READ_PAPERS",
+      "at": "2026-09-09T12:19:29.822584+00:00",
+      "note": "Cycle 5 EXTRACT_PAPERS: extracted all 4 new websearch-found papers via WebSearch snippets (WebFetch confirmed still EGRESS_BLOCKED on arxiv.org, same as cycles 2-4). chen2024-revision-controllable-decoding: beam-search-internal revision window, continuous stability/quality tradeoff -- not implementable API-side but supports h-masking-holdback's approach. zoom2025-self-speculative-retranslation: names 'display-only masking' explicitly, directly grounds h-gemini-only-masking-replay; speculative-decoding speedup itself not applicable (API-only, no draft/verify access). cmu-nvidia2026-hierarchical-policy-simulst: RL multi-turn/KV-cache training fix for cross-continuation drift, evaluated incl. En->Ja (+7 COMET/+1.25 MetricX @1.5s) -- training-time only, not applicable, but strong contextual grounding for h-cross-utterance-flicker's finding (NE~1.47 cross-batch) being a recognized problem; reinforces the repo's realistic fix is prompt-level context-passing, not architectural. papi2026-doa-decoder-only-attention-policy: same AlignAtt-family white-box-attention constraint as alignatt4llm-iwslt2026, reconfirms h-localagreement-asr-commit's LocalAgreement-2-only scoping, no new action."
     }
   ]
 }
