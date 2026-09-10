@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "EXTRACT_PAPERS",
+  "current_state": "GENERATE_HYPOTHESES",
   "cycle": 4,
-  "last_updated": "2026-09-10T12:18:12.293868+00:00",
+  "last_updated": "2026-09-10T12:20:26.648918+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -287,6 +287,18 @@
       "to": "EXTRACT_PAPERS",
       "at": "2026-09-10T12:18:12.293834+00:00",
       "note": "Cycle 7 SEARCH_PAPERS: fresh WebSearch pass per cycle-6 reflection (retroactive corpus analyses largely exhausted, literature stale since cycle 5). Found 3 new candidates: hoang2026-dynamic-lagging (arXiv 2609.05799, Microsoft, fine-tune-based prefix-commit-forward, evaluated EN->JA, directly targets the cross-batch flicker measured by h-cross-utterance-flicker), mllp-vrain-iwslt2026-simulst (arXiv 2606.17255, black-box adaptive policies + bounded-rewrite-on-catastrophic-failure, more directly implementable against an API-only translator), koshkin2024-tollmatch-zeroshot-context-aware (EMNLP 2024, arXiv 2406.13476, zero-shot LLM SimulST with explicit context carryover, no fine-tuning -- closest architectural match to this repo's API-only Gemini translator found so far, included despite predating the survey baseline dates because of its high relevance). Added all 3 as status=found stubs to papers.json. Deepgram/Google keys are set in this session's env but not yet re-verified for reachability (that check belongs to RUN_EXPERIMENTS, not this state); ffmpeg currently missing (installable via apt-get per prior cycles' notes, will redo when RUN_EXPERIMENTS is reached)."
+    },
+    {
+      "from": "EXTRACT_PAPERS",
+      "to": "READ_PAPERS",
+      "at": "2026-09-10T12:19:28.969870+00:00",
+      "note": "Cycle 7 EXTRACT_PAPERS: extracted all 3 new websearch-found papers via WebSearch snippets (WebFetch confirmed still EGRESS_BLOCKED on arxiv.org, same as cycles 2-5). Substantive summaries/key_findings written directly (not just extraction-level snippets), same pattern as cycle 5. Leading finding: hoang2026-dynamic-lagging (force-decode commit-forward) + koshkin2024-tollmatch (zero-shot prompt-only context injection) together suggest a concrete, zero-fine-tuning, zero-new-API-cost-to-design hypothesis: pass an utterance's already-committed prior translation back into the prompt for its next continuation batch instead of re-translating from scratch, to reduce the confirmed cross-batch flicker (h-cross-utterance-flicker, NE~1.47). mllp-vrain-iwslt2026-simulst's black-box policy + bounded-rewrite-on-catastrophic-failure noted as relevant to h-localagreement-asr-commit and h-masking-holdback respectively."
+    },
+    {
+      "from": "READ_PAPERS",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-10T12:20:26.648871+00:00",
+      "note": "Cycle 7 READ_PAPERS: marked hoang2026-dynamic-lagging, mllp-vrain-iwslt2026-simulst, koshkin2024-tollmatch-zeroshot-context-aware as read (summaries/key_findings were already substantive from EXTRACT_PAPERS). Cross-referenced the leading idea (commit-forward prior translation into continuation-batch prompts) directly against pipeline.py: confirmed _stream_batch() retranslates continuation batches from scratch with zero anchor to the utterance's own already-emitted translation, and commit_context() only fires once per whole utterance, never per continuation batch -- a real, previously-undocumented code gap, not just a literature gap. No overlap with already-answered experiments/results.csv sweeps. Advancing to write this up as a new hypothesis."
     }
   ]
 }
