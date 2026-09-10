@@ -120,8 +120,8 @@
       "required_changes": "Extend src/real_time_translation/experiments/flicker_metrics.py's group_translation_by_utterance() (or add a sibling function) to also record, for each multi-batch span, the wall-clock duration of its first batch (batch_key[1] - batch_key[0], i.e. asr_end_time - asr_start_time of the first _stream_batch() call in the span) alongside the existing NE. Add corpus-wide summary stats (mean/median/min/max first-batch duration for multi-batch spans) to the script's printed output and a new column to flicker_metrics.csv. No changes to the live pipeline; reruns the existing `uv run real-time-translation-exp-flicker` (or `python3 -m real_time_translation.experiments.flicker_metrics` per the venv workaround) over the same 47 files.",
       "uses_existing_clips": true,
       "estimated_cost_usd": 0.0,
-      "approval": "",
-      "status": "proposed",
+      "approval": "auto_approved",
+      "status": "queued",
       "experiment_ids": [],
       "result_summary": ""
     }
