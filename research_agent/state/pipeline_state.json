@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "GENERATE_HYPOTHESES",
+  "current_state": "RUN_EXPERIMENTS",
   "cycle": 4,
-  "last_updated": "2026-09-10T12:20:26.648918+00:00",
+  "last_updated": "2026-09-10T12:21:36.398511+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -299,6 +299,18 @@
       "to": "GENERATE_HYPOTHESES",
       "at": "2026-09-10T12:20:26.648871+00:00",
       "note": "Cycle 7 READ_PAPERS: marked hoang2026-dynamic-lagging, mllp-vrain-iwslt2026-simulst, koshkin2024-tollmatch-zeroshot-context-aware as read (summaries/key_findings were already substantive from EXTRACT_PAPERS). Cross-referenced the leading idea (commit-forward prior translation into continuation-batch prompts) directly against pipeline.py: confirmed _stream_batch() retranslates continuation batches from scratch with zero anchor to the utterance's own already-emitted translation, and commit_context() only fires once per whole utterance, never per continuation batch -- a real, previously-undocumented code gap, not just a literature gap. No overlap with already-answered experiments/results.csv sweeps. Advancing to write this up as a new hypothesis."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-10T12:21:25.768102+00:00",
+      "note": "Cycle 7 GENERATE_HYPOTHESES complete: added h-continuation-context-anchor ($1.5 est, uses_existing_clips=true). Backlog now 4 queued/proposed under the 6 cap. Moving to HUMAN_APPROVAL to check its budget."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-10T12:21:36.398482+00:00",
+      "note": "Cycle 7 HUMAN_APPROVAL: h-continuation-context-anchor auto_approved/queued. Proceeding to RUN_EXPERIMENTS to re-verify environment before picking a hypothesis (4 queued: h-continuation-context-anchor is new and needs the same live Deepgram ASR path as the 3 still-blocked ones)."
     }
   ]
 }
