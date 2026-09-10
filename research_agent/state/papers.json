@@ -241,7 +241,9 @@
         "However the *inference-time shape* of the fix (force-decode/carry-forward the previously committed translation as context for the next continuation batch) is a prompt-level idea achievable without fine-tuning: pass the prior batch's emitted Japanese text back into the prompt for the next batch and instruct the model to extend/preserve it rather than re-translating from scratch -- this is a plausible zero-shot approximation worth testing as a new hypothesis.",
         "EN->JA is one of the three evaluated language pairs, so this is directly on-target for the repo's EN->JA use case rather than a different-language-pair result that may not transfer."
       ],
-      "relevant_to": []
+      "relevant_to": [
+        "h-continuation-context-anchor"
+      ]
     },
     {
       "id": "mllp-vrain-iwslt2026-simulst",
@@ -259,7 +261,10 @@
         "The RAG-over-pre-translated-exemplars context track is for domain adaptation (glossary-like), overlapping conceptually with this repo's existing keyterm/glossary features already tested in prior experiments -- not a new angle by itself.",
         "No fully aligned latency/quality numbers surfaced via WebSearch snippets alone (WebFetch to arxiv.org is EGRESS_BLOCKED in this sandbox, consistent with cycles 2-5); the MCIF En->De +5.82 XCOMET-XL year-over-year figure found is for a different track/direction than this repo's En->Ja and not directly comparable."
       ],
-      "relevant_to": []
+      "relevant_to": [
+        "h-localagreement-asr-commit",
+        "h-masking-holdback"
+      ]
     },
     {
       "id": "koshkin2024-tollmatch-zeroshot-context-aware",
@@ -277,7 +282,9 @@
         "Reference open-source implementation exists (github.com/RomanKoshkin/toLLMatch) that could be read for the exact prompt template/context-window mechanics if this becomes a hypothesis, though re-implementing against this repo's own Gemini-based pipeline (not toLLMatch's specific backbone) would still be needed.",
         "Combined with hoang2026-dynamic-lagging's force-decode/commit-forward idea, this strongly suggests a concrete, zero-cost-to-implement (prompt-only, no fine-tuning) new hypothesis: pass each utterance's already-committed/most-stable prior translation text back into the prompt for its next continuation batch, instructing the model to extend rather than re-translate from scratch, then re-measure cross-batch translation NE the same way h-cross-utterance-flicker did."
       ],
-      "relevant_to": []
+      "relevant_to": [
+        "h-continuation-context-anchor"
+      ]
     }
   ],
   "_websearch_note": "One real WebSearch pass was run on 2026-09-08 (query: '2026 normalized erasure caption flicker simultaneous speech translation LLM cascade stability metric') to check for post-survey literature. It also cross-validated this pipeline's NE implementation: an independent summary described 'NE score of 0.2' as meaning roughly 1/5 of tokens change before settling, which matches what src/real_time_translation/experiments/flicker_metrics.py measured for this repo's own ASR-interim stream (asr_ne_word_mean ~= 0.20 across the existing experiment corpus).",
