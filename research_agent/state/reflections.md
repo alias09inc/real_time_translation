@@ -333,3 +333,63 @@ case, jump straight to running `h-masking-holdback`, which is fully
 implemented and ready) or a genuinely new $0-cost, no-live-API angle
 occurs to that session (e.g. the cycle-4-flagged time-to-second-batch
 distribution analysis).
+
+## Cycle 6 (2026-09-10, scheduled/automated run)
+
+**What worked this cycle:** Following cycle 5's own explicit fallback
+plan paid off directly -- it named a concrete candidate ("the cycle-4
+time-to-second-batch distribution analysis") for exactly the situation
+that occurred (WS proxy still blocked), so this session didn't have to
+improvise; it just executed the plan. `h-utterance-batch-timing` was
+cheap to implement (one small extension to an existing function),
+cheap to verify (corpus-wide NE numbers unchanged confirmed the change
+was purely additive), and produced a genuinely useful, non-obvious
+result: the first-batch-duration distribution for multi-batch spans
+(mean 3.76s, median 3.46s, min 2.43s) lines up almost exactly with
+`config.py`'s `deepgram_max_interim_duration=2.5s`. That's a concrete,
+falsifiable link between an already-known config constant and an
+already-known NE finding that neither h-cross-utterance-flicker nor any
+prior cycle had drawn explicitly.
+
+**What didn't work / lesson:** Environment re-verification (ffmpeg
+reinstall, fresh venv, WS handshake test) is now costing a very similar
+amount of session time each cycle for an unchanging result -- 4
+consecutive cycles (3, 4 skipped it, 5, 6) have found the identical
+proxy WS-upgrade-mangling signature. It's still correct per the
+playbook to re-check every cycle (an environment fix could land at any
+time, silently, from outside this session), but the diagnostic script
+itself could be made faster to run without losing rigor -- e.g. skip
+rebuilding the venv from scratch if `.venv` already has `websockets`
+importable, only reinstalling when the check actually fails. Not
+changing this yet since venv state doesn't persist between sessions in
+this sandbox anyway (each cycle starts fresh), so the potential savings
+may be moot in practice -- flagging for a future cycle to confirm
+whether that assumption holds.
+
+**Backlog calibration:** Still well-calibrated (4 tested + 3 blocked =
+mix, cap 6). One new hypothesis added this cycle, which was the right
+call -- it was cheap, concrete, and answered a real open question
+flagged by prior work, not backlog padding for its own sake.
+
+**Budget policy:** Unchanged recommendation -- still $0 total spent
+across 6 cycles. Nothing new to propose; the caps remain untested by
+actual spend.
+
+**Playbook changes made this cycle:** None. The documented workarounds
+(venv setup, ruff install, WS diagnostic script) all worked as written
+with no surprises this cycle -- first cycle in a while where the
+playbook itself needed no edits.
+
+**Next state:** Advancing to `SEARCH_PAPERS` for cycle 7 rather than
+`GENERATE_HYPOTHESES` directly. Reasoning: the $0-cost, no-live-API
+retroactive analyses on the existing 47-file corpus are now largely
+exhausted (NE within-batch, NE cross-batch, and now cross-batch timing
+have all been measured) -- a `GENERATE_HYPOTHESES` no-op would just
+repeat what cycle 6 already did, whereas a fresh WebSearch pass (last
+one was cycle 5, one cycle ago, but this session found no further $0
+angle on its own) gives the next session new material to ground
+hypotheses in, or to confirm there's genuinely nothing more to search
+for. If the WS proxy issue is resolved by then, skip the search and go
+straight to running `h-masking-holdback` (fully implemented, ready to
+go) ahead of everything else -- that always takes priority over more
+literature review.
