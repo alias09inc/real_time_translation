@@ -140,8 +140,8 @@
       "required_changes": "llm_translator.py: extend _build_user_prompt (or add a new prompt block) to accept an optional prior_translation string and render it as e.g. <prior_translation>...</prior_translation> with explicit system-prompt instructions on when to preserve vs revise it. pipeline.py: in _stream_batch, when live is False (continuation batch), pass through the utterance's previously emitted translation (already tracked somewhere for is_utterance_end bookkeeping via self._utterance_target_text / needs checking whether the TRANSLATED text is retained per-utterance today or only the source -- may need a new self._utterance_translated_text dict alongside the existing self._utterance_source_text/_utterance_target_text). Add a Config flag to toggle the behavior for A/B. Run the same cached-clip experiment twice (flag off = baseline, flag on = treatment) so results.csv rows are directly comparable, then re-run flicker_metrics.py's group_translation_by_utterance() on both new experiment JSONs.",
       "uses_existing_clips": true,
       "estimated_cost_usd": 1.5,
-      "approval": "",
-      "status": "proposed",
+      "approval": "auto_approved",
+      "status": "queued",
       "experiment_ids": [],
       "result_summary": ""
     }
