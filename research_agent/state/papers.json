@@ -233,7 +233,7 @@
       "venue": "arXiv:2609.05799 (submitted 2026-09-05)",
       "url": "https://arxiv.org/abs/2609.05799",
       "source": "websearch",
-      "status": "extracted",
+      "status": "read",
       "summary": "Microsoft Research paper on cascaded SimulST addressing exactly the flicker problem this repo measured in h-cross-utterance-flicker (cross-batch translation NE~1.47). Fine-tunes a sentence-trained decoder-only LLM (Qwen3-8B) to be 'prefix-aware' by training it on stable prefixes -- the longest prefix any partial-source translation shares with the model's own full-source translation -- mixed with ordinary full-sentence pairs. At inference, the model is prompted with a single force-decode turn that carries the previously committed target text forward as more source arrives, so the output is flicker-free by construction rather than by post-hoc masking. Evaluated EN->DE/JA/ZH with simulated streaming via reference-transcript prefixes.",
       "key_findings": [
         "Directly targets this repo's own confirmed problem (cross-batch translation NE~1.47 vs ~0.0001 within-batch, from h-cross-utterance-flicker) with a named mechanism: commit-forward via force-decoding the previously emitted target as a prefix.",
@@ -251,7 +251,7 @@
       "venue": "arXiv:2606.17255 / ACL Anthology 2026.iwslt-1.24 (IWSLT 2026, San Diego)",
       "url": "https://arxiv.org/abs/2606.17255",
       "source": "websearch",
-      "status": "extracted",
+      "status": "read",
       "summary": "UPV/MLLP-VRAIN's IWSLT 2026 SimulST shared-task system report. Builds a cascaded pipeline (Parakeet ASR + Qwen 3.5 MT) with adaptive 'black-box' read/write policies -- i.e. policies that only need the model's observable output, not internal attention weights, distinguishing it from the AlignAtt-family papers already read (alignatt4llm-iwslt2026, papi2026-doa) that need white-box access this repo's API-only translator doesn't have. Also describes allowing the last two previously emitted target tokens to be rewritten when a 'catastrophic failure' is detected, keeping the resulting flicker minimal. For three of the En-> language directions they also add a context track: ASR word-boosting plus a RAG mechanism over offline pre-translated exemplars for domain-specific context.",
       "key_findings": [
         "Black-box policy framing (no internal model access needed) is architecturally compatible with this repo's API-only Gemini/OpenAI translator, unlike the AlignAtt/DOA family already read -- worth another look for the emit-timing hypothesis (h-localagreement-asr-commit) as an alternative or complement to plain LocalAgreement-2.",
@@ -269,7 +269,7 @@
       "venue": "EMNLP 2024 (arXiv:2406.13476)",
       "url": "https://arxiv.org/abs/2406.13476",
       "source": "websearch",
-      "status": "extracted",
+      "status": "read",
       "summary": "NAIST group's EMNLP 2024 paper (toLLMatch) showing that open-source LLMs, used zero-shot with no fine-tuning, can match or beat prior specialized SimulST baselines by exploiting document/discourse-level context passed in the prompt. This is architecturally the closest match found so far to this repo's own setup: an API/prompt-level LLM translator with no access to model internals or weights. They report that injecting even minimal background/context information into the prompt gives further gains, especially on technical/domain-specific subject matter.",
       "key_findings": [
         "Zero-shot, prompt-only context injection (no fine-tuning) is directly reproducible against this repo's Gemini-API-based translator -- the most 'free lunch' shaped finding of any paper read so far, since it needs no architecture change, just prompt content.",
