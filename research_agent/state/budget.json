@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-09",
+  "date": "2026-09-10",
   "spent_today_usd": 0.0,
   "daily_cap_usd": 7.0,
   "per_batch_cap_usd": 3.0,
@@ -14,6 +14,11 @@
       "at": "2026-09-08T12:51:37.592696+00:00",
       "amount_usd": 0.0,
       "note": "h-cross-utterance-flicker: added group_translation_by_utterance() to flicker_metrics.py, reran over 47 existing experiment JSON files, zero new API spend"
+    },
+    {
+      "at": "2026-09-10T00:16:51.712335+00:00",
+      "amount_usd": 0.0,
+      "note": "h-utterance-batch-timing: extended flicker_metrics.py's group_translation_by_utterance() with first_batch_duration, reran over 47 existing experiment JSON files, zero new API spend"
     }
   ]
 }

@@ -121,9 +121,11 @@
       "uses_existing_clips": true,
       "estimated_cost_usd": 0.0,
       "approval": "auto_approved",
-      "status": "queued",
-      "experiment_ids": [],
-      "result_summary": ""
+      "status": "tested",
+      "experiment_ids": [
+        "retroactive: all experiments/*.json with a results.events list (via group_translation_by_utterance's new first_batch_duration field)"
+      ],
+      "result_summary": "Prediction confirmed. Extended group_translation_by_utterance() in flicker_metrics.py to record each multi-batch span's first-batch wall-clock duration (asr_end_time - asr_start_time of the span's first _stream_batch() call) and reran over the same 47 experiment JSON files / 275 multi-batch spans h-cross-utterance-flicker found. Result: mean=3.761s, median=3.460s, min=2.430s, max=11.790s. The corpus-wide numbers (translation_ne_char_mean=0.0001, asr_ne_word_mean=0.2004, translation_ne_char_cross_batch_mean=1.4430) are unchanged from cycles 4/5, confirming this was a purely additive analysis. The min/median cluster tightly just above config.py's deepgram_max_interim_duration=2.5s (the soft-finalize interval pipeline.py's docstring says triggers a new queued batch for continuous speech, per _drain_batch's comment) -- i.e. most multi-batch utterances cross into a second batch almost exactly when the 2.5s soft-finalize timer fires, not because they are rare, unusually long outliers. Only the tail (max=11.79s) reflects longer continuous speech. Conclusion: h-cross-utterance-flicker's ~1.47 cross-batch NE is not a narrow edge case triggered only by pathologically long utterances -- it is a direct, generic consequence of the 2.5s soft-finalize chunking policy hitting on ordinary continuous speech, so h-masking-holdback/h-localagreement-asr-commit remain broadly applicable general-purpose fixes (as opposed to needing to special-case long utterances), once Deepgram infra access is restored. Caveat: inherits h-cross-utterance-flicker's span-boundary heuristic (no true utterance_id); 'first batch duration' measures time-to-first-continuation, not the full span duration."
     }
   ]
 }

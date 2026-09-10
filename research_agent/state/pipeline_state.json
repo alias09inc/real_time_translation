@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "GENERATE_HYPOTHESES",
+  "current_state": "RUN_EXPERIMENTS",
   "cycle": 3,
-  "last_updated": "2026-09-09T12:29:28.656465+00:00",
+  "last_updated": "2026-09-10T00:14:35.129557+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -245,6 +245,18 @@
       "to": "GENERATE_HYPOTHESES",
       "at": "2026-09-09T12:29:28.656431+00:00",
       "note": "Cycle 5 REFLECT complete. Appended reflection entry: search pass was worthwhile (grounded existing hypotheses, correctly resulted in a no-op rather than backlog padding); the real value this cycle was going deeper on 2 'blocked' hypotheses instead of accepting blocked status at face value (precise WS-proxy root cause; h-gemini-only-masking-replay's structural data gap caught before writing the harness). Improved PLAYBOOK.md: (1) extended the Deepgram WS diagnostic script to distinguish a proxy CA cert-verification red herring from the real HTTP-level rejection reason, (2) documented that ruff needs 'uv pip install ruff' separately in the experiments venv. Advancing to GENERATE_HYPOTHESES (skipping SEARCH_PAPERS) for cycle 6 -- literature base is fresh, no new angle needed right now; next session should stay a no-op there unless the WS proxy issue is resolved (then run h-masking-holdback immediately, code is ready) or a new /bin/bash/no-live-API angle occurs (e.g. cycle-4's flagged time-to-second-batch distribution analysis)."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-10T00:14:19.293374+00:00",
+      "note": "Cycle 6 GENERATE_HYPOTHESES: added h-utterance-batch-timing ($0 retroactive analysis, direct follow-up to h-cross-utterance-flicker's flagged wall-clock-timing caveat). Backlog now 4 queued/proposed (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay all still blocked on Deepgram WS-proxy infra; h-utterance-batch-timing new, proposed), under the 6 cap. Re-verified environment: ffmpeg missing again this session (reinstalled via apt-get), REST reachable, but listen-websocket handshake still fails with the same proxy WS-upgrade-mangling signature as cycle 5 -- appended cycle-6 confirmation to the 3 blocked hypotheses' blocked_reason, no change in underlying infra gap. Moving to HUMAN_APPROVAL to check budget for the new hypothesis."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-10T00:14:35.129523+00:00",
+      "note": "Cycle 6 HUMAN_APPROVAL: check-budget(0.0)=AUTO_APPROVE for h-utterance-batch-timing (uses_existing_clips=true, retroactive-only). Set approval=auto_approved/status=queued. The 3 other queued hypotheses remain blocked on Deepgram WS-proxy infra (reconfirmed this cycle). Proceeding to RUN_EXPERIMENTS to implement h-utterance-batch-timing -- it needs no live ASR/LLM calls."
     }
   ]
 }

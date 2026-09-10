@@ -92,6 +92,7 @@ class UtteranceGroupStats:
     num_hypotheses: int
     ne: float | None
     final_text: str
+    first_batch_duration: float | None = None
 
 
 def group_asr_interim(events: list[dict]) -> list[UtteranceGroupStats]:
@@ -210,12 +211,20 @@ def group_translation_by_utterance(events: list[dict]) -> list[UtteranceGroupSta
 
     def flush_span() -> None:
         if span_texts:
+            key = span_key or (0.0, 0.0)
+            # Wall-clock duration of the span's *first* batch only (its own
+            # asr_end_time - asr_start_time) -- i.e. how long the utterance
+            # had been running before it first crossed into a continuation
+            # batch. Only meaningful for multi-batch spans; a single-batch
+            # span never "crossed" into anything.
+            first_batch_duration = key[1] - key[0] if len(span_texts) >= 2 else None
             groups.append(
                 UtteranceGroupStats(
-                    key=span_key or (0.0, 0.0),
+                    key=key,
                     num_hypotheses=len(span_texts),
                     ne=normalized_erasure(span_texts),
                     final_text=span_texts[-1],
+                    first_batch_duration=first_batch_duration,
                 )
             )
 
@@ -235,6 +244,30 @@ def _mean(values: list[float]) -> float | None:
     return sum(values) / len(values) if values else None
 
 
+def _median(values: list[float]) -> float | None:
+    if not values:
+        return None
+    ordered = sorted(values)
+    n = len(ordered)
+    mid = n // 2
+    if n % 2:
+        return ordered[mid]
+    return (ordered[mid - 1] + ordered[mid]) / 2
+
+
+def first_batch_durations(path: Path) -> list[float]:
+    """Raw per-span first-batch wall-clock durations (seconds) for every
+    multi-batch utterance span in one experiment JSON -- the same spans
+    group_translation_by_utterance() finds, filtered to ones with >=2
+    batches (a single-batch span has no "first batch duration" to report)."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    events = data.get("results", {}).get("events", [])
+    spans = group_translation_by_utterance(events)
+    return [
+        s.first_batch_duration for s in spans if s.first_batch_duration is not None
+    ]
+
+
 @dataclass(frozen=True)
 class FlickerReport:
     json_path: str
@@ -245,6 +278,8 @@ class FlickerReport:
     translation_ne_char_mean: float | None
     num_translation_utterance_spans: int
     translation_ne_char_cross_batch_mean: float | None
+    num_multi_batch_spans: int
+    first_batch_duration_mean: float | None
 
 
 def analyze_experiment(path: Path) -> FlickerReport:
@@ -256,6 +291,9 @@ def analyze_experiment(path: Path) -> FlickerReport:
     asr_ne = [g.ne for g in asr_groups if g.ne is not None]
     tr_ne = [g.ne for g in tr_groups if g.ne is not None]
     tr_span_ne = [g.ne for g in tr_spans if g.ne is not None]
+    first_batch_durations = [
+        g.first_batch_duration for g in tr_spans if g.first_batch_duration is not None
+    ]
     return FlickerReport(
         json_path=str(path),
         experiment_name=data.get("experiment_name", path.stem),
@@ -265,6 +303,8 @@ def analyze_experiment(path: Path) -> FlickerReport:
         translation_ne_char_mean=_mean(tr_ne),
         num_translation_utterance_spans=len(tr_spans),
         translation_ne_char_cross_batch_mean=_mean(tr_span_ne),
+        num_multi_batch_spans=len(first_batch_durations),
+        first_batch_duration_mean=_mean(first_batch_durations),
     )
 
 
@@ -295,9 +335,11 @@ def main() -> None:
     paths = [p for p in paths if not (p in seen or seen.add(p))]
 
     reports: list[FlickerReport] = []
+    all_first_batch_durations: list[float] = []
     for path in paths:
         try:
             reports.append(analyze_experiment(path))
+            all_first_batch_durations.extend(first_batch_durations(path))
         except (KeyError, json.JSONDecodeError) as exc:
             print(f"skip {path}: {exc}")
 
@@ -314,6 +356,8 @@ def main() -> None:
                 "translation_ne_char_mean",
                 "num_translation_utterance_spans",
                 "translation_ne_char_cross_batch_mean",
+                "num_multi_batch_spans",
+                "first_batch_duration_mean",
             ]
         )
         for r in reports:
@@ -327,6 +371,8 @@ def main() -> None:
                     r.translation_ne_char_mean,
                     r.num_translation_utterance_spans,
                     r.translation_ne_char_cross_batch_mean,
+                    r.num_multi_batch_spans,
+                    r.first_batch_duration_mean,
                 ]
             )
 
@@ -348,6 +394,14 @@ def main() -> None:
         )
         print(
             f"translation_ne_char_cross_batch_mean across corpus: {overall_cross:.4f}"
+        )
+    if all_first_batch_durations:
+        print(
+            f"first_batch_duration (s) across {len(all_first_batch_durations)} "
+            f"multi-batch span(s): mean={_mean(all_first_batch_durations):.3f} "
+            f"median={_median(all_first_batch_durations):.3f} "
+            f"min={min(all_first_batch_durations):.3f} "
+            f"max={max(all_first_batch_durations):.3f}"
         )
 
 
