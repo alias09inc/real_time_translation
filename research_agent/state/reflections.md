@@ -393,3 +393,74 @@ for. If the WS proxy issue is resolved by then, skip the search and go
 straight to running `h-masking-holdback` (fully implemented, ready to
 go) ahead of everything else -- that always takes priority over more
 literature review.
+
+## Cycle 7 (2026-09-10, scheduled/automated run)
+
+**What worked this cycle:** A fresh WebSearch pass (last one was cycle
+5) was worth it this time, unlike some prior "confirm and no-op" search
+attempts -- it found two independent papers (hoang2026-dynamic-lagging,
+koshkin2024-tollmatch-zeroshot-context-aware) converging on the same
+concrete idea (carry the utterance's own already-emitted translation
+forward into continuation-batch prompts), and cross-referencing that
+idea against this repo's own `pipeline.py` (not just against
+`experiments/results.csv`) turned up a genuine, previously-undocumented
+code gap: `_stream_batch()` retranslates continuation batches from
+scratch with zero anchor to the utterance's own prior output, and
+`commit_context()` only fires once per whole utterance. This is a
+stronger form of literature grounding than most prior cycles achieved --
+the hypothesis isn't just "a paper suggests X", it's "a paper suggests X,
+and reading our own code confirms we are not doing X". Recommend future
+SEARCH_PAPERS/READ_PAPERS cycles keep doing this: always check a
+promising paper's idea against the actual pipeline code, not just
+against the experiment results CSV.
+
+**What didn't work / lesson:** Same environment story as cycles 3, 5,
+and 6 -- ffmpeg missing, fresh venv needed, WS handshake still fails
+with the identical HTTP 400 "Connection header did not include
+'upgrade'" signature. This is now 4 cycles (3, 5, 6, 7) with byte-for-byte
+identical proxy behavior. The playbook's guidance to re-verify every
+cycle is still correct in principle (the fix could land invisibly at any
+time), but there is no longer much diagnostic value in re-running the
+*full* diagnostic script every cycle now that the failure mode is this
+well-established -- a future session could reasonably do a fast check
+(REST curl + a single WS connection attempt) and only fall back to the
+full cert-verify-vs-disabled diagnostic if something about the failure
+*changes* from this exact signature. Not editing PLAYBOOK.md to shorten
+the check yet, since the full diagnostic is what caught the *previous*
+change in failure mode (cycle 3's generic 403 becoming cycle 5's more
+specific TLS/HTTP 400 split) -- shortening it risks missing a similarly
+subtle future change. Flagging as a judgment call for whoever next finds
+the environment still blocked after several more identical cycles.
+
+**Backlog calibration:** Still well-calibrated (3 tested + 4 queued/all
+blocked = 7 total, backlog of 4 under the cap of 6). Adding exactly one
+new hypothesis this cycle was right -- it was well-grounded (two
+independent papers plus direct code confirmation) and answers a
+concrete, previously-unaddressed question, not padding.
+
+**Budget policy:** Unchanged recommendation -- still $0 total spent
+across 7 cycles. The auto-approval caps ($3/batch, $7/day) remain
+completely untested by actual spend, since every hypothesis needing live
+API calls has been blocked by the same infra issue since cycle 3. If/when
+Deepgram access is restored, the very first live run will be the first
+real test of whether these caps are sized reasonably for this repo's
+actual per-experiment cost -- worth watching closely on that first run
+rather than assuming the caps are fine.
+
+**Playbook changes made this cycle:** None needed. All documented
+workarounds (ffmpeg via apt-get, python3.13 venv + `uv pip install -e
+".[experiments]"`, the WS diagnostic script) worked exactly as written.
+
+**Next state:** Advancing to `GENERATE_HYPOTHESES` for cycle 8 rather
+than `SEARCH_PAPERS` again -- the literature base is fresh (searched
+this cycle) and yielded a concrete new hypothesis already; another
+search immediately next cycle is unlikely to add much. If the WS proxy
+issue is resolved by then, skip straight to running `h-masking-holdback`
+(fully implemented, ready to go) ahead of everything else -- that always
+takes priority over more hypothesis generation. If it's still blocked,
+consider starting the `h-continuation-context-anchor` implementation
+(the `llm_translator.py` prompt extension and `pipeline.py` per-utterance
+translated-text tracking) even without being able to run it yet, so it's
+ready to fire the moment Deepgram access returns -- this is the same
+"implement now, run later" pattern that worked well for
+`h-masking-holdback` back in cycle 2.
