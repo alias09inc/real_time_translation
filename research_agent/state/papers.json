@@ -224,6 +224,45 @@
       "relevant_to": [
         "h-localagreement-asr-commit"
       ]
+    },
+    {
+      "id": "hoang2026-dynamic-lagging",
+      "title": "Dynamic Lagging for Simultaneous Translation",
+      "authors": "Hieu Hoang (Microsoft), Amittai Axelrod",
+      "year": 2026,
+      "venue": "arXiv:2609.05799 (submitted 2026-09-05)",
+      "url": "https://arxiv.org/abs/2609.05799",
+      "source": "websearch",
+      "status": "found",
+      "summary": "",
+      "key_findings": [],
+      "relevant_to": []
+    },
+    {
+      "id": "mllp-vrain-iwslt2026-simulst",
+      "title": "MLLP-VRAIN UPV system for the IWSLT 2026 Simultaneous Speech Translation task",
+      "authors": "MLLP-VRAIN (Universitat Politecnica de Valencia)",
+      "year": 2026,
+      "venue": "arXiv:2606.17255 / ACL Anthology 2026.iwslt-1.24 (IWSLT 2026, San Diego)",
+      "url": "https://arxiv.org/abs/2606.17255",
+      "source": "websearch",
+      "status": "found",
+      "summary": "",
+      "key_findings": [],
+      "relevant_to": []
+    },
+    {
+      "id": "koshkin2024-tollmatch-zeroshot-context-aware",
+      "title": "LLMs Are Zero-Shot Context-Aware Simultaneous Translators",
+      "authors": "Roman Koshkin, Katsuhito Sudoh, Satoshi Nakamura (NAIST)",
+      "year": 2024,
+      "venue": "EMNLP 2024 (arXiv:2406.13476)",
+      "url": "https://arxiv.org/abs/2406.13476",
+      "source": "websearch",
+      "status": "found",
+      "summary": "",
+      "key_findings": [],
+      "relevant_to": []
     }
   ],
   "_websearch_note": "One real WebSearch pass was run on 2026-09-08 (query: '2026 normalized erasure caption flicker simultaneous speech translation LLM cascade stability metric') to check for post-survey literature. It also cross-validated this pipeline's NE implementation: an independent summary described 'NE score of 0.2' as meaning roughly 1/5 of tokens change before settling, which matches what src/real_time_translation/experiments/flicker_metrics.py measured for this repo's own ASR-interim stream (asr_ne_word_mean ~= 0.20 across the existing experiment corpus).",
