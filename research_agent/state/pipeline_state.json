@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "SEARCH_PAPERS",
+  "current_state": "EXTRACT_PAPERS",
   "cycle": 4,
-  "last_updated": "2026-09-10T00:19:23.944033+00:00",
+  "last_updated": "2026-09-10T12:18:12.293868+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -281,6 +281,12 @@
       "to": "SEARCH_PAPERS",
       "at": "2026-09-10T00:19:23.944004+00:00",
       "note": "Cycle 6 REFLECT complete. Appended reflection entry. Recommending SEARCH_PAPERS for cycle 7 (rather than GENERATE_HYPOTHESES) since $0 retroactive analyses on the existing 47-file corpus are now largely exhausted (within-batch NE, cross-batch NE, and cross-batch timing all measured) -- a fresh literature pass is more likely to add value than another no-op. If the WS proxy issue is resolved first, prioritize running h-masking-holdback immediately instead."
+    },
+    {
+      "from": "SEARCH_PAPERS",
+      "to": "EXTRACT_PAPERS",
+      "at": "2026-09-10T12:18:12.293834+00:00",
+      "note": "Cycle 7 SEARCH_PAPERS: fresh WebSearch pass per cycle-6 reflection (retroactive corpus analyses largely exhausted, literature stale since cycle 5). Found 3 new candidates: hoang2026-dynamic-lagging (arXiv 2609.05799, Microsoft, fine-tune-based prefix-commit-forward, evaluated EN->JA, directly targets the cross-batch flicker measured by h-cross-utterance-flicker), mllp-vrain-iwslt2026-simulst (arXiv 2606.17255, black-box adaptive policies + bounded-rewrite-on-catastrophic-failure, more directly implementable against an API-only translator), koshkin2024-tollmatch-zeroshot-context-aware (EMNLP 2024, arXiv 2406.13476, zero-shot LLM SimulST with explicit context carryover, no fine-tuning -- closest architectural match to this repo's API-only Gemini translator found so far, included despite predating the survey baseline dates because of its high relevance). Added all 3 as status=found stubs to papers.json. Deepgram/Google keys are set in this session's env but not yet re-verified for reachability (that check belongs to RUN_EXPERIMENTS, not this state); ffmpeg currently missing (installable via apt-get per prior cycles' notes, will redo when RUN_EXPERIMENTS is reached)."
     }
   ]
 }
