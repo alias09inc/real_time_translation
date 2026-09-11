@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "HUMAN_APPROVAL",
+  "current_state": "RUN_EXPERIMENTS",
   "cycle": 4,
-  "last_updated": "2026-09-11T00:14:26.958938+00:00",
+  "last_updated": "2026-09-11T12:15:30.147459+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -341,6 +341,12 @@
       "to": "HUMAN_APPROVAL",
       "at": "2026-09-11T00:14:26.958870+00:00",
       "note": "Cycle 8 GENERATE_HYPOTHESES: no-op confirmed. Backlog is 4 queued (h-masking-holdback 1.5, h-localagreement-asr-commit 1.5, h-gemini-only-masking-replay 0.3, h-continuation-context-anchor 1.5), all well under the 6 cap and all already auto_approved; 3 tested (h-flicker-metric, h-cross-utterance-flicker, h-utterance-batch-timing). All 15 papers in papers.json are status=read -- no unread stubs to extract new hypotheses from, and every read paper's applicable idea is already grounded into an existing hypothesis (checked each: alignatt4llm-iwslt2026/papi2026-doa both white-box-attention-only and already excluded from h-localagreement-asr-commit's scope; chen2024-revision-controllable-decoding/zoom2025-self-speculative-retranslation/cmu-nvidia2026-hierarchical-policy-simulst already cited as supporting context for h-masking-holdback/h-gemini-only-masking-replay/h-cross-utterance-flicker respectively; hoang2026-dynamic-lagging/koshkin2024-tollmatch/mllp-vrain-iwslt2026-simulst already grounding h-continuation-context-anchor or noted as relevant-but-not-new per cycle-7 history). Per PLAYBOOK depth-over-breadth guidance and this being the 4th/5th consecutive cycle where the real blocker is the persistent Deepgram WS-proxy issue (not a lack of hypotheses to test), adding a new hypothesis now would just pad the backlog without addressing what is actually stalling progress. No changes to hypotheses.json this state. Proceeding to HUMAN_APPROVAL to re-check budget/approval status for the 4 queued hypotheses before RUN_EXPERIMENTS re-verifies the environment."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-11T12:15:30.147437+00:00",
+      "note": "Cycle 8 HUMAN_APPROVAL: no hypotheses with approval unset/proposed -- all 4 queued (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor) already auto_approved from prior cycles. Re-verified check-budget for 1.5 and 0.3 -> AUTO_APPROVE, daily cap rolled over to 2026-09-11 (0.0 spent). Proceeding to RUN_EXPERIMENTS to verify environment."
     }
   ]
 }
