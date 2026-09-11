@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "RUN_EXPERIMENTS",
+  "current_state": "WRITE_REPORT",
   "cycle": 4,
-  "last_updated": "2026-09-11T12:15:30.147459+00:00",
+  "last_updated": "2026-09-11T12:29:15.229686+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -347,6 +347,18 @@
       "to": "RUN_EXPERIMENTS",
       "at": "2026-09-11T12:15:30.147437+00:00",
       "note": "Cycle 8 HUMAN_APPROVAL: no hypotheses with approval unset/proposed -- all 4 queued (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor) already auto_approved from prior cycles. Re-verified check-budget for 1.5 and 0.3 -> AUTO_APPROVE, daily cap rolled over to 2026-09-11 (0.0 spent). Proceeding to RUN_EXPERIMENTS to verify environment."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-11T12:29:10.275732+00:00",
+      "note": "Cycle 8 RUN_EXPERIMENTS: no experiment ran. Re-verified environment end to end -- Deepgram REST reachable (200) but the listen-websocket handshake still fails with the same proxy WS-upgrade-mangling signature as cycles 5-7 (HTTP 400 'Connection header did not include upgrade' with TLS verification disabled; cert-verified attempt fails on the proxy CA key-usage-extension quirk). ffmpeg install hit unrelated mirror 404s again and did not complete this session (moot -- Deepgram block applies regardless). Independently re-confirmed h-gemini-only-masking-replay's cycle-5 finding still holds: all 47 existing experiment JSONs predate the original_text field (2026-09-09) and have no date >= 2026-09-08, so no per-batch source text exists to replay; asr_interim timestamps don't reliably substitute (only 14/42 batch keys match exactly on a sample file). All 4 queued hypotheses (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor) remain blocked on the same root cause (no live Deepgram access in this sandbox). No /bin/bash retroactive hypotheses remain queued (h-flicker-metric/h-cross-utterance-flicker/h-utterance-batch-timing already tested in prior cycles). Appended cycle-8 UPDATE entries to each hypothesis's blocked_reason. /bin/bash spent, nothing fabricated."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-11T12:29:15.229655+00:00",
+      "note": "Cycle 8 ANALYZE_RESULTS: confirmed no billable experiment ran this cycle; nothing to analyze numerically. The one substantive finding this cycle is a data-availability gap for h-gemini-only-masking-replay (independently re-derived, matches cycle 5's conclusion) -- worth stating clearly in the Japanese report since it means this hypothesis cannot be de-risked from Deepgram access at all anymore, contrary to its original 'zero new Deepgram spend' premise."
     }
   ]
 }
