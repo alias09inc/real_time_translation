@@ -139,6 +139,16 @@ python3 research_agent/orchestrator.py check-budget <estimated_cost_usd>
   # ffmpeg` before giving up -- worked cleanly in a 2026-09-08 cloud sandbox
   # (had sudo/apt-get available; some mirror 404s on unrelated GPU-driver
   # packages were harmless noise, ffmpeg itself still installed fine).
+  # UPDATE cycle 8 (2026-09-11): this is NOT reliably one-shot -- in this
+  # session the same class of unrelated-package mirror failures (libva2
+  # connection-failed, libssh-gcrypt-4/libcaca0 404s) caused the whole
+  # transaction to abort even though ffmpeg's own .deb had already
+  # downloaded. `apt-get update` first, then retrying with `--fix-missing`,
+  # is worth trying once, but don't loop on it indefinitely or block other
+  # states on it -- if it hasn't succeeded after ~2 attempts, treat ffmpeg
+  # as unavailable for this cycle and move on (this is moot anyway whenever
+  # the separate Deepgram listen-websocket check below is also failing,
+  # since no live audio experiment can run either way).
   ls experiments/refs/audio/*.webm 2>/dev/null || echo "no cached clips found"
   # Keys being *set* isn't the same as being *reachable* -- a cloud
   # sandbox's network egress proxy can allow one API host and reject

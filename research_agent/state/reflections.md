@@ -464,3 +464,64 @@ translated-text tracking) even without being able to run it yet, so it's
 ready to fire the moment Deepgram access returns -- this is the same
 "implement now, run later" pattern that worked well for
 `h-masking-holdback` back in cycle 2.
+
+## Cycle 8 (2026-09-11)
+
+**What worked:** Started cleanly from `HUMAN_APPROVAL` per cycle 7's
+handoff. Confirming that no hypothesis had `approval` unset/`"proposed"`
+before doing anything else made this state a fast, honest no-op instead
+of redundant busywork. Re-verifying the Deepgram listen-websocket with
+the full diagnostic (not a shortcut) again paid off as a sanity check --
+same exact HTTP 400 "Connection header did not include 'upgrade'"
+signature as cycles 5, 6, 7, so still no silent regression/change to
+miss.
+
+**What didn't work / new finding:** Independently re-derived (before
+re-reading cycle 5's note) that `h-gemini-only-masking-replay` is stuck
+on the same root cause as the other 3 queued hypotheses, just one layer
+removed: all 47 existing experiment JSONs predate the `original_text`
+field (added 2026-09-09) and none has a `date >= 2026-09-08`, so there is
+no per-batch source text anywhere to replay. Checked whether
+`asr_interim` event timestamps could substitute -- only 14/42 batch keys
+matched exactly on a sample file, because translation-batch keys are the
+*new fragment's* own start/end time while `asr_interim` keys are
+Deepgram's utterance-relative interim timing. Decided against building an
+approximate-timestamp-join replay: feeding the real `LLMTranslator` an
+approximated (not actually recorded) source text and presenting the
+output as testing masking-holdback "on real Gemini output" would be
+misleading about what was actually tested, even though every individual
+LLM call would be real. This is exactly the kind of thing the "never
+fabricate results" rule should also cover on the *input* side, not just
+the output side -- worth being explicit about that distinction if this
+comes up again for another hypothesis.
+
+**Backlog calibration:** Still well-calibrated (3 tested + 4
+queued/all blocked = 7 total). Did not add a new hypothesis this cycle
+-- there wasn't a new literature-grounded idea to add, and the backlog
+is already all we can act on once Deepgram access returns; adding a 5th
+blocked hypothesis right now would just be padding, not depth.
+
+**Budget policy:** Unchanged recommendation, still $0 spent across 8
+cycles. No new information to revise the $3/batch, $7/day caps -- still
+completely untested by real spend.
+
+**Playbook changes made this cycle:** Added a short note to the
+RUN_EXPERIMENTS ffmpeg-install step: this cycle's `apt-get install`
+aborted on unrelated mirror failures (libva2/libssh-gcrypt-4/libcaca0)
+even though ffmpeg's own package had already downloaded, and a
+`--fix-missing` retry did not resolve it within the session. Documented
+that this is not reliably one-shot and that a future session shouldn't
+loop on it indefinitely -- cap it at ~2 attempts and move on, especially
+since it's moot whenever the Deepgram websocket check is also failing.
+
+**Next state:** Advancing to `SEARCH_PAPERS` for cycle 9. Reasoning:
+cycle 7 already did a fresh search and cycle 8 didn't add any literature
+work, so the literature base is one cycle less fresh than it was; more
+importantly, the backlog is now fully saturated with blocked hypotheses
+(4/6) and no new $0 retroactive angle has surfaced in two cycles, so the
+highest-value use of a fresh search is to look specifically for (a) any
+new SimulST work with an evaluation methodology that doesn't require
+live ASR access (in case there's a smarter way to make progress while
+Deepgram stays blocked than the ones already tried), and (b) anything
+concrete on prompt-based continuation-context anchoring to sharpen
+`h-continuation-context-anchor`'s design before it's implemented.
