@@ -294,7 +294,7 @@
       "venue": "arXiv",
       "url": "https://arxiv.org/abs/2509.17349",
       "source": "websearch",
-      "status": "extracted",
+      "status": "read",
       "summary": "First large-scale meta-evaluation of latency metrics for simultaneous speech-to-text translation, comparing metrics against a defined \"True Latency\" ground truth across languages and systems. Finds existing latency metrics are inconsistent and structurally biased by how the reference audio is segmented into sentences/utterances. Introduces YAAL (Yet Another Average Lagging) plus SOFTSEGMENTER, a segmentation-aware evaluation suite for both short- and long-form simultaneous translation.",
       "key_findings": [
         "Segmentation bias is structural: metrics disagree more when reference segmentation changes, not just when system quality changes.",
@@ -312,7 +312,7 @@
       "venue": "arXiv / IWSLT 2025",
       "url": "https://arxiv.org/abs/2506.17077",
       "source": "websearch",
-      "status": "extracted",
+      "status": "read",
       "summary": "CUNI's IWSLT 2025 submission using offline (non-streaming) speech and LLM models for simultaneous translation, selected via COMET-XL and evaluated with LongYAAL latency metrics. Section 5.1 introduces a character-level \"Continuous Levenshtein Alignment\" (CLA) method for measuring ASR word latency, with an open-source implementation (github.com/ufal/asr_latency).",
       "key_findings": [
         "CLA aligns gold and ASR-candidate transcripts at the character level (not word level), which is more robust to minor deviations like word-ending mismatches.",
@@ -330,7 +330,7 @@
       "venue": "arXiv / IWSLT 2025",
       "url": "https://arxiv.org/abs/2505.24016",
       "source": "websearch",
-      "status": "extracted",
+      "status": "read",
       "summary": "Oregon State University's IWSLT 2025 cascaded system: VAD segmenter -> Whisper Large V2 ASR -> Gemma 3 12B (LoRA fine-tuned) for translation. Uses a conversational prompting strategy that carries a single prior-sentence memory bank from the source language into the prompt for the next sentence, to keep translations consistent across sentence boundaries in a streaming context.",
       "key_findings": [
         "Memory bank is deliberately small: ONE prior source-language sentence, not the full running transcript -- a concrete, minimal design point for what \"context anchor\" should carry.",
