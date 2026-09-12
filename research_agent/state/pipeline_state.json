@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "ANALYZE_RESULTS",
+  "current_state": "WRITE_REPORT",
   "cycle": 5,
-  "last_updated": "2026-09-12T00:34:14.931192+00:00",
+  "last_updated": "2026-09-12T00:34:58.217782+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -407,6 +407,12 @@
       "to": "ANALYZE_RESULTS",
       "at": "2026-09-12T00:34:14.931128+00:00",
       "note": "Cycle 9 RUN_EXPERIMENTS: implemented and ran h-cla-asr-latency-metric ($0 retroactive, 19 experiments analyzed). Re-verified Deepgram listen-websocket still blocked (identical HTTP 400 signature, cycles 5-9); other 4 queued hypotheses remain blocked, updated their blocked_reason. Advancing to ANALYZE_RESULTS."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-12T00:34:58.217751+00:00",
+      "note": "Cycle 9 ANALYZE_RESULTS: compared CLA latency against avg_end_to_end_latency_seconds for the endpointing sweep -- existing metric noisy/non-monotonic (7.3-18.9s), CLA flat (~4.07-4.10s). Hypothesis prediction directionally confirmed. status=tested. Advancing to WRITE_REPORT."
     }
   ]
 }
