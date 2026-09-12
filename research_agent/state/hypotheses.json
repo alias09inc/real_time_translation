@@ -178,8 +178,8 @@
       "required_changes": "None expected to production code if the trace confirms correctness (this is a read-only audit). If a break is found, the fix would be localized to whichever link in the chain is broken (config.py, video_segment.py/youtube_segment.py CLI override, pipeline.py's DeepgramTranscriber construction, or deepgram_client.py's _build_options/connect).",
       "uses_existing_clips": true,
       "estimated_cost_usd": 0.0,
-      "approval": "",
-      "status": "proposed",
+      "approval": "auto_approved",
+      "status": "queued",
       "experiment_ids": [],
       "result_summary": ""
     }
