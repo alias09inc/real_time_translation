@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "REFLECT",
+  "current_state": "GENERATE_HYPOTHESES",
   "cycle": 5,
-  "last_updated": "2026-09-12T12:16:10.264351+00:00",
+  "last_updated": "2026-09-12T12:17:05.011550+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -455,6 +455,12 @@
       "to": "REFLECT",
       "at": "2026-09-12T12:16:10.264321+00:00",
       "note": "Cycle 10 WRITE_REPORT: wrote research_agent/reports/20260912_cycle10_report.md (Japanese) covering h-endpointing-connection-verify's result (config.deepgram_endpointing wiring confirmed correct end-to-end, no bug; ruled out explanation (b) from cycle 9's flat-CLA finding). Did not touch 00_pipeline_overview_ja.md -- no material pipeline-shape change this cycle."
+    },
+    {
+      "from": "REFLECT",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-12T12:17:05.011514+00:00",
+      "note": "Cycle 10 REFLECT complete. Appended reflection entry to reflections.md. Playbook self-improvements: fixed stale hardcoded macOS path in Step 0 (this session's clone lives elsewhere, on feat/rm2278/async-containers not main), documented the two mismatched cycle counters. Advancing to GENERATE_HYPOTHESES directly (skipping SEARCH_PAPERS) for cycle 11 -- h-endpointing-connection-verify's result flags a concrete non-literature-driven next question (measure is_final/UtteranceEnd event timing directly, not just settled-text stability, to properly settle explanation (a) left open this cycle). If Deepgram WS-proxy access has returned by then, prioritize running h-masking-holdback live immediately instead."
     }
   ]
 }
