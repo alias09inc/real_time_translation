@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "SEARCH_PAPERS",
+  "current_state": "EXTRACT_PAPERS",
   "cycle": 5,
-  "last_updated": "2026-09-11T12:31:04.487798+00:00",
+  "last_updated": "2026-09-12T00:13:08.446100+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -371,6 +371,12 @@
       "to": "SEARCH_PAPERS",
       "at": "2026-09-11T12:31:04.487772+00:00",
       "note": "Cycle 8 REFLECT complete. Appended reflection entry to reflections.md; made one small PLAYBOOK.md self-improvement (ffmpeg apt-get install is not reliably one-shot, cap retries at ~2 and move on). No new hypothesis added (backlog already saturated with 4 blocked, no new /bin/bash angle found). Advancing to SEARCH_PAPERS for cycle 9 -- literature is one cycle stale and the backlog can't grow productively without either new literature or Deepgram access returning; will search for evaluation methodologies that don't need live ASR and for continuation-context-anchoring prompt design examples."
+    },
+    {
+      "from": "SEARCH_PAPERS",
+      "to": "EXTRACT_PAPERS",
+      "at": "2026-09-12T00:13:08.446074+00:00",
+      "note": "Cycle 9 SEARCH_PAPERS: WebSearch pass targeting cycle-8's two flagged gaps (offline eval metrics not needing live ASR; continuation-context-anchor prompting precedents). Added 3 candidate papers as 'found' stubs: polak2026-meta-evaluation-latency-metrics, machacek-polak2025-cuni-offline-cla-latency, beavertalk2025-sentence-memory-bank. Re-surfaced but did not re-add 2 already-known papers (alignatt4llm-iwslt2026, mllp-vrain-iwslt2026-simulst)."
     }
   ]
 }
