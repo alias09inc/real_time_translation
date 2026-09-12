@@ -525,3 +525,89 @@ live ASR access (in case there's a smarter way to make progress while
 Deepgram stays blocked than the ones already tried), and (b) anything
 concrete on prompt-based continuation-context anchoring to sharpen
 `h-continuation-context-anchor`'s design before it's implemented.
+
+## Cycle 9 (2026-09-12)
+
+**What worked:** The targeted search paid off exactly as planned --
+both cycle-8-flagged gaps got a concrete hit
+(machacek-polak2025-cuni-offline-cla-latency for the no-live-ASR-needed
+evaluation gap, beavertalk2025-sentence-memory-bank for the
+context-anchor-prompting gap), and the CLA paper's own metric turned out
+to be directly implementable against this repo's own data (a genuine
+gold VTT transcript already sitting in experiments/refs/, covering 19 of
+47 existing experiments). Went all the way through a full cycle
+(SEARCH_PAPERS -> ... -> REFLECT) in one session since each state's unit
+of work stayed genuinely bounded and each was committed before moving
+on -- this confirms last cycle's own note that the playbook's "you may
+continue into the next state" allowance is usable in practice, not just
+theoretical.
+
+**What didn't work / had to be fixed mid-stream:** Implementing CLA was
+not a clean transcription of the paper's method -- three real problems
+surfaced only once actual data was run through it: (1) some experiments'
+recorded events stop well short of their requested duration_seconds, so
+windowing by the *requested* duration rather than the *actual* max
+asr_end_time would have silently produced a much larger (and wrong)
+gold window; (2) `playback_offset` turned out not to be on the same
+clock as the gold transcript for these specific runs (they weren't
+strictly real-time-paced), which would have produced a nonsense
+"latency" (drifting more negative every group) if not caught by
+sanity-checking the first few groups' output by hand instead of trusting
+the aggregate mean; (3) the naive version (align every experiment
+against one fixed gold transcript with no relevance check) is not just
+wrong but dangerous -- it produced a 1.5-billion-cell alignment request
+against an unrelated video's experiment and got the whole process
+OOM-killed. None of these would have been caught by only reading the
+primary source's abstract/methodology description; all three needed
+actually running the code against this repo's real data and inspecting
+intermediate output by hand (printing per-group latency for the first
+~15 groups, not just trusting the final mean) before trusting the
+aggregate number. Lesson for future retroactive-analysis hypotheses:
+budget time to sanity-check a metric's *intermediate* values on 1-2
+files by hand before running it over the full corpus and writing up the
+aggregate result as if it were self-evidently correct.
+
+**Backlog calibration:** 5/6 (up from 4/6), still within cap. Was right
+to add only 1 new hypothesis (h-cla-asr-latency-metric) rather than all
+3 papers' worth of ideas -- BeaverTalk's finding was folded into
+strengthening h-continuation-context-anchor's existing design rather
+than spawning a separate hypothesis, keeping depth over breadth. The
+4 Deepgram-blocked hypotheses are unchanged and still blocked; adding a
+6th of the same kind would have been padding, not progress.
+
+**Budget policy:** Unchanged recommendation, still $0 total spend across
+9 cycles now. No new information to revise the $3/batch, $7/day caps.
+
+**Playbook changes made this cycle:** None needed -- the ffmpeg
+retry-cap note from cycle 8 was followed as written (skipped the
+apt-get attempt entirely this cycle since Deepgram was already
+confirmed blocked, exactly the "moot" case that note anticipated) and
+worked as intended, no friction found.
+
+**Open question worth flagging for a future cycle, not a playbook
+change:** this cycle's own `pipeline_state.json["cycle"]` field reads 5,
+but every report/commit in this repo's history (including this one) has
+been narrating and naming reports by a *different*, larger cycle count
+("cycle 9" here) that only matches the number of REFLECT->SEARCH_PAPERS
+`orchestrator.py advance` calls, not some cycles apparently having taken
+a GENERATE_HYPOTHESES-only shortcut per the state machine's own
+"REFLECT -> GENERATE_HYPOTHESES" edge (which doesn't increment the
+`cycle` field). This is cosmetic (report filenames and commit messages
+are internally consistent with each other, just not with the raw JSON
+counter) and not worth an urgent fix, but a future REFLECT should either
+reconcile the two counters or stop trying to keep them in sync and just
+treat the JSON field as "REFLECT->SEARCH_PAPERS loop count" explicitly
+in its own key name.
+
+**Next state:** Advancing to `GENERATE_HYPOTHESES` directly (skipping a
+fresh `SEARCH_PAPERS` pass) rather than starting cycle 10 with another
+search. Reasoning: this cycle's own ANALYZE_RESULTS surfaced a concrete,
+actionable, code-only (not literature-driven) $0 hypothesis candidate --
+checking whether `deepgram_endpointing` config actually reaches the
+Deepgram connection setup code, motivated by CLA showing a flat ~4.1s
+latency across the entire 300-2000ms endpointing sweep where the
+existing avg_end_to_end_latency_seconds metric showed large,
+non-monotonic swings (7.3-18.9s). That is a question about this repo's
+own code, not something a literature search would surface, so the
+highest-value next unit of work is to generate and test that hypothesis
+directly rather than search first.
