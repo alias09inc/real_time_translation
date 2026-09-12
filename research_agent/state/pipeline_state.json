@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "HUMAN_APPROVAL",
+  "current_state": "RUN_EXPERIMENTS",
   "cycle": 5,
-  "last_updated": "2026-09-12T00:15:43.132829+00:00",
+  "last_updated": "2026-09-12T00:15:56.878507+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -395,6 +395,12 @@
       "to": "HUMAN_APPROVAL",
       "at": "2026-09-12T00:15:43.132802+00:00",
       "note": "Cycle 9 GENERATE_HYPOTHESES: added 1 new hypothesis (h-cla-asr-latency-metric, $0 retroactive), kept backlog at 5 queued+proposed (within ~6 cap), prioritized depth. Updated h-continuation-context-anchor's grounding with beavertalk2025-sentence-memory-bank."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-12T00:15:56.878471+00:00",
+      "note": "Cycle 9 HUMAN_APPROVAL: h-cla-asr-latency-metric auto-approved (0.0, fits both caps). 5 hypotheses now queued with approval != needs_human (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor all previously auto_approved but blocked; h-cla-asr-latency-metric newly queued and $0/retroactive so not blocked on live access). Advancing to RUN_EXPERIMENTS."
     }
   ]
 }
