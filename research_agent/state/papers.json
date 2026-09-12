@@ -285,8 +285,48 @@
       "relevant_to": [
         "h-continuation-context-anchor"
       ]
+    },
+    {
+      "id": "polak2026-meta-evaluation-latency-metrics",
+      "title": "Better late than never: Meta-evaluation of latency metrics for simultaneous speech-to-text translation",
+      "authors": "Polák, Papi, Bentivogli, Bojar",
+      "year": 2026,
+      "venue": "arXiv",
+      "url": "https://arxiv.org/abs/2509.17349",
+      "source": "websearch",
+      "status": "found",
+      "summary": "",
+      "key_findings": [],
+      "relevant_to": []
+    },
+    {
+      "id": "machacek-polak2025-cuni-offline-cla-latency",
+      "title": "Simultaneous Translation with Offline Speech and LLM Models in CUNI Submission to IWSLT 2025",
+      "authors": "Macháček, Polák",
+      "year": 2025,
+      "venue": "arXiv / IWSLT 2025",
+      "url": "https://arxiv.org/abs/2506.17077",
+      "source": "websearch",
+      "status": "found",
+      "summary": "",
+      "key_findings": [],
+      "relevant_to": []
+    },
+    {
+      "id": "beavertalk2025-sentence-memory-bank",
+      "title": "BeaverTalk: Oregon State University's IWSLT 2025 Simultaneous Speech Translation System",
+      "authors": "Oregon State University (BeaverTalk team)",
+      "year": 2025,
+      "venue": "arXiv / IWSLT 2025",
+      "url": "https://arxiv.org/abs/2505.24016",
+      "source": "websearch",
+      "status": "found",
+      "summary": "",
+      "key_findings": [],
+      "relevant_to": []
     }
   ],
   "_websearch_note": "One real WebSearch pass was run on 2026-09-08 (query: '2026 normalized erasure caption flicker simultaneous speech translation LLM cascade stability metric') to check for post-survey literature. It also cross-validated this pipeline's NE implementation: an independent summary described 'NE score of 0.2' as meaning roughly 1/5 of tokens change before settling, which matches what src/real_time_translation/experiments/flicker_metrics.py measured for this repo's own ASR-interim stream (asr_ne_word_mean ~= 0.20 across the existing experiment corpus).",
-  "_extraction_note_cycle2": "EXTRACT_PAPERS for the 3 websearch-found papers (2026-09-08, cycle 2) hit an environment gap: WebFetch returned EGRESS_BLOCKED for arxiv.org, research.google, and aclanthology.org in this sandbox (the network egress proxy blocks these domains outright; WebSearch itself works fine and was used instead). All three 'extracted' summaries/key_findings above are therefore built from WebSearch result snippets, not full-text extraction -- they're substantive and specific (not marketing language), but a session with working WebFetch to these domains should verify against full text before treating any numeric claim as precise, especially NeMo's actual stability-metric formula/numbers which WebSearch snippets did not surface."
+  "_extraction_note_cycle2": "EXTRACT_PAPERS for the 3 websearch-found papers (2026-09-08, cycle 2) hit an environment gap: WebFetch returned EGRESS_BLOCKED for arxiv.org, research.google, and aclanthology.org in this sandbox (the network egress proxy blocks these domains outright; WebSearch itself works fine and was used instead). All three 'extracted' summaries/key_findings above are therefore built from WebSearch result snippets, not full-text extraction -- they're substantive and specific (not marketing language), but a session with working WebFetch to these domains should verify against full text before treating any numeric claim as precise, especially NeMo's actual stability-metric formula/numbers which WebSearch snippets did not surface.",
+  "_websearch_note_cycle9": "WebSearch pass on 2026-09-12 targeting the two gaps flagged in the cycle-8 reflection: (1) evaluation methodologies that do not require live ASR access, and (2) continuation-context-anchoring prompt design precedents. Found 3 new candidates: polak2026-meta-evaluation-latency-metrics (meta-evaluation of latency metrics themselves, directly usable offline), machacek-polak2025-cuni-offline-cla-latency (introduces a character-level Continuous Levenshtein Alignment ASR-latency metric computable retroactively against gold transcripts, no live ASR needed -- open-source impl at github.com/ufal/asr_latency), and beavertalk2025-sentence-memory-bank (IWSLT2025 system using a prior-sentence memory bank in the LLM prompt, direct precedent for h-continuation-context-anchor). Also re-surfaced alignatt4llm-iwslt2026 and mllp-vrain-iwslt2026-simulst (already in corpus, not re-added). WebFetch to arxiv.org is expected to be EGRESS_BLOCKED in this sandbox per the cycle-2 note -- EXTRACT_PAPERS should try WebFetch first but fall back to WebSearch snippets if so, same as before."
 }
