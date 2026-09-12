@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "RUN_EXPERIMENTS",
+  "current_state": "ANALYZE_RESULTS",
   "cycle": 5,
-  "last_updated": "2026-09-12T00:15:56.878507+00:00",
+  "last_updated": "2026-09-12T00:34:14.931192+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -401,6 +401,12 @@
       "to": "RUN_EXPERIMENTS",
       "at": "2026-09-12T00:15:56.878471+00:00",
       "note": "Cycle 9 HUMAN_APPROVAL: h-cla-asr-latency-metric auto-approved (0.0, fits both caps). 5 hypotheses now queued with approval != needs_human (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor all previously auto_approved but blocked; h-cla-asr-latency-metric newly queued and $0/retroactive so not blocked on live access). Advancing to RUN_EXPERIMENTS."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-12T00:34:14.931128+00:00",
+      "note": "Cycle 9 RUN_EXPERIMENTS: implemented and ran h-cla-asr-latency-metric ($0 retroactive, 19 experiments analyzed). Re-verified Deepgram listen-websocket still blocked (identical HTTP 400 signature, cycles 5-9); other 4 queued hypotheses remain blocked, updated their blocked_reason. Advancing to ANALYZE_RESULTS."
     }
   ]
 }
