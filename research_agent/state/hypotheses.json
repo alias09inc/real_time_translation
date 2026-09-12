@@ -159,8 +159,8 @@
       "required_changes": "New analysis script under src/real_time_translation/experiments/ (e.g. asr_latency_cla.py), modeled on flicker_metrics.py's existing pattern (reads experiments/*.json's results.events, writes/updates experiments/results.csv). Needs: (1) a minimal WebVTT parser for experiments/refs/wjZofJX0v4M.en.vtt (stdlib only, no new dependency -- VTT is simple enough to parse with a small regex/state machine), (2) a character-level Continuous Levenshtein Alignment implementation per the CUNI paper's Section 5.1 description (continuous-run-preferring edit-distance alignment; do not just reuse flicker_metrics.py's longest-common-prefix helper, CLA needs full edit-distance alignment, not prefix matching), (3) per-experiment windowing logic to slice the VTT to [start_seconds, start_seconds+duration_seconds] and shift timestamps to match each experiment's own playback_offset origin before aligning against asr_interim events. Verify against the CUNI paper's own numbers is not possible without full-text access (WebFetch to arxiv.org is EGRESS_BLOCKED), so validate the implementation instead via a sanity check: CLA latency should track the manually-known relationship of the endpointing sweep (larger endpointing-ms configs should show measurably higher ASR word latency).",
       "uses_existing_clips": true,
       "estimated_cost_usd": 0.0,
-      "approval": "",
-      "status": "proposed",
+      "approval": "auto_approved",
+      "status": "queued",
       "experiment_ids": [],
       "result_summary": ""
     }
