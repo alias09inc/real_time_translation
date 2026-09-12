@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "READ_PAPERS",
+  "current_state": "GENERATE_HYPOTHESES",
   "cycle": 5,
-  "last_updated": "2026-09-12T00:14:11.434815+00:00",
+  "last_updated": "2026-09-12T00:14:28.037097+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -383,6 +383,12 @@
       "to": "READ_PAPERS",
       "at": "2026-09-12T00:14:11.434784+00:00",
       "note": "Cycle 9 EXTRACT_PAPERS: extracted concrete claims for the 3 new papers via WebSearch snippets (arxiv/aclanthology WebFetch still EGRESS_BLOCKED) plus a direct WebFetch of the CLA metric's own repo (github.com/ufal/asr_latency, not arxiv). All 3 confirmed relevant to the two cycle-8-flagged gaps."
+    },
+    {
+      "from": "READ_PAPERS",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-12T00:14:28.037071+00:00",
+      "note": "Cycle 9 READ_PAPERS: finalized summaries/key_findings for the 3 new papers (already substantive from EXTRACT_PAPERS), marked read. Confirmed no overlap with existing 47 experiments or flicker_metrics.py -- CLA retroactive ASR-latency metric and YAAL/SOFTSEGMENTER are new territory."
     }
   ]
 }
