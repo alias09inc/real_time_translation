@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "GENERATE_HYPOTHESES",
+  "current_state": "HUMAN_APPROVAL",
   "cycle": 5,
-  "last_updated": "2026-09-12T00:36:58.585718+00:00",
+  "last_updated": "2026-09-12T12:13:39.927506+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -425,6 +425,12 @@
       "to": "GENERATE_HYPOTHESES",
       "at": "2026-09-12T00:36:58.585689+00:00",
       "note": "Cycle 9 REFLECT complete. Appended reflection entry to reflections.md (lessons on sanity-checking retroactive metrics' intermediate values, not just aggregate means, before trusting them). No playbook change needed this cycle. Skipping a fresh SEARCH_PAPERS pass and advancing directly to GENERATE_HYPOTHESES: ANALYZE_RESULTS surfaced a concrete code-only $0 hypothesis candidate (verify deepgram_endpointing actually reaches the Deepgram connection setup) motivated by CLA's flat-latency finding, not by new literature."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-12T12:13:39.927473+00:00",
+      "note": "Cycle 10 GENERATE_HYPOTHESES: added h-endpointing-connection-verify ($0 code-only static-analysis), the concrete follow-up flagged by cycle-9's h-cla-asr-latency-metric ANALYZE_RESULTS (does config.deepgram_endpointing actually reach the Deepgram connection, or does the flat CLA latency across the endpointing sweep mean the config value never arrives?). Backlog now 5 queued/proposed (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor all still blocked on Deepgram WS-proxy infra; h-endpointing-connection-verify new, proposed, needs no live API access at all). Under the 6 cap. Moving to HUMAN_APPROVAL to check its budget."
     }
   ]
 }
