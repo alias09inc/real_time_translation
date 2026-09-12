@@ -24,7 +24,14 @@ SEARCH_PAPERS -> EXTRACT_PAPERS -> READ_PAPERS -> GENERATE_HYPOTHESES
 ## Step 0: orient yourself every time
 
 ```bash
-cd /Users/riki/Desktop/GitHub/real_time_translation
+# cd to wherever this repo's working copy actually is in THIS session --
+# do not assume a fixed path. A local session may be at
+# /Users/riki/Desktop/GitHub/real_time_translation, but a cloud/scheduled
+# session (found cycle 10, 2026-09-12) gets a fresh clone at a different
+# path each time (e.g. /home/user/real_time_translation) and on a branch
+# other than main (the pipeline currently lives on
+# feat/rm2278/async-containers -- `git branch -a` / `git log --oneline`
+# if unsure which branch has research_agent/).
 git status && git log --oneline -5
 python3 research_agent/orchestrator.py status
 cat research_agent/state/hypotheses.json
@@ -38,6 +45,19 @@ budget/time left after finishing a unit cleanly, you may continue into the
 next state in the same session -- but always leave the repo in a
 consistent, committed state before you stop, since you may be interrupted
 (context limit, session end) at any point.
+
+Note on the two "cycle" counters (found cycle 9, confirmed still true
+cycle 10): `pipeline_state.json`'s own `cycle` field only increments on a
+`REFLECT -> SEARCH_PAPERS` transition (see orchestrator.py), so it under-
+counts whenever REFLECT instead advances straight to `GENERATE_HYPOTHESES`
+(a valid, deliberate shortcut this playbook explicitly allows). Report
+filenames and commit messages instead narrate a *different*, larger
+"cycle N" that increments on every REFLECT regardless of which state it
+advances to -- that is the number to use when naming
+`research_agent/reports/YYYYMMDD_cycleN_report.md` and in commit messages,
+NOT the raw JSON field. Keep using the narrated count for anything
+human-facing; treat the JSON field as an internal
+"REFLECT->SEARCH_PAPERS loop count" only.
 
 ## State: SEARCH_PAPERS
 

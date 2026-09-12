@@ -611,3 +611,69 @@ non-monotonic swings (7.3-18.9s). That is a question about this repo's
 own code, not something a literature search would surface, so the
 highest-value next unit of work is to generate and test that hypothesis
 directly rather than search first.
+
+---
+
+## Cycle 10 (2026-09-12)
+
+**What worked / what didn't:** This was the cleanest possible unit of
+work: cycle 9's own ANALYZE_RESULTS handed cycle 10 a fully-scoped,
+concretely-actionable, $0, zero-live-API-dependency question ("does
+`deepgram_endpointing` actually reach the connection?"), so
+GENERATE_HYPOTHESES this cycle was trivial and RUN_EXPERIMENTS didn't
+need to touch the Deepgram/ffmpeg environment at all -- the environment
+gap (ffmpeg missing again this session) was genuinely moot for this
+hypothesis, which is exactly the kind of case PLAYBOOK.md's cycle-8 note
+anticipated. Went one level deeper than a surface code read: downloaded
+the pinned `deepgram-sdk` wheel straight from PyPI (unaffected by the
+sandbox's Deepgram-specific egress block) to confirm the SDK itself
+doesn't silently swallow the `endpointing` kwarg -- this is the kind of
+"verify the third-party boundary, not just our own code" step that
+past cycles' Deepgram-blocked investigations already modeled well.
+Result: the wiring is provably correct, ruling out explanation (b) and
+leaving (a) (this clip/threshold-range not exercising the setting, or
+CLA measuring a different dimension than endpointing controls) as the
+standing account -- a genuine, useful negative result, not a dead end.
+
+**Backlog calibration:** Still well-calibrated (5 of 6 slots used,
+4 of those still genuinely blocked on infra, not from a shortage of
+ideas). Adding this cycle's hypothesis didn't crowd anything out and
+directly resolved the concrete follow-up flagged last cycle rather than
+padding the backlog with a tangential idea.
+
+**Budget policy:** Unchanged recommendation. $0 total spend across 10
+cycles now (11 including this one's own $0 log entry). No new
+information to revise the $3/batch, $7/day caps -- the real bottleneck
+remains the Deepgram WS-proxy infra gap, not the budget policy.
+
+**Playbook changes made this cycle:**
+1. Fixed a stale hardcoded macOS path in Step 0's orientation snippet
+   (`/Users/riki/Desktop/GitHub/real_time_translation`) that does not
+   exist in a cloud/scheduled session -- this session's actual working
+   copy was at `/home/user/real_time_translation`, on branch
+   `feat/rm2278/async-containers` rather than `main` (the pipeline
+   files don't exist on `main` at all; a fresh session must `git fetch`/
+   `checkout` that branch first, since the repo's default branch alone
+   doesn't have `research_agent/`). Replaced the hardcoded path with
+   guidance to orient dynamically instead.
+2. Resolved the cycle-9-flagged open question about the two mismatched
+   "cycle" counters (JSON `pipeline_state.json["cycle"]` vs. the larger
+   number narrated in report filenames/commits): documented explicitly
+   in Step 0 that the JSON field only counts `REFLECT -> SEARCH_PAPERS`
+   loops (per orchestrator.py's `TRANSITIONS`/increment logic), while
+   the narrated "cycle N" used in filenames and commit messages
+   increments on every REFLECT regardless of target state, and that the
+   narrated count is the one to keep using for anything human-facing.
+   This was flagged as "not urgent" in cycle 9 but the fix was cheap
+   enough to just make now rather than let a future session re-derive
+   the same explanation a third time.
+
+**Next state:** Advancing to `GENERATE_HYPOTHESES` again (skipping a
+fresh `SEARCH_PAPERS` pass) for cycle 11, since h-endpointing-connection-
+verify's own result_summary flags a concrete, testable next question
+that doesn't need new literature: directly measuring `is_final`/
+`UtteranceEnd` event timing (not just settled-text stability) across the
+existing endpointing-sweep experiment JSONs, to properly settle
+explanation (a) left open this cycle. If the Deepgram WS-proxy issue is
+resolved by the time cycle 11 runs, prioritize running `h-masking-holdback`
+live immediately instead (code has been ready since cycle 2).
