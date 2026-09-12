@@ -19,6 +19,11 @@
       "at": "2026-09-10T00:16:51.712335+00:00",
       "amount_usd": 0.0,
       "note": "h-utterance-batch-timing: extended flicker_metrics.py's group_translation_by_utterance() with first_batch_duration, reran over 47 existing experiment JSON files, zero new API spend"
+    },
+    {
+      "at": "2026-09-12T12:14:53.204105+00:00",
+      "amount_usd": 0.0,
+      "note": "h-endpointing-connection-verify: static code audit only (traced config.deepgram_endpointing through to deepgram-sdk's connect() query-string construction), zero new Deepgram/LLM API spend"
     }
   ]
 }

@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "RUN_EXPERIMENTS",
+  "current_state": "ANALYZE_RESULTS",
   "cycle": 5,
-  "last_updated": "2026-09-12T12:13:53.412544+00:00",
+  "last_updated": "2026-09-12T12:15:00.373342+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -437,6 +437,12 @@
       "to": "RUN_EXPERIMENTS",
       "at": "2026-09-12T12:13:53.412509+00:00",
       "note": "Cycle 10 HUMAN_APPROVAL: check-budget(0.0)=AUTO_APPROVE for h-endpointing-connection-verify (uses_existing_clips=true, needs no live API access at all). Set approval=auto_approved/status=queued. The other 4 queued hypotheses remain auto_approved but blocked on the persistent Deepgram WS-proxy infra issue. Proceeding to RUN_EXPERIMENTS to verify environment then pick a hypothesis -- h-endpointing-connection-verify is the only queued one not blocked on live Deepgram access, so it is this cycle's pick regardless of env state."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-12T12:15:00.373310+00:00",
+      "note": "Cycle 10 RUN_EXPERIMENTS: implemented h-endpointing-connection-verify as a pure static code audit ($0, no live experiment). Environment check: DEEPGRAM_API_KEY/GOOGLE_API_KEY both set, ffmpeg MISSING this session (not installed -- moot, since this hypothesis needs no audio/API calls at all). Traced config.deepgram_endpointing end-to-end from config.py through youtube_segment.py/video_segment.py CLI overrides, pipeline.py, deepgram_client.py's _build_options(), down into the deepgram-sdk's own listen.v1.connect() query-string construction (verified by downloading the deepgram-sdk 5.3.4 wheel, matching this repo's pyproject.toml pin, directly from PyPI and reading its source -- PyPI is unaffected by the sandbox's Deepgram-specific egress block). Confirmed the wiring is correct with no break; result written to hypothesis.result_summary, status=tested. Other 4 queued hypotheses remain blocked on Deepgram WS-proxy infra (not re-verified this cycle since ffmpeg/websocket check would be moot for a hypothesis that needed no live run). Advancing to ANALYZE_RESULTS."
     }
   ]
 }
