@@ -43,6 +43,7 @@ real-time-translation-exp-find-hardest = "real_time_translation.experiments.find
 real-time-translation-exp-compare-dictionary = "real_time_translation.experiments.compare_dictionary_runs:main"
 real-time-translation-exp-compare-models = "real_time_translation.experiments.compare_translation_models:main"
 real-time-translation-exp-flicker = "real_time_translation.experiments.flicker_metrics:main"
+real-time-translation-exp-cla-latency = "real_time_translation.experiments.asr_latency_cla:main"
 
 [build-system]
 requires = ["hatchling"]
