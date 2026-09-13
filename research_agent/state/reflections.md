@@ -677,3 +677,74 @@ existing endpointing-sweep experiment JSONs, to properly settle
 explanation (a) left open this cycle. If the Deepgram WS-proxy issue is
 resolved by the time cycle 11 runs, prioritize running `h-masking-holdback`
 live immediately instead (code has been ready since cycle 2).
+
+## Cycle 11 (2026-09-13, scheduled/automated run)
+
+**What worked:** Generated `h-asr-final-emission-latency` as a direct,
+concrete follow-up to cycle 10's own flagged open question (explanation
+(a) vs (b) for the flat CLA-latency result) instead of a fresh literature
+search -- this kept the cycle focused and, like cycle 5's
+`h-gemini-only-masking-replay` finding, the *implementation* itself
+surfaced a real correction to the hypothesis's premise before any
+misleading result could be produced: there is no distinct `asr_final`
+event kind in the logs, and `TimedEvent.is_final` for translation events
+means something unrelated (translation-call completion, not ASR
+finality). Caught this by actually inspecting real experiment JSON data
+(counting event kinds) before writing the analysis script, not just by
+re-reading the dataclass docstring -- the docstring alone would not have
+revealed that 0 events ever have `kind="asr_final"`. The real signal
+(`is_utterance_end`, distinguishing Deepgram-native finalize from the
+`max_interim_duration` soft-finalize timer) was already sitting in
+`deepgram_client.py`'s own docstrings, previously read by
+`h-cross-utterance-flicker`/`h-utterance-batch-timing` for unrelated
+purposes -- worth remembering that a field logged for one purpose can
+answer a completely different question later.
+
+**What didn't:** Nothing failed this cycle in the sense of wasted API
+spend or a broken commit, but the *first* draft of the hypothesis
+(written during `GENERATE_HYPOTHESES`, before implementation) was wrong
+about what data existed. This is the second time in this pipeline's
+history (after `h-gemini-only-masking-replay` in cycle 5) that a
+hypothesis's premise about the event-log schema needed correcting once
+someone actually tried to build against it. A cheap process improvement
+for next time: before finalizing a new hypothesis's `required_changes` in
+`GENERATE_HYPOTHESES`, do one quick `python3 -c "..."` spot-check of an
+actual experiment JSON's event `kind`/field values referenced in the
+description, rather than relying on dataclass comments alone -- comments
+can describe intent or a past state that no longer matches the data.
+
+**Backlog calibration:** Good this cycle -- one hypothesis added,
+implemented, and fully resolved (found -> approved -> run -> analyzed ->
+reported) in a single pass, keeping depth over breadth. Backlog
+(queued/proposed) is now 4, all four still genuinely blocked on the
+Deepgram WS-proxy infra gap (unchanged since cycle 3, not re-verified
+this cycle since none of this cycle's chosen hypothesis needed it).
+$0-cost retroactive angles against the existing 47-file corpus feel
+substantially exhausted after this cycle: within-batch NE, cross-batch
+NE, cross-batch timing, CLA word latency, endpointing wiring, and now the
+genuine-vs-soft-finalize mix have all been measured. The next $0 idea
+that isn't just re-slicing the same 47 files would likely need either (a)
+a genuinely new angle from fresh literature, or (b) accepting a live
+experiment is required to make further progress on the ASR/translation
+substance (h-masking-holdback et al.).
+
+**Budget policy:** Unchanged recommendation, still $0 total spend across
+11 cycles. No new information to revise the $3/batch, $7/day caps.
+
+**Should the playbook change?** No changes made this cycle. The existing
+guidance (verify environment before picking a hypothesis; don't fabricate
+results; correct a hypothesis's premise in place when implementation
+reveals it was wrong) already covered this cycle's situation well. The
+one soft lesson (spot-check real data before trusting a schema
+description) is recorded above for future cycles but didn't feel like it
+rose to the level of a playbook rule yet -- if a third hypothesis in a
+row turns out to have a wrong schema premise, that would be the trigger
+to add an explicit step.
+
+**Next state:** Advancing to `SEARCH_PAPERS` for cycle 12 (cycle counter
+increments), per this cycle's own Japanese report's recommendation --
+the $0 retroactive-analysis well against the existing corpus is close to
+dry, so a fresh literature pass is more likely to add value than another
+`GENERATE_HYPOTHESES` no-op. If the Deepgram WS-proxy issue has been
+resolved by then, prioritize running `h-masking-holdback` live
+immediately instead (code has been ready since cycle 2).
