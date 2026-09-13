@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "RUN_EXPERIMENTS",
-  "cycle": 5,
-  "last_updated": "2026-09-13T00:12:49.515265+00:00",
+  "current_state": "SEARCH_PAPERS",
+  "cycle": 6,
+  "last_updated": "2026-09-13T00:20:13.971755+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -473,6 +473,30 @@
       "to": "RUN_EXPERIMENTS",
       "at": "2026-09-13T00:12:49.515236+00:00",
       "note": "Cycle 11 HUMAN_APPROVAL: check-budget(0.0)=AUTO_APPROVE for h-asr-final-emission-latency (uses_existing_clips=true, retroactive-only, no live API access needed). Set approval=auto_approved/status=queued. The other 4 queued hypotheses remain auto_approved but blocked on the persistent Deepgram WS-proxy infra issue. Proceeding to RUN_EXPERIMENTS -- h-asr-final-emission-latency is the only queued hypothesis not blocked on live Deepgram access, so it is this cycle's pick regardless of env state."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-13T00:17:25.719836+00:00",
+      "note": "Cycle 11 RUN_EXPERIMENTS complete: h-asr-final-emission-latency implemented and run (0 USD). Result: pct_soft_finalized ~50-65% flat across the entire endpointing sweep, no clear scaling with deepgram_endpointing in either soft or genuine-final batch durations. Proceeding to ANALYZE_RESULTS to write result_summary."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-13T00:18:13.817225+00:00",
+      "note": "Cycle 11 ANALYZE_RESULTS: h-asr-final-emission-latency's result_summary written and confirmed (soft-finalize rate flat 50-65% across the endpointing sweep, no monotonic trend, sweep2 endpointing>=800ms bit-identical). Writing the cycle-11 Japanese report next covering this result plus the hypothesis's mid-implementation correction (no distinct asr_final event kind; the real signal is is_utterance_end)."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-13T00:19:25.759819+00:00",
+      "note": "Cycle 11 WRITE_REPORT: wrote research_agent/reports/20260913_cycle11_report.md (Japanese) covering h-asr-final-emission-latency's mid-implementation correction (no distinct asr_final event kind; real signal is is_utterance_end) and its confirmed result. 00_pipeline_overview_ja.md not touched -- no material pipeline-shape change this cycle."
+    },
+    {
+      "from": "REFLECT",
+      "to": "SEARCH_PAPERS",
+      "at": "2026-09-13T00:20:13.971690+00:00",
+      "note": "Cycle 11 REFLECT complete. Appended reflection entry to reflections.md. No playbook changes this cycle. Advancing to SEARCH_PAPERS for cycle 12 -- $0 retroactive-analysis angles against the existing 47-file corpus feel largely exhausted after this cycle's genuine/soft-finalize-mix finding (within-batch NE, cross-batch NE, timing, CLA, wiring audit, and now finalize-mix have all been measured). If the Deepgram WS-proxy issue is resolved by then, prioritize running h-masking-holdback live immediately instead."
     }
   ]
 }
