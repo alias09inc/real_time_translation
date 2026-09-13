@@ -197,8 +197,8 @@
       "required_changes": "New analysis script (or an addition to asr_latency_cla.py / a sibling module) under src/real_time_translation/experiments/ that: for each experiment JSON, walks its results.events in order, and for each asr_final event (is_final=True) finds the immediately preceding asr_interim event for the same batch (same asr_start_time) and computes playback_offset(asr_final) - playback_offset(last asr_interim) as the emission delay; aggregate mean/median per experiment file and print/write a summary comparable across the chunk_latency_sweep{,2} endpointing values, e.g. as a new column in a sidecar CSV following flicker_metrics.py/asr_latency_cla.py's existing precedent (do not touch results.csv directly, same reasoning as those two scripts). No changes to the live pipeline.",
       "uses_existing_clips": true,
       "estimated_cost_usd": 0.0,
-      "approval": "",
-      "status": "proposed",
+      "approval": "auto_approved",
+      "status": "queued",
       "experiment_ids": [],
       "result_summary": ""
     }
