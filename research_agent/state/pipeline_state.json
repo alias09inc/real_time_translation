@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "current_state": "GENERATE_HYPOTHESES",
+  "current_state": "RUN_EXPERIMENTS",
   "cycle": 5,
-  "last_updated": "2026-09-12T12:17:05.011550+00:00",
+  "last_updated": "2026-09-13T00:12:49.515265+00:00",
   "active_hypothesis_ids": [],
   "active_experiment_batch": null,
   "history": [
@@ -461,6 +461,18 @@
       "to": "GENERATE_HYPOTHESES",
       "at": "2026-09-12T12:17:05.011514+00:00",
       "note": "Cycle 10 REFLECT complete. Appended reflection entry to reflections.md. Playbook self-improvements: fixed stale hardcoded macOS path in Step 0 (this session's clone lives elsewhere, on feat/rm2278/async-containers not main), documented the two mismatched cycle counters. Advancing to GENERATE_HYPOTHESES directly (skipping SEARCH_PAPERS) for cycle 11 -- h-endpointing-connection-verify's result flags a concrete non-literature-driven next question (measure is_final/UtteranceEnd event timing directly, not just settled-text stability, to properly settle explanation (a) left open this cycle). If Deepgram WS-proxy access has returned by then, prioritize running h-masking-holdback live immediately instead."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-13T00:12:34.292214+00:00",
+      "note": "Cycle 11 GENERATE_HYPOTHESES: added h-asr-final-emission-latency ($0 retroactive analysis of is_final emission timing vs settled-text CLA stability, direct follow-up to h-endpointing-connection-verify's explanation (a)). Backlog now 5 queued/proposed (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor all still blocked on Deepgram WS-proxy infra; h-asr-final-emission-latency new, needs no live API access, uses only already-logged is_final/playback_offset fields). Under the 6 cap. Moving to HUMAN_APPROVAL to check its budget."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-13T00:12:49.515236+00:00",
+      "note": "Cycle 11 HUMAN_APPROVAL: check-budget(0.0)=AUTO_APPROVE for h-asr-final-emission-latency (uses_existing_clips=true, retroactive-only, no live API access needed). Set approval=auto_approved/status=queued. The other 4 queued hypotheses remain auto_approved but blocked on the persistent Deepgram WS-proxy infra issue. Proceeding to RUN_EXPERIMENTS -- h-asr-final-emission-latency is the only queued hypothesis not blocked on live Deepgram access, so it is this cycle's pick regardless of env state."
     }
   ]
 }

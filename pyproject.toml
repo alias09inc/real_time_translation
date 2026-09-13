@@ -44,6 +44,7 @@ real-time-translation-exp-compare-dictionary = "real_time_translation.experiment
 real-time-translation-exp-compare-models = "real_time_translation.experiments.compare_translation_models:main"
 real-time-translation-exp-flicker = "real_time_translation.experiments.flicker_metrics:main"
 real-time-translation-exp-cla-latency = "real_time_translation.experiments.asr_latency_cla:main"
+real-time-translation-exp-utterance-end-mix = "real_time_translation.experiments.utterance_end_mix:main"
 
 [build-system]
 requires = ["hatchling"]
