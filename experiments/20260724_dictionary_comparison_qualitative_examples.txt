@@ -1,0 +1,25 @@
+Qualitative examples: with vs. without the video-extracted dictionary
+(dictionaries/sessions/LLM2024_8_part1.csv), full 75-min run of
+video/LLM2024_8_part1.mp4. See 20260724_dictionary_comparison_report.json
+for the quantitative comparison these are drawn from.
+
+Term: 'Arena Score' (asr_start=2408s)
+  ASR:            Arena score.
+  WITH dict:      Arenaスコアが
+  WITHOUT dict:   アリーナスコア。そしてそれは (asr="arena score. And it's")
+
+  "アリーナスコア" phonetically transliterates "arena" as the common noun
+  (a stadium/arena), losing the fact that "Arena Score" is the proper name
+  of the LMSYS Chatbot Arena leaderboard metric. "Arenaスコア" (with dict)
+  preserves it as the named benchmark, matching how a Japanese ML audience
+  would actually recognize the term.
+
+Term: 'Tokens Per Second' (asr_start=2663s)
+  ASR:            super tokens per second doubled.
+  WITH dict:      トークン毎秒を2倍に
+  WITHOUT dict:   スーパー・トークン・パー・セカンドを2倍に
+
+  Without the dictionary, the model fell back to a literal word-by-word
+  katakana transliteration ("token-per-second") that isn't standard
+  Japanese technical usage. With the dictionary, it used the actual
+  standard term (トークン毎秒).

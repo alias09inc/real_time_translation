@@ -1,0 +1,588 @@
+[3.4s] input_transcript: other companies.
+[3.6s] output_transcript: 他の会社。
+[4.0s] input_transcript:  Yeah.
+[4.3s] output_transcript: そう。
+[5.0s] input_transcript:  Yes, it's a
+[5.3s] output_transcript: はい、
+[6.0s] input_transcript:  very secret
+[6.3s] output_transcript: とても秘密
+[7.0s] input_transcript:  source
+[7.3s] output_transcript: な情報源
+[8.0s] input_transcript:  for that.
+[8.3s] output_transcript: です。
+[9.0s] input_transcript:  Uh yeah,
+[9.3s] output_transcript: ええ、
+[10.0s] input_transcript:  advantages.
+[10.3s] output_transcript: そういう利点です。
+[11.0s] input_transcript:  Okay.
+[11.3s] output_transcript: はい。
+[12.0s] input_transcript:  Thank
+[12.3s] output_transcript: ありがとう
+[13.1s] input_transcript:  you. And
+[13.3s] output_transcript: ございます。それ
+[14.0s] input_transcript:  the next question
+[14.4s] output_transcript: で、次の質問
+[15.0s] input_transcript:  is, what was the
+[15.3s] output_transcript: は、
+[16.1s] input_transcript:  most exciting moment
+[16.3s] output_transcript: 一番エキサイティン
+[17.0s] input_transcript:  during gymnast
+[17.3s] output_transcript: グだった瞬間
+[18.1s] input_transcript:  development?
+[18.3s] output_transcript: は何ですか？
+[19.0s] input_transcript:  Please impress
+[19.3s] output_transcript: 感動させて
+[19.9s] input_transcript:  us.
+[20.0s] output_transcript: ください。
+[21.0s] input_transcript:  Yeah.
+[21.3s] output_transcript: ええ。
+[22.1s] input_transcript:  If you have to
+[22.3s] output_transcript: もし言わなきゃ
+[23.0s] input_transcript:  thanks for
+[23.3s] output_transcript: いけないなら、
+[24.1s] input_transcript:  question. Yeah, actually
+[24.3s] output_transcript: 質問ありがとう。
+[25.1s] input_transcript:  I think there are
+[25.3s] output_transcript: ええ、実は
+[26.0s] input_transcript:  many
+[26.3s] output_transcript: たくさんあると
+[27.0s] input_transcript:  impressive stories.
+[27.3s] output_transcript: 思います、感動
+[27.9s] input_transcript:  From
+[28.3s] output_transcript: する話が。
+[29.0s] input_transcript:  my from my
+[29.3s] output_transcript: 私の、
+[30.0s] input_transcript:  perspective, it was like
+[30.3s] output_transcript: 私の視点から
+[31.0s] input_transcript:  Google has
+[31.3s] output_transcript: は、Google
+[32.3s] output_transcript: が
+[33.0s] input_transcript:  many,
+[33.3s] output_transcript: たくさん、
+[34.0s] input_transcript:  many talents.
+[34.3s] output_transcript: たくさんの才能
+[35.1s] input_transcript:  in
+[35.3s] output_transcript: がある中で、
+[36.0s] input_transcript:  sight and
+[36.4s] output_transcript: そして
+[37.0s] input_transcript:  also
+[37.3s] output_transcript: また、
+[38.0s] input_transcript:  normally
+[38.3s] output_transcript: 通常は
+[39.0s] input_transcript:  uh
+[39.3s] output_transcript: ええと
+[40.0s] input_transcript:  some
+[40.3s] output_transcript: 時々
+[41.0s] input_transcript:  sometimes
+[41.3s] output_transcript: 私
+[42.0s] input_transcript:  our method
+[42.3s] output_transcript: たちの方法
+[43.1s] input_transcript:  will
+[43.3s] output_transcript: は、
+[44.0s] input_transcript:  currently we cannot
+[44.3s] output_transcript: 現在は公開
+[45.1s] input_transcript:  publish paper, but
+[45.3s] output_transcript: できない論文ですが、
+[46.0s] input_transcript:  we do
+[46.3s] output_transcript: 私たちは
+[47.0s] input_transcript:  say a lot
+[47.3s] output_transcript: たくさんの
+[48.0s] input_transcript:  amazing
+[48.3s] output_transcript: 素晴らしい進歩
+[49.0s] input_transcript:  progress in
+[49.3s] output_transcript: をジェミニで
+[50.1s] input_transcript:  Gemini. I think
+[50.3s] output_transcript: 遂げています。
+[51.0s] input_transcript:  when you say some
+[51.3s] output_transcript: 例えば、
+[52.0s] input_transcript:  groundbreaking
+[52.3s] output_transcript: 画期的な
+[53.0s] input_transcript:  things and also when
+[53.4s] output_transcript: ことや、
+[54.0s] input_transcript:  you say
+[54.3s] output_transcript: また、多くの
+[55.1s] input_transcript:  many
+[55.3s] output_transcript: 才能がある
+[56.0s] input_transcript:  in
+[56.4s] output_transcript: と言う時、
+[57.2s] input_transcript:  different
+[57.3s] output_transcript: 異なる
+[58.1s] input_transcript:  methods
+[58.3s] output_transcript: 方法で
+[59.1s] input_transcript:  could
+[59.4s] output_transcript: うまくいく
+[60.0s] input_transcript:  work and
+[60.3s] output_transcript: ことや、
+[61.0s] input_transcript:  also
+[61.4s] output_transcript: また、
+[62.0s] input_transcript:  entirely
+[62.4s] output_transcript: 全く
+[63.0s] input_transcript:  entirely
+[63.3s] output_transcript: 全く
+[64.1s] input_transcript:  some method
+[64.3s] output_transcript: ある方法
+[65.0s] input_transcript:  entirely
+[65.3s] output_transcript: が全く
+[66.0s] input_transcript:  but also
+[66.3s] output_transcript: でも、また
+[67.1s] input_transcript:  work, that would be
+[67.3s] output_transcript: うまくいく、
+[68.1s] input_transcript:  amazing. Yeah.
+[68.5s] output_transcript: それは素晴らしいです。
+[69.1s] input_transcript:  And also
+[69.3s] output_transcript: ええ。そして
+[70.4s] input_transcript:  yeah,
+[70.6s] output_transcript: ええ、
+[71.4s] input_transcript:  I think
+[71.6s] output_transcript: そうですね、
+[72.3s] input_transcript:  from
+[72.6s] output_transcript: 私の
+[73.4s] input_transcript:  my
+[73.5s] output_transcript: 視点から
+[74.5s] input_transcript:  perspective is like
+[74.6s] output_transcript: は、
+[75.4s] input_transcript:  as a researcher, I
+[75.7s] output_transcript: 研究者として、
+[76.5s] input_transcript:  think to say
+[76.8s] output_transcript: 言うと、
+[77.5s] input_transcript:  many different
+[77.8s] output_transcript: 多くの異なる
+[78.4s] input_transcript:  works, to say
+[78.6s] output_transcript: 作品、
+[79.3s] input_transcript:  many
+[79.6s] output_transcript: 多くの異なる
+[80.3s] input_transcript:  different kind
+[80.7s] output_transcript: 種類の
+[81.3s] input_transcript:  of talents
+[81.6s] output_transcript: 才能が
+[82.5s] input_transcript:  to discuss
+[82.6s] output_transcript: あることを議論
+[83.5s] input_transcript:  this methods.
+[83.6s] output_transcript: する方法。
+[84.4s] input_transcript:  Uh it's it's
+[84.6s] output_transcript: ええ、
+[85.5s] input_transcript:  very amazing.
+[85.8s] output_transcript: とても素晴らしいです。
+[86.5s] input_transcript:  Yeah. Okay.
+[86.8s] output_transcript: ええ。はい。
+[87.4s] input_transcript:  Okay, thank you very much
+[87.6s] output_transcript: ありがとうございます。
+[88.4s] input_transcript:  for answering.
+[88.6s] output_transcript: お答えいただき。
+[89.4s] input_transcript:  very sensitive
+[89.7s] output_transcript: とても繊細
+[90.5s] input_transcript:  question.
+[90.6s] output_transcript: な質問です。
+[91.3s] input_transcript:  And
+[91.7s] output_transcript: そして、
+[92.3s] input_transcript:  the next question
+[92.7s] output_transcript: 次の質問
+[93.4s] input_transcript:  is, what
+[93.6s] output_transcript: は、何
+[94.0s] input_transcript:  strategy do you think
+[94.3s] output_transcript: が戦略だと
+[95.1s] input_transcript:  holds the
+[95.4s] output_transcript: 思いますか？
+[96.2s] input_transcript:  most
+[96.3s] output_transcript: 最も有望
+[97.0s] input_transcript:  promise for a low
+[97.3s] output_transcript: な低
+[98.1s] input_transcript:  hallucination
+[98.3s] output_transcript: ハルシネーション
+[99.1s] input_transcript:  LLM. Any specific
+[99.3s] output_transcript: LLMです。
+[100.0s] input_transcript:  fine tuning
+[100.3s] output_transcript: 具体的なファイン
+[101.1s] input_transcript:  algorithm or
+[101.3s] output_transcript: チューニングアルゴリズム
+[102.0s] input_transcript:  paradigm you
+[102.4s] output_transcript: やパラダイム
+[103.0s] input_transcript:  recommend,
+[103.4s] output_transcript: でおすすめはあります
+[104.2s] input_transcript:  such as training or
+[104.3s] output_transcript: か？例えば、
+[105.1s] input_transcript:  SLM.
+[105.3s] output_transcript: トレーニングや
+[106.3s] output_transcript: SLMなど。
+[107.1s] input_transcript:  Yeah,
+[107.3s] output_transcript: ええ、
+[108.1s] input_transcript:  uh I
+[108.3s] output_transcript: ええ、
+[109.1s] input_transcript:  think it's a very
+[109.3s] output_transcript: とても良い
+[110.0s] input_transcript:  good question for
+[110.3s] output_transcript: 質問だと思います。
+[111.2s] input_transcript:  hallucination in
+[111.3s] output_transcript:  LLMの
+[112.2s] input_transcript:  LLM. I think
+[112.3s] output_transcript: ハルシネーションについて。
+[113.0s] input_transcript:  it's an open
+[113.3s] output_transcript: これはオープン
+[114.1s] input_transcript:  question. In
+[114.3s] output_transcript: な質問です。
+[115.1s] input_transcript:  Google, we do a
+[115.3s] output_transcript:  Googleでは、
+[116.0s] input_transcript:  lot such as
+[116.3s] output_transcript: 例えば、
+[117.0s] input_transcript:  simple simple
+[117.3s] output_transcript: シンプルな
+[118.1s] input_transcript:  QA, it's a
+[118.3s] output_transcript: QAなど、
+[119.0s] input_transcript:  uh
+[119.3s] output_transcript: ええと
+[120.0s] input_transcript:  uh
+[120.9s] input_transcript:  uh
+[121.3s] output_transcript: ええと
+[122.1s] input_transcript:  benchmark to
+[122.3s] output_transcript: ベンチマークで
+[123.0s] input_transcript:  evaluate how
+[123.3s] output_transcript: 評価しています。
+[124.0s] input_transcript:  how
+[124.3s] output_transcript: どの
+[125.0s] input_transcript:  how
+[125.3s] output_transcript: どの
+[126.0s] input_transcript:  how much the
+[126.4s] output_transcript: どのくらい
+[127.1s] input_transcript:  language model
+[127.3s] output_transcript: 言語モデルが
+[128.1s] input_transcript:  hallucinate. In Google, we do
+[128.4s] output_transcript: ハルシネーションするか。
+[129.1s] input_transcript:  it very well and
+[129.3s] output_transcript:  Googleでは
+[130.0s] input_transcript:  we use
+[130.3s] output_transcript: それをうまくやって
+[131.0s] input_transcript:  many different
+[131.3s] output_transcript: いて、多くの
+[132.0s] input_transcript:  methods.
+[132.3s] output_transcript: 異なる方法を使っ
+[133.0s] input_transcript:  The thing is
+[133.3s] output_transcript: ています。問題
+[134.0s] input_transcript:  like you need
+[134.3s] output_transcript: は、
+[135.0s] input_transcript:  to carefully
+[135.3s] output_transcript: 注意深く
+[136.1s] input_transcript:  think
+[136.3s] output_transcript: 考える必要
+[137.1s] input_transcript:  about how
+[137.3s] output_transcript: があります、
+[138.1s] input_transcript:  how good your
+[138.3s] output_transcript: どのくらいあなたの
+[139.1s] input_transcript:  language model it is.
+[139.4s] output_transcript: 言語モデルが良いか。
+[140.2s] input_transcript:  So you need to
+[140.3s] output_transcript: だから、
+[141.0s] input_transcript:  analyze
+[141.4s] output_transcript: 分析する必要
+[142.1s] input_transcript:  your language
+[142.3s] output_transcript: があります、あなたの
+[143.1s] input_transcript:  model
+[143.3s] output_transcript: 言語モデルの
+[144.1s] input_transcript:  hallucination. Like
+[144.4s] output_transcript: ハルシネーションを。
+[145.0s] input_transcript:  maybe
+[145.3s] output_transcript: 例えば、
+[146.1s] input_transcript:  sometimes
+[146.3s] output_transcript: 時々
+[147.1s] input_transcript:  because you
+[147.4s] output_transcript: あなたが
+[148.1s] input_transcript:  fine tune the
+[148.3s] output_transcript: ファインチューニング
+[149.1s] input_transcript:  base language
+[149.3s] output_transcript: したベース言語
+[150.0s] input_transcript:  model,
+[150.3s] output_transcript: モデル、
+[151.0s] input_transcript:  this language model has
+[151.3s] output_transcript: この言語モデル
+[152.1s] input_transcript:  no
+[152.3s] output_transcript: には知識が
+[153.1s] input_transcript:  knowledge about
+[153.3s] output_transcript: ない、あなたの
+[154.1s] input_transcript:  your data site.
+[154.3s] output_transcript: データサイトについて。
+[155.0s] input_transcript:  But you want
+[155.3s] output_transcript: でも、
+[156.1s] input_transcript:  to let it to
+[156.3s] output_transcript: それに学ばせ
+[157.1s] input_transcript:  learn how to
+[157.3s] output_transcript: たい、どうやって
+[158.1s] input_transcript:  learn in data
+[158.3s] output_transcript: データサイトで学ぶ
+[159.1s] input_transcript:  site. What
+[159.3s] output_transcript: か。どの
+[160.1s] input_transcript:  what kind of do
+[160.3s] output_transcript: ようなことをする
+[161.1s] input_transcript:  it can just
+[161.3s] output_transcript: か、ただ
+[162.1s] input_transcript:  hallucinate.
+[162.3s] output_transcript: ハルシネーションする
+[163.1s] input_transcript:  Yeah.
+[163.3s] output_transcript: か。ええ。
+[164.1s] input_transcript:  hallucinate.
+[164.3s] output_transcript: ハルシネーション。
+[165.0s] input_transcript:  some process.
+[165.3s] output_transcript: 何らかのプロセス。
+[166.1s] input_transcript:  So
+[166.3s] output_transcript: だから
+[167.4s] input_transcript:  just like
+[167.6s] output_transcript: まさに
+[168.4s] input_transcript:  if you our
+[168.7s] output_transcript: 私たちの
+[169.5s] input_transcript:  people we don't
+[169.8s] output_transcript: 人々は、
+[170.4s] input_transcript:  know some area,
+[170.6s] output_transcript: ある分野を知らな
+[171.4s] input_transcript:  but we must
+[171.6s] output_transcript: いけれど、
+[172.4s] input_transcript:  answer this question.
+[172.6s] output_transcript: この質問に答えな
+[173.6s] input_transcript:  Yeah.
+[173.6s] output_transcript: ければならない。ええ。
+[174.4s] input_transcript:  And
+[174.7s] output_transcript: そして、
+[175.4s] input_transcript:  we
+[175.8s] output_transcript: 私たちは
+[176.5s] input_transcript:  we will just
+[176.8s] output_transcript: ただ
+[177.6s] input_transcript:  hallucinate to
+[177.9s] output_transcript: 答えるためにハル
+[178.6s] input_transcript:  answer the question, right?
+[178.8s] output_transcript: シネーションするよね？
+[179.5s] input_transcript:  Yeah.
+[179.9s] output_transcript: ええ。
+[180.4s] input_transcript:  Yeah.
+[180.7s] output_transcript: ええ。
+[181.6s] input_transcript:  So, so
+[181.9s] output_transcript: だから、
+[182.8s] input_transcript:  this is a
+[183.1s] output_transcript: だからこれは
+[183.8s] input_transcript:  complicated method,
+[184.1s] output_transcript: 複雑な方法
+[184.8s] input_transcript:  but one
+[185.1s] output_transcript: ですが、
+[185.8s] input_transcript:  perspective is
+[186.1s] output_transcript: ただ一つの視点
+[186.8s] input_transcript:  like just
+[187.1s] output_transcript: は、ただ
+[187.9s] input_transcript:  do the right
+[188.0s] output_transcript: 正しいことを
+[189.0s] input_transcript:  thing for your
+[189.3s] output_transcript: あなたの言語
+[190.1s] input_transcript:  language model. If you
+[190.3s] output_transcript: モデルのためにする。
+[191.2s] input_transcript:  think that it's
+[191.3s] output_transcript: もしそれが
+[192.1s] input_transcript:  not capable,
+[192.3s] output_transcript: 不可能だと思うなら、
+[194.2s] input_transcript:  to
+[194.3s] output_transcript: 答える
+[194.9s] input_transcript:  answer the question,
+[195.1s] output_transcript: ために、
+[195.5s] input_transcript:  maybe you should think
+[195.9s] output_transcript: おそらくあなたは
+[196.2s] input_transcript:  about how to
+[196.3s] output_transcript: どうやって
+[196.9s] input_transcript:  enhance its
+[197.1s] output_transcript: その能力を向上
+[197.5s] input_transcript:  ability.
+[197.8s] output_transcript: させるか考える
+[198.2s] input_transcript:  Yeah.
+[198.3s] output_transcript: べきだ。ええ。
+[202.0s] input_transcript:  And the next
+[202.3s] output_transcript: そして、
+[203.2s] input_transcript:  question, uh,
+[203.3s] output_transcript: 次の質問ですが、
+[204.0s] input_transcript:  where is that
+[204.3s] output_transcript: ええと、
+[205.0s] input_transcript:  next
+[205.3s] output_transcript: 次はどこですか？
+[206.0s] input_transcript:  battleground?
+[207.1s] input_transcript:  for Elon
+[207.3s] output_transcript: イーロンにとって
+[208.1s] input_transcript:  efficiency,
+[208.3s] output_transcript: の効率性、
+[209.0s] input_transcript:  quantization
+[209.3s] output_transcript: 量子化
+[210.1s] input_transcript:  distillation,
+[210.3s] output_transcript: 蒸留、
+[211.0s] input_transcript:  speculative
+[211.3s] output_transcript: 推測的
+[212.1s] input_transcript:  decoding,
+[212.3s] output_transcript: デコーディング、
+[213.1s] input_transcript:  KV
+[213.3s] output_transcript:  KV
+[214.0s] input_transcript:  caching and
+[214.3s] output_transcript: キャッシングと
+[215.1s] input_transcript:  why?
+[215.3s] output_transcript: なぜですか？
+[216.0s] input_transcript:  Yeah, I
+[216.3s] output_transcript: ええ、
+[217.1s] input_transcript:  think, yeah,
+[217.3s] output_transcript: そうですね、
+[218.2s] input_transcript:  yeah, it's
+[218.3s] output_transcript: そうですね、
+[219.1s] input_transcript:  it means
+[219.3s] output_transcript: それはつまり
+[220.1s] input_transcript:  I I I
+[220.3s] output_transcript: 私が
+[221.1s] input_transcript:  suppose
+[221.3s] output_transcript: 思うに、
+[222.0s] input_transcript:  it's
+[222.3s] output_transcript: それは
+[223.0s] input_transcript:  like
+[223.3s] output_transcript: つまり、
+[224.1s] input_transcript:  hot topic,
+[224.3s] output_transcript: ホットなトピック
+[225.2s] input_transcript:  hot topic.
+[225.3s] output_transcript: ですね、ホットなトピック。
+[226.0s] input_transcript:  Yeah, I said
+[226.3s] output_transcript: ええ、
+[227.1s] input_transcript:  I think, yeah,
+[227.3s] output_transcript: そうですね、
+[228.0s] input_transcript:  it's
+[228.4s] output_transcript: それは
+[229.0s] input_transcript:  very good question
+[229.3s] output_transcript: とても良い質問
+[230.1s] input_transcript:  actually
+[230.3s] output_transcript: ですね、実際
+[231.0s] input_transcript:  um
+[231.3s] output_transcript: あの、
+[232.0s] input_transcript:  uh
+[232.3s] output_transcript: ええと、
+[233.0s] input_transcript:  I think I'm
+[233.3s] output_transcript: 私は
+[234.0s] input_transcript:  already
+[234.5s] output_transcript: すでに
+[235.1s] input_transcript:  past it, right? I'm
+[235.3s] output_transcript: それを過ぎたと思います。
+[236.0s] input_transcript:  just one
+[236.3s] output_transcript: 私は
+[237.1s] input_transcript:  kind of activation
+[237.3s] output_transcript: ただ一つの活性化
+[238.1s] input_transcript:  sparsity and also
+[238.3s] output_transcript: 疎性であり、
+[239.1s] input_transcript:  distillation,
+[239.3s] output_transcript: また蒸留でも
+[240.1s] input_transcript:  it's very
+[240.3s] output_transcript: あり、それはとても
+[241.0s] input_transcript:  important.
+[241.3s] output_transcript: 重要です。
+[242.0s] input_transcript:  Uh
+[242.3s] output_transcript: ええと、
+[243.0s] input_transcript:  I
+[243.3s] output_transcript: 私は
+[244.3s] input_transcript:  think
+[244.5s] output_transcript: 思うに、
+[245.3s] input_transcript:  I think
+[245.6s] output_transcript: 私は
+[246.4s] input_transcript:  for all of
+[246.6s] output_transcript: すべての
+[247.3s] input_transcript:  your
+[247.6s] output_transcript: あなたの
+[248.5s] input_transcript:  mentioned,
+[248.8s] output_transcript: 言及したこと
+[249.3s] input_transcript:  these concepts
+[249.6s] output_transcript: について、これらの
+[250.3s] input_transcript:  are very,
+[250.6s] output_transcript: 概念は非常に、
+[251.3s] input_transcript:  very important.
+[251.6s] output_transcript: 非常に重要
+[252.5s] input_transcript:  Uh for
+[252.6s] output_transcript: です。ええ、
+[253.4s] input_transcript:  um
+[253.6s] output_transcript: あの、
+[254.3s] input_transcript:  such as for
+[254.6s] output_transcript: 例えば量子
+[255.3s] input_transcript:  quantization,
+[255.6s] output_transcript: 化については、
+[256.4s] input_transcript:  before we just
+[256.6s] output_transcript: 以前はただ
+[257.3s] input_transcript:  do like element
+[257.5s] output_transcript: 要素ごとの
+[258.4s] input_transcript:  wise quantization
+[258.8s] output_transcript: 量子化を行って
+[259.4s] input_transcript:  currently we have vector
+[259.6s] output_transcript: いましたが、現在は
+[260.4s] input_transcript:  quantization,
+[260.6s] output_transcript: ベクトル量子化
+[261.3s] input_transcript:  it's a
+[261.6s] output_transcript: があり、それは
+[262.3s] input_transcript:  new new
+[262.6s] output_transcript: 新しい
+[263.4s] input_transcript:  thing, right? We
+[263.6s] output_transcript: ことですよね？
+[264.6s] input_transcript:  still need to do
+[264.8s] output_transcript: 私たちはまだ
+[265.5s] input_transcript:  it further. And
+[265.8s] output_transcript: それをさらに進める
+[266.4s] input_transcript:  for sparsity,
+[266.6s] output_transcript: 必要があります。そして
+[267.4s] input_transcript:  and
+[267.6s] output_transcript: 疎性については、
+[268.1s] input_transcript:  and also
+[268.3s] output_transcript: また
+[269.0s] input_transcript:  uh
+[269.3s] output_transcript: ええと、
+[270.0s] input_transcript:  there are
+[270.3s] output_transcript: まだ
+[271.1s] input_transcript:  still a lot of
+[271.3s] output_transcript: たくさんの研究
+[272.1s] input_transcript:  research paper about this
+[272.3s] output_transcript: 論文がこの
+[273.1s] input_transcript:  kind of area.
+[273.4s] output_transcript: 分野についてあります。
+[274.1s] input_transcript:  I think
+[274.3s] output_transcript: 私が思う
+[275.0s] input_transcript:  all this
+[275.3s] output_transcript: に、これらすべて
+[276.0s] input_transcript:  things will be
+[276.3s] output_transcript: は非常に
+[277.1s] input_transcript:  very important.
+[277.3s] output_transcript: 重要になるでしょう。
+[278.0s] input_transcript:  Even for
+[278.3s] output_transcript:  KV
+[279.1s] input_transcript:  also for
+[279.4s] output_transcript: キャッシングについても、
+[280.0s] input_transcript:  KV cache,
+[280.3s] output_transcript:  KVキャッシュ
+[281.0s] input_transcript:  because the KV
+[281.4s] output_transcript: については、KV
+[282.2s] input_transcript:  cache will
+[282.3s] output_transcript: キャッシュが
+[283.1s] input_transcript:  decide how many
+[283.3s] output_transcript: どれだけの
+[284.2s] input_transcript:  how large is
+[284.3s] output_transcript: 大きさの
+[285.1s] input_transcript:  the batch
+[285.3s] output_transcript: バッチサイズになる
+[286.1s] input_transcript:  size. It will
+[286.3s] output_transcript: かを決定します。
+[287.1s] input_transcript:  impact the
+[287.3s] output_transcript: それはスループット
+[288.3s] input_transcript:  throughput and also
+[288.6s] output_transcript: に影響し、また
+[289.1s] input_transcript:  IO training
+[289.3s] output_transcript: IOトレーニング
+[290.1s] input_transcript:  throughput.
+[290.4s] output_transcript: スループットにも影響
+[291.2s] input_transcript:  For
+[291.3s] output_transcript: します。サー
+[292.1s] input_transcript:  serving and it will be
+[292.3s] output_transcript: ビング用で、
+[293.0s] input_transcript:  very very
+[293.3s] output_transcript: それは非常に
+[294.3s] input_transcript:  important too. It's
+[294.5s] output_transcript: 重要です。
+[295.1s] input_transcript:  like you could
+[295.4s] output_transcript: それは、
+[296.2s] input_transcript:  say with
+[296.3s] output_transcript: 言ってみれば、
+[297.2s] input_transcript:  reasoning model are
+[297.3s] output_transcript: 推論モデルは
+[298.2s] input_transcript:  generated tokens are
+[298.3s] output_transcript: 生成されたトークン
+[299.1s] input_transcript:  very very long.
+[299.3s] output_transcript: が非常に長い
+[300.1s] input_transcript:  So
+[300.4s] output_transcript: ということです。だから
+[301.3s] input_transcript:  so
+[301.6s] output_transcript: 、そうですね。

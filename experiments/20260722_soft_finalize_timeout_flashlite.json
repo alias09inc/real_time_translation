@@ -1,0 +1,911 @@
+{
+  "date": "2026-07-22",
+  "experiment_name": "soft_finalize_timeout_flashlite",
+  "domain": "llm_lecture_mixed_ja_en",
+  "input": {
+    "type": "local_video",
+    "path": "experiments\\clips\\clip_4m00_40s_stall_repro.wav",
+    "start_seconds": 0.0,
+    "duration_seconds": null
+  },
+  "models": {
+    "deepgram_model": "nova-3",
+    "deepgram_language": "multi",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-2.5-flash-lite",
+    "gemini_thinking_budget": 0
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "translation_workers": 4,
+    "gemini_rpm_limit": 9,
+    "deepgram_endpointing": 500,
+    "deepgram_utterance_end_ms": 1000,
+    "deepgram_max_interim_duration": 4.0
+  },
+  "results": {
+    "segment_count": 11,
+    "avg_confidence": 0.9609818918181818,
+    "avg_end_to_end_latency_seconds": 7.997804259138627,
+    "max_end_to_end_latency_seconds": 10.77493581907654,
+    "avg_mt_latency_seconds": 0.11579793149774725,
+    "segments": [
+      {
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.14,
+        "asr_final_arrival": 6.251399755477905,
+        "translation_complete_arrival": 6.325980186462402,
+        "translation_first_token_arrival": 6.251399755477905,
+        "end_to_end_latency": 6.325980186462402,
+        "mt_latency": 0.07458043098449707,
+        "asr": "お話 をして いただ こう と思って ます。",
+        "translation": "お話 をして いただ こう と思って ます。",
+        "confidence": 0.9863281
+      },
+      {
+        "asr_start_time": 3.14,
+        "asr_end_time": 8.1999995,
+        "asr_final_arrival": 10.320881843566895,
+        "translation_complete_arrival": 10.483373880386353,
+        "translation_first_token_arrival": 10.320881843566895,
+        "end_to_end_latency": 7.343373880386352,
+        "mt_latency": 0.162492036819458,
+        "asr": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。",
+        "translation": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。",
+        "confidence": 0.9790039
+      },
+      {
+        "asr_start_time": 8.1999995,
+        "asr_end_time": 12.399999000000001,
+        "asr_final_arrival": 14.478249549865723,
+        "translation_complete_arrival": 14.605689764022827,
+        "translation_first_token_arrival": 14.478249549865723,
+        "end_to_end_latency": 6.405690264022827,
+        "mt_latency": 0.1274402141571045,
+        "asr": "で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リ ーム",
+        "translation": "で、一人目がジャシャンゴーさんで、ライブストリーム",
+        "confidence": 0.94140625
+      },
+      {
+        "asr_start_time": 12.399999000000001,
+        "asr_end_time": 16.2,
+        "asr_final_arrival": 18.527926683425903,
+        "translation_complete_arrival": 18.759472846984863,
+        "translation_first_token_arrival": 18.527926683425903,
+        "end_to_end_latency": 6.359473846984862,
+        "mt_latency": 0.23154616355895996,
+        "asr": "リアル タイム で ご覧 いただきます ね。",
+        "translation": "リアルタイムでご覧いただきますね。",
+        "confidence": 0.94140625
+      },
+      {
+        "asr_start_time": 16.2,
+        "asr_end_time": 20.0,
+        "asr_final_arrival": 22.681473970413208,
+        "translation_complete_arrival": 22.768378496170044,
+        "translation_first_token_arrival": 22.681473970413208,
+        "end_to_end_latency": 6.568378496170045,
+        "mt_latency": 0.08690452575683594,
+        "asr": "二人 目が ゆ ん ち い じ ょう さん ということで、 六",
+        "translation": "二人目がユン・チィジョウさんということで、",
+        "confidence": 0.94970703
+      },
+      {
+        "asr_start_time": 20.0,
+        "asr_end_time": 23.0,
+        "asr_final_arrival": 26.74477481842041,
+        "translation_complete_arrival": 26.82777690887451,
+        "translation_first_token_arrival": 26.74477481842041,
+        "end_to_end_latency": 6.827776908874512,
+        "mt_latency": 0.08300209045410156,
+        "asr": "した ビ デオ をちょっと 本 日は 流 さ し",
+        "translation": "したビデオを流させていただく",
+        "confidence": 0.94140625
+      },
+      {
+        "asr_start_time": 23.0,
+        "asr_end_time": 26.600001,
+        "asr_final_arrival": 31.329794883728027,
+        "translation_complete_arrival": 31.476168394088745,
+        "translation_first_token_arrival": 31.329794883728027,
+        "end_to_end_latency": 8.476168394088745,
+        "mt_latency": 0.14637351036071777,
+        "asr": "。 で、 両 者 とも 英語 で ですね、 講 演",
+        "translation": "。 で、 両 者 とも 英語 で ですね、 講演",
+        "confidence": 0.94970703
+      },
+      {
+        "asr_start_time": 26.600001,
+        "asr_end_time": 30.400000000000002,
+        "asr_final_arrival": 37.24554467201233,
+        "translation_complete_arrival": 37.37493681907654,
+        "translation_first_token_arrival": 37.24554467201233,
+        "end_to_end_latency": 10.77493581907654,
+        "mt_latency": 0.12939214706420898,
+        "asr": "して いただく ので、 必要 であれば 日本語 のサ ブ タ イト ルを",
+        "translation": "つける こと も でき ます 。",
+        "confidence": 0.9716797
+      },
+      {
+        "asr_start_time": 30.400000000000002,
+        "asr_end_time": 33.900002,
+        "asr_final_arrival": 39.328203201293945,
+        "translation_complete_arrival": 39.39588284492493,
+        "translation_first_token_arrival": 39.328203201293945,
+        "end_to_end_latency": 8.995882844924925,
+        "mt_latency": 0.06767964363098145,
+        "asr": "オン にして いただいて、 字 幕 を",
+        "translation": "オン にして いただいて、 字 幕 を",
+        "confidence": 0.9667969
+      },
+      {
+        "asr_start_time": 33.900002,
+        "asr_end_time": 37.0,
+        "asr_final_arrival": 43.39319324493408,
+        "translation_complete_arrival": 43.543543338775635,
+        "translation_first_token_arrival": 43.39319324493408,
+        "end_to_end_latency": 9.643541338775634,
+        "mt_latency": 0.15035009384155273,
+        "asr": "日本の字 幕 を オン にして もら え れば と思って",
+        "translation": "日本の字幕をオンにしてもらえればと思って",
+        "confidence": 0.9716797
+      },
+      {
+        "asr_start_time": 37.0,
+        "asr_end_time": 39.2,
+        "asr_final_arrival": 47.240628480911255,
+        "translation_complete_arrival": 47.25464487075806,
+        "translation_first_token_arrival": 47.240628480911255,
+        "end_to_end_latency": 10.254644870758057,
+        "mt_latency": 0.014016389846801758,
+        "asr": "もう、 。",
+        "translation": "もう、",
+        "confidence": 0.9716797
+      }
+    ],
+    "events": [
+      {
+        "kind": "asr_interim",
+        "playback_offset": 1.180130958557129,
+        "wall_clock_lag": 1.180130958557129,
+        "text": "お話",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 1.0,
+        "confidence": 0.87597656
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 2.274977684020996,
+        "wall_clock_lag": 2.274977684020996,
+        "text": "お話 をして いただ こう",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.0,
+        "confidence": 0.98828125
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 2.821227788925171,
+        "wall_clock_lag": 2.821227788925171,
+        "text": "お話 をして いただ こう と思って",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.5,
+        "confidence": 0.98095703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 3.7038257122039795,
+        "wall_clock_lag": 3.7038257122039795,
+        "text": "お話 をして いただ こう と思って ます。 と",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.3,
+        "confidence": 0.9819336
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 4.787038326263428,
+        "wall_clock_lag": 4.787038326263428,
+        "text": "お話 をして いただ こう と思って ます。 二人 とも 両 親",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 4.3,
+        "confidence": 0.94189453
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 5.606149911880493,
+        "wall_clock_lag": 2.466149911880493,
+        "text": "二人 とも 両 者 とも ですね、",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 4.999999900000001,
+        "confidence": 0.92578125
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 6.251399755477905,
+        "wall_clock_lag": 6.251399755477905,
+        "text": "お",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.14,
+        "confidence": 0.9863281
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 6.324747800827026,
+        "wall_clock_lag": 6.324747800827026,
+        "text": "お話 をして いただ こう と思って ます。",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.14,
+        "confidence": 0.9863281
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 6.325980186462402,
+        "wall_clock_lag": 6.325980186462402,
+        "text": "お話 をして いただ こう と思って ます。",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.14,
+        "confidence": 0.9863281
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 6.75346302986145,
+        "wall_clock_lag": 3.61346302986145,
+        "text": "二人 とも 両 者 とも ですね、 Google の 件",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 6.0999998,
+        "confidence": 0.8635254
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 7.851774454116821,
+        "wall_clock_lag": 4.711774454116821,
+        "text": "二人 とも 両 者 とも ですね、 Google の 研究 者、",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 7.0999998,
+        "confidence": 0.91503906
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 8.17453908920288,
+        "wall_clock_lag": 5.03453908920288,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 e",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 7.4,
+        "confidence": 0.9375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 9.049685001373291,
+        "wall_clock_lag": 5.9096850013732904,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 8.1999995,
+        "confidence": 0.9790039
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 10.14135456085205,
+        "wall_clock_lag": 7.00135456085205,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 9.1999995,
+        "confidence": 0.95703125
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 10.320881843566895,
+        "wall_clock_lag": 7.180881843566894,
+        "text": "二人",
+        "is_final": true,
+        "asr_start_time": 3.14,
+        "asr_end_time": 8.1999995,
+        "confidence": 0.9790039
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 10.482506036758423,
+        "wall_clock_lag": 7.342506036758422,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。",
+        "is_final": true,
+        "asr_start_time": 3.14,
+        "asr_end_time": 8.1999995,
+        "confidence": 0.9790039
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 10.483373880386353,
+        "wall_clock_lag": 7.343373880386352,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。",
+        "is_final": true,
+        "asr_start_time": 3.14,
+        "asr_end_time": 8.1999995,
+        "confidence": 0.9790039
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 11.242105722427368,
+        "wall_clock_lag": 8.102105722427368,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さん。",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 10.1999995,
+        "confidence": 0.9375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 12.332438468933105,
+        "wall_clock_lag": 9.192438468933105,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 11.199999,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 13.637601613998413,
+        "wall_clock_lag": 10.497601613998413,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リ ーム",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 12.399999000000001,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 14.478249549865723,
+        "wall_clock_lag": 6.278250049865722,
+        "text": "で",
+        "is_final": true,
+        "asr_start_time": 8.1999995,
+        "asr_end_time": 12.399999000000001,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 14.604926586151123,
+        "wall_clock_lag": 6.4049270861511225,
+        "text": "で、一人目がジャシャンゴーさんで、ライブストリーム",
+        "is_final": true,
+        "asr_start_time": 8.1999995,
+        "asr_end_time": 12.399999000000001,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 14.605689764022827,
+        "wall_clock_lag": 6.405690264022827,
+        "text": "で、一人目がジャシャンゴーさんで、ライブストリーム",
+        "is_final": true,
+        "asr_start_time": 8.1999995,
+        "asr_end_time": 12.399999000000001,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 14.746750116348267,
+        "wall_clock_lag": 11.606750116348266,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で、 リア",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 13.399999000000001,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 15.724953889846802,
+        "wall_clock_lag": 12.584953889846801,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 14.3,
+        "confidence": 0.9589844
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 16.820147275924683,
+        "wall_clock_lag": 13.680147275924682,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 15.3,
+        "confidence": 0.94750977
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 17.821251153945923,
+        "wall_clock_lag": 14.681251153945922,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 16.2,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 18.527926683425903,
+        "wall_clock_lag": 6.127927683425902,
+        "text": "リアル",
+        "is_final": true,
+        "asr_start_time": 12.399999000000001,
+        "asr_end_time": 16.2,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 18.65030527114868,
+        "wall_clock_lag": 15.510305271148681,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 17.0,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 18.757596731185913,
+        "wall_clock_lag": 6.357597731185912,
+        "text": "リアルタイムでご覧いただきますね。",
+        "is_final": true,
+        "asr_start_time": 12.399999000000001,
+        "asr_end_time": 16.2,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 18.759472846984863,
+        "wall_clock_lag": 6.359473846984862,
+        "text": "リアルタイムでご覧いただきますね。",
+        "is_final": true,
+        "asr_start_time": 12.399999000000001,
+        "asr_end_time": 16.2,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 19.772765398025513,
+        "wall_clock_lag": 16.632765398025512,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 18.0,
+        "confidence": 0.93847656
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 20.846646547317505,
+        "wall_clock_lag": 17.706646547317504,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということ",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 19.0,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 21.94802689552307,
+        "wall_clock_lag": 18.80802689552307,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 六",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 20.0,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 22.681473970413208,
+        "wall_clock_lag": 6.481473970413209,
+        "text": "二人",
+        "is_final": true,
+        "asr_start_time": 16.2,
+        "asr_end_time": 20.0,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 22.767380952835083,
+        "wall_clock_lag": 6.567380952835084,
+        "text": "二人目がユン・チィジョウさんということで、",
+        "is_final": true,
+        "asr_start_time": 16.2,
+        "asr_end_time": 20.0,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 22.768378496170044,
+        "wall_clock_lag": 6.568378496170045,
+        "text": "二人目がユン・チィジョウさんということで、",
+        "is_final": true,
+        "asr_start_time": 16.2,
+        "asr_end_time": 20.0,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 23.068367958068848,
+        "wall_clock_lag": 19.928367958068847,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 21.0,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 24.14492893218994,
+        "wall_clock_lag": 21.00492893218994,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 人",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 22.0,
+        "confidence": 0.93847656
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 25.23181915283203,
+        "wall_clock_lag": 22.09181915283203,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 さ し",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 23.0,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 26.450181245803833,
+        "wall_clock_lag": 23.310181245803832,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら います。",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 24.100001,
+        "confidence": 0.95703125
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 26.74477481842041,
+        "wall_clock_lag": 6.74477481842041,
+        "text": "した",
+        "is_final": true,
+        "asr_start_time": 20.0,
+        "asr_end_time": 23.0,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 26.82674741744995,
+        "wall_clock_lag": 6.826747417449951,
+        "text": "したビデオを流させていただく",
+        "is_final": true,
+        "asr_start_time": 20.0,
+        "asr_end_time": 23.0,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 26.82777690887451,
+        "wall_clock_lag": 6.827776908874512,
+        "text": "したビデオを流させていただく",
+        "is_final": true,
+        "asr_start_time": 20.0,
+        "asr_end_time": 23.0,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 26.87429428100586,
+        "wall_clock_lag": 23.73429428100586,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 両 者",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 24.5,
+        "confidence": 0.94140625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 28.07966184616089,
+        "wall_clock_lag": 24.939661846160888,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 25.600001,
+        "confidence": 0.9589844
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 29.193869590759277,
+        "wall_clock_lag": 26.053869590759277,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 26.600001,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 30.298802375793457,
+        "wall_clock_lag": 27.158802375793456,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 27.600001,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 31.329794883728027,
+        "wall_clock_lag": 8.329794883728027,
+        "text": "。",
+        "is_final": true,
+        "asr_start_time": 23.0,
+        "asr_end_time": 26.600001,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 31.47466492652893,
+        "wall_clock_lag": 8.47466492652893,
+        "text": "。 で、 両 者 とも 英語 で ですね、 講演",
+        "is_final": true,
+        "asr_start_time": 23.0,
+        "asr_end_time": 26.600001,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 31.476168394088745,
+        "wall_clock_lag": 8.476168394088745,
+        "text": "。 で、 両 者 とも 英語 で ですね、 講演",
+        "is_final": true,
+        "asr_start_time": 23.0,
+        "asr_end_time": 26.600001,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 32.246034145355225,
+        "wall_clock_lag": 29.106034145355224,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 の",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 29.400000000000002,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 33.33406710624695,
+        "wall_clock_lag": 30.194067106246948,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 のサ ブ タ イト ルを",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 30.400000000000002,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 34.44500946998596,
+        "wall_clock_lag": 31.30500946998596,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 のサ ブ タ イト ルを、 あ の機能 をですね、",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 31.400000000000002,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 35.55722212791443,
+        "wall_clock_lag": 32.41722212791443,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 のサ ブ タ イト ルを、 あ の機能 をですね オン にして いただいて、",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 32.400002,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 36.301450967788696,
+        "wall_clock_lag": 33.161450967788696,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 のサ ブ タイトル 機能 をですね オン にして いただいて、",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 33.1,
+        "confidence": 0.96777344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 37.19000864028931,
+        "wall_clock_lag": 34.050008640289306,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 のサ ブ タイトル 機能 をですね オン にして いただいて、 字 幕 を",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 33.900002,
+        "confidence": 0.9667969
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 37.24554467201233,
+        "wall_clock_lag": 10.64554367201233,
+        "text": "つける",
+        "is_final": true,
+        "asr_start_time": 26.600001,
+        "asr_end_time": 30.400000000000002,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 37.37351202964783,
+        "wall_clock_lag": 10.773511029647828,
+        "text": "つける こと も でき ます 。",
+        "is_final": true,
+        "asr_start_time": 26.600001,
+        "asr_end_time": 30.400000000000002,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 37.37493681907654,
+        "wall_clock_lag": 10.77493581907654,
+        "text": "つける こと も でき ます 。",
+        "is_final": true,
+        "asr_start_time": 26.600001,
+        "asr_end_time": 30.400000000000002,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 38.50018072128296,
+        "wall_clock_lag": 35.36018072128296,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 のサ ブ タイトル 機能 をですね オン にして いただいて、 字 幕 をですね、 日本の字 幕",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 34.900002,
+        "confidence": 0.9667969
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 39.328203201293945,
+        "wall_clock_lag": 8.928203201293943,
+        "text": "オン",
+        "is_final": true,
+        "asr_start_time": 30.400000000000002,
+        "asr_end_time": 33.900002,
+        "confidence": 0.9667969
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 39.37131977081299,
+        "wall_clock_lag": 36.23131977081299,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 のサ ブ タイトル 機能 をですね オン にして いただいて、 字 幕 をですね、 日本の字 幕 を オン にして もら え",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 35.900002,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 39.395188093185425,
+        "wall_clock_lag": 8.995188093185423,
+        "text": "オン にして いただいて、 字 幕 を",
+        "is_final": true,
+        "asr_start_time": 30.400000000000002,
+        "asr_end_time": 33.900002,
+        "confidence": 0.9667969
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 39.39588284492493,
+        "wall_clock_lag": 8.995882844924925,
+        "text": "オン にして いただいて、 字 幕 を",
+        "is_final": true,
+        "asr_start_time": 30.400000000000002,
+        "asr_end_time": 33.900002,
+        "confidence": 0.9667969
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 40.577524185180664,
+        "wall_clock_lag": 37.43752418518066,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 のサ ブ タイトル 機能 をですね オン にして いただいて、 字 幕 をですね、 日本の字 幕 を オン にして もら え れば と思って",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 37.0,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 42.96769332885742,
+        "wall_clock_lag": 39.82769332885742,
+        "text": "二人 とも 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 のサ ブ タイトル 機能 をですね オン にして いただいて、 字 幕 をですね、 日本の字 幕 を オン にして もら え れば と、 もう、 。",
+        "is_final": false,
+        "asr_start_time": 3.14,
+        "asr_end_time": 39.2,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 43.39319324493408,
+        "wall_clock_lag": 9.493191244934081,
+        "text": "日本の",
+        "is_final": true,
+        "asr_start_time": 33.900002,
+        "asr_end_time": 37.0,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 43.54250121116638,
+        "wall_clock_lag": 9.642499211166381,
+        "text": "日本の字幕をオンにしてもらえればと思って",
+        "is_final": true,
+        "asr_start_time": 33.900002,
+        "asr_end_time": 37.0,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 43.543543338775635,
+        "wall_clock_lag": 9.643541338775634,
+        "text": "日本の字幕をオンにしてもらえればと思って",
+        "is_final": true,
+        "asr_start_time": 33.900002,
+        "asr_end_time": 37.0,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 47.240628480911255,
+        "wall_clock_lag": 10.240628480911255,
+        "text": "もう",
+        "is_final": true,
+        "asr_start_time": 37.0,
+        "asr_end_time": 39.2,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 47.25343203544617,
+        "wall_clock_lag": 10.253432035446167,
+        "text": "もう、",
+        "is_final": true,
+        "asr_start_time": 37.0,
+        "asr_end_time": 39.2,
+        "confidence": 0.9716797
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 47.25464487075806,
+        "wall_clock_lag": 10.254644870758057,
+        "text": "もう、",
+        "is_final": true,
+        "asr_start_time": 37.0,
+        "asr_end_time": 39.2,
+        "confidence": 0.9716797
+      }
+    ],
+    "full_asr": "お話 をして いただ こう と思って ます。\n二人 とも 両 者 とも ですね、 Google の研究 者、 になります。\nで、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リ ーム\nリアル タイム で ご覧 いただきます ね。\n二人 目が ゆ ん ち い じ ょう さん ということで、 六\nした ビ デオ をちょっと 本 日は 流 さ し\n。 で、 両 者 とも 英語 で ですね、 講 演\nして いただく ので、 必要 であれば 日本語 のサ ブ タ イト ルを\nオン にして いただいて、 字 幕 を\n日本の字 幕 を オン にして もら え れば と思って\nもう、 。",
+    "full_translation": "お話 をして いただ こう と思って ます。\n二人 とも 両 者 とも ですね、 Google の研究 者、 になります。\nで、一人目がジャシャンゴーさんで、ライブストリーム\nリアルタイムでご覧いただきますね。\n二人目がユン・チィジョウさんということで、\nしたビデオを流させていただく\n。 で、 両 者 とも 英語 で ですね、 講演\nつける こと も でき ます 。\nオン にして いただいて、 字 幕 を\n日本の字幕をオンにしてもらえればと思って\nもう、"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null
+  },
+  "notes": "Validates: UtteranceEnd+max-interim-duration soft-finalize, translation timeout+retry (fixes worker hang bug found via diagnostics), gemini-2.5-flash-lite (2.5-flash daily free quota exhausted from testing).",
+  "created_at_utc": "2026-07-22T11:48:06.176291+00:00",
+  "elapsed_seconds": 70.163
+}

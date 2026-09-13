@@ -1,0 +1,347 @@
+{
+  "_schema": {
+    "id": "short slug, unique",
+    "title": "paper title",
+    "authors": "et al. form is fine",
+    "year": "int",
+    "venue": "conference/journal/arXiv",
+    "url": "canonical URL (arXiv abstract page preferred over PDF)",
+    "source": "how it was found: 'survey' (already in the 2026-09-08 conversation survey) | 'websearch' | 'citation-chase'",
+    "status": "found | extracted | read",
+    "summary": "2-4 sentence summary in the reader's own words",
+    "key_findings": [
+      "bullet",
+      "bullet"
+    ],
+    "relevant_to": [
+      "hypothesis ids this could ground, filled in during GENERATE_HYPOTHESES"
+    ]
+  },
+  "papers": [
+    {
+      "id": "papi2025-howreal",
+      "title": "How 'Real' is Your Real-Time Simultaneous Speech-to-Text Translation System?",
+      "authors": "Papi, Polak, Machacek, Bojar",
+      "year": 2025,
+      "venue": "TACL vol. 13, pp. 281-313",
+      "url": "",
+      "source": "survey",
+      "status": "read",
+      "summary": "Survey/critique arguing most SimulST research over-simplifies (pre-segmented speech, inconsistent terminology) and should adopt computation-aware latency, unbounded-speech evaluation, and SimulEval-based joint quality-latency curves.",
+      "key_findings": [
+        "SimulEval is the dominant eval framework (61/110 papers surveyed)",
+        "computation-aware latency (incl. real compute time / RTF) is essential for honest benchmarking",
+        "cascade vs end-to-end: end-to-end trends better for simultaneous settings due to cascades accumulating ASR+MT delay and error propagation"
+      ],
+      "relevant_to": []
+    },
+    {
+      "id": "arivazhagan2020-retranslation",
+      "title": "Re-Translation Strategies for Long Form, Simultaneous, Spoken Language Translation / Re-translation versus Streaming for Simultaneous Translation",
+      "authors": "Arivazhagan et al.",
+      "year": 2020,
+      "venue": "ICASSP 2020 / IWSLT 2020",
+      "url": "",
+      "source": "survey",
+      "status": "read",
+      "summary": "Shows re-translation (re-translate the whole growing source on every ASR update) can match or beat streaming systems on final quality, but causes caption flicker; proposes masking (truncate last few words) and biasing (bias decoding toward the previous output) to nearly eliminate erasure while preserving quality.",
+      "key_findings": [
+        "re-translation alone can be 'as good or better than SOTA streaming systems, even under constraints allowing very few revisions'",
+        "masking + biasing nearly eliminate erasure",
+        "directly describes this repo's current behavior: interim ASR results are re-translated (pipeline.py is_final=False path), i.e. re-translation without masking/biasing"
+      ],
+      "relevant_to": [
+        "h-flicker-metric",
+        "h-masking-holdback"
+      ]
+    },
+    {
+      "id": "machacek2023-whisperstreaming",
+      "title": "Turning Whisper into Real-Time Transcription System",
+      "authors": "Machacek, Dabre, Bojar",
+      "year": 2023,
+      "venue": "IJCNLP-AACL 2023 demo, arXiv:2307.14743",
+      "url": "https://arxiv.org/abs/2307.14743",
+      "source": "survey",
+      "status": "read",
+      "summary": "LocalAgreement-n policy: only commit the longest common prefix agreed across n consecutive hypotheses from overlapping buffers. CUNI-KIT found n=2 most effective.",
+      "key_findings": [
+        "LocalAgreement-2 is a simple, rule-based stability policy applicable to any incremental hypothesis stream, including our Deepgram interim-result -> LLM-translation stream"
+      ],
+      "relevant_to": [
+        "h-localagreement-asr-commit"
+      ]
+    },
+    {
+      "id": "arivazhagan2019-erasure",
+      "title": "Normalized erasure metric (definition)",
+      "authors": "Arivazhagan et al.",
+      "year": 2019,
+      "venue": "cited within the 2026-09-08 survey, Section 4",
+      "url": "",
+      "source": "survey",
+      "status": "read",
+      "summary": "Defines normalized erasure (NE): tokens deleted from the previous partial's suffix to produce the next partial (via longest common prefix), normalized by output length. NE=0 means no displayed token was ever revised.",
+      "key_findings": [
+        "this repo currently logs chrF/latency/glossary but has zero instrumentation for revision/flicker -- direct, cheap, high-value gap to close first"
+      ],
+      "relevant_to": [
+        "h-flicker-metric"
+      ]
+    },
+    {
+      "id": "alignatt4llm-iwslt2026",
+      "title": "AlignAtt4LLM: Fast AlignAtt for Decoder-Only LLMs at IWSLT 2026 Simultaneous Speech Translation Task",
+      "authors": "unread -- found via WebSearch 2026-09-08, extracted via WebSearch 2026-09-08 (WebFetch blocked on arxiv.org in this environment, see note below)",
+      "year": 2026,
+      "venue": "arXiv:2606.03967 / ACL Anthology 2026.iwslt-1.32",
+      "url": "https://arxiv.org/abs/2606.03967",
+      "source": "websearch",
+      "status": "read",
+      "summary": "A synchronous cascade for En->De/It/Zh: Qwen3-ASR with forced alignment produces an incrementally updated source transcript, and Gemma-4 E4B-it translates that prefix under an MT-side AlignAtt policy -- the first application of AlignAtt (attention-based emit-decision) to a decoder-only LLM, recovered despite the LLM lacking the encoder-decoder cross-attention earlier AlignAtt systems relied on, via (1) an explicit source span in the prompt, (2) offline-selected translation-specific alignment heads, (3) selective qk-fast replay of the draft-to-source attention block, and (4) runtime query/key capture that reproduces model outputs bit-identically. Outperforms IWSLT2026 baselines for En->De/It in both low-latency (~2s) and high-latency (<4s) regimes.",
+      "key_findings": [
+        "AlignAtt's commit rule is fundamentally different from LocalAgreement-2: it inspects the LLM's own internal attention weights (which source tokens the next target token is attending to) to decide when enough of the source has been 'seen' to safely emit, not a longest-common-prefix agreement across repeated ASR hypotheses",
+        "Requires white-box access to the translating model's attention internals (offline alignment-head selection + runtime query/key capture) -- NOT reproducible against an API-only model like this repo's Gemini/OpenAI translator, where internal attention is inaccessible",
+        "Therefore this repo's h-localagreement-asr-commit should stay scoped to plain LocalAgreement-2 (agreement across consecutive Deepgram ASR hypotheses, both externally observable as text) rather than attempting an AlignAtt-style policy -- the reflections.md cycle-1 concern that AlignAtt4LLM's rule 'may differ from plain LocalAgreement-2 in a way that matters' is confirmed true, but the difference is a hard architectural blocker, not just a design nuance to account for"
+      ],
+      "relevant_to": [
+        "h-localagreement-asr-commit"
+      ]
+    },
+    {
+      "id": "google-live-caption-stability-blog",
+      "title": "Modeling and Improving Text Stability in Live Captions",
+      "authors": "Liu, Zhang, Du, et al. (Google Research)",
+      "year": 2023,
+      "venue": "ACM CHI 2023 (research.google blog post is a 2026-visible summary of the 2023 CHI paper, not a new 2026 paper)",
+      "url": "https://research.google/blog/modeling-and-improving-text-stability-in-live-captions/",
+      "source": "websearch",
+      "status": "read",
+      "summary": "Proposes a vision-based flicker metric -- luminance contrast + discrete Fourier transform applied to the *rendered* caption image, not a text/token diff -- to quantify what a viewer actually perceives as caption instability. Validated the metric against real viewer-reported distraction (moderate correlation, |r|~0.3) and introduced a stabilization algorithm (tokenized alignment + semantic merging + smooth animation) that a crowdsourced study (N=123) showed significantly reduces viewer distraction/fatigue and improves reading comfort.",
+      "key_findings": [
+        "Vision-based (pixel/DFT) flicker measurement captures something text-based normalized erasure (NE) cannot: NE treats any token revision as equally bad, but a rendered-pixel metric would weight a revision by how visually jarring it actually is (position on screen, animation, font) -- NE is a reasonable cheap proxy but not a perceptual ground truth",
+        "The correlation with viewer experience is only moderate (~0.3), i.e. even a well-designed stability metric explains a minority of viewer-reported distraction -- a caution against over-indexing on any single flicker number (including this repo's own NE) as a proxy for caption quality",
+        "Out of scope for this repo right now: implementing this would require actually rendering captions to pixels and running DFT analysis, a much heavier lift than the retroactive text-level NE analysis already done in h-flicker-metric -- worth flagging as a possible future hypothesis (rendered-caption flicker) rather than pursuing this cycle"
+      ],
+      "relevant_to": [
+        "h-flicker-metric"
+      ]
+    },
+    {
+      "id": "nemo-iwslt2026-cascade",
+      "title": "NeMo@IWSLT 2026: Cascaded System for Simultaneous Speech Translation",
+      "authors": "NVIDIA NeMo team (incl. Boris Ginsburg)",
+      "year": 2026,
+      "venue": "ACL Anthology 2026.iwslt-1.23",
+      "url": "https://aclanthology.org/2026.iwslt-1.23/",
+      "source": "websearch",
+      "status": "read",
+      "summary": "NVIDIA's IWSLT 2026 submission cascades a dual-mode Unified ASR Transducer (trained to deliver stable transcriptions across a wide range of latencies) with a multilingual LLM for translation, covering En->De/It/Zh (standard and contextualized) and Cs->En. The key design choice is pushing stability into the ASR model itself via training, so the downstream LLM translation stage receives an already-stable source stream instead of needing its own stabilization logic.",
+      "key_findings": [
+        "Confirms stability is being treated as a first-class training/architecture concern by 2026 SOTA cascade systems, not just a post-hoc metric -- validates this repo's decision (h-flicker-metric) to start measuring it at all",
+        "NeMo's approach (train the ASR model itself for cross-latency stability) is not retrofittable to this repo, which uses Deepgram as an off-the-shelf hosted ASR API with no training access -- this repo's realistic options remain post-hoc: masking (h-masking-holdback) or commit-gating (h-localagreement-asr-commit) applied to Deepgram's existing interim/final hypothesis stream",
+        "WebSearch could not surface NeMo's specific stability metric formula or numeric results (only the architecture-level design rationale) -- the full ACL Anthology paper (WebFetch to aclanthology.org is blocked in this environment, see note below) would be needed for a numeric comparison; not blocking any current hypothesis since NeMo's approach isn't applicable here anyway"
+      ],
+      "relevant_to": [
+        "h-flicker-metric",
+        "h-localagreement-asr-commit"
+      ]
+    },
+    {
+      "id": "chen2024-revision-controllable-decoding",
+      "title": "Improving Stability in Simultaneous Speech Translation: A Revision-Controllable Decoding Approach",
+      "authors": "Junkun Chen et al. (Microsoft Research)",
+      "year": 2024,
+      "venue": "ICASSP 2024, arXiv:2310.04399",
+      "url": "https://arxiv.org/abs/2310.04399",
+      "source": "websearch",
+      "status": "read",
+      "summary": "Introduces an 'allowed revision window' into the beam-search pruning step of a streaming translation decoder: candidate continuations whose new output would revise more than a bounded number of previously-emitted tokens are pruned out during beam search itself, rather than emitted and corrected later. Because the constraint sits inside decoding (not as a post-hoc mask/filter on top of an unconstrained re-translation), the revision window can be tuned continuously from 0 (completely eliminates flicker) to unbounded (behaves like ordinary unconstrained re-translation), letting a system pick any point on the stability/quality tradeoff curve rather than only two fixed regimes.",
+      "key_findings": [
+        "Revision budget is enforced during beam search/pruning, not as a separate masking step applied after generation -- structurally different from Arivazhagan et al. 2020's masking (truncate last k words of already-generated output) and biasing (soft preference for previous output), which post-process an unconstrained re-translation",
+        "The window size is a single continuous knob: window=0 gives zero flicker (nothing already shown is ever revised), and results show quality degrades only modestly as the window shrinks toward 0, i.e. most of the achievable quality is retained even under a tight/no-revision budget",
+        "NOT directly applicable to this repo without white-box decoder access: this repo's translator is an API-only LLM (Gemini/OpenAI) where beam-search pruning internals are not exposed by the API, so the revision-window mechanism itself can't be implemented -- but the *result* (a continuous stability/quality tradeoff curve exists and near-zero-flicker costs little quality) is useful evidence that this repo's own masking-based approach (h-masking-holdback) is a reasonable API-accessible approximation of the same idea, and suggests reporting a similar quality-vs-mask-window curve rather than a single on/off comparison"
+      ],
+      "relevant_to": [
+        "h-masking-holdback",
+        "h-flicker-metric"
+      ]
+    },
+    {
+      "id": "zoom2025-self-speculative-retranslation",
+      "title": "Self-Speculative Biased Decoding for Faster Re-Translation",
+      "authors": "Linxiao Zeng, Haoyun Deng, Kangyuan Shu, Shizhen Wang (Zoom Communications)",
+      "year": 2025,
+      "venue": "arXiv:2509.21740 (submitted 2025-09-26, rev. 2026-01-04)",
+      "url": "https://arxiv.org/abs/2509.21740",
+      "source": "websearch",
+      "status": "read",
+      "summary": "Targets the *compute cost* of re-translation (not directly flicker): re-translating the whole growing source on every ASR update is redundant because most of the new output matches the previous output. Self-Speculative Biased Decoding (SSBD) reuses the model's own previous output as a speculative draft for the updated (longer) input, verifies the whole draft in one forward pass with a lightweight bias term, and only resumes normal autoregressive decoding from the first token where the draft and the verified continuation diverge -- a tuning-free inference-time trick, no fine-tuning required. Separately, it introduces a 'display-only masking' UI trick: hide the unstable tail of the output from the viewer while still keeping it internally as the speculative draft for the next round's verification.",
+      "key_findings": [
+        "Directly names and formalizes exactly the caption-visible-vs-internally-fluid distinction that this repo's h-gemini-only-masking-replay hypothesis is built on ('display-only masking' = show only the stable prefix, keep computing/holding the unstable suffix) -- this is now real published grounding for that hypothesis's core mechanism, not just an informal design choice",
+        "The speculative-decoding speedup mechanism itself (verify-then-resume-from-divergence) targets LLM inference cost/latency, which this repo doesn't control at the API level (Gemini/OpenAI are called as black-box completion endpoints, no access to draft/verify at the token level) -- not implementable here, but its stated motivation (repeated full re-translation is wasteful because most output is unchanged) is exactly the same waste this repo's re-translate-every-interim-update pipeline.py path exhibits",
+        "'Tuning-free' and applied at inference time on an off-the-shelf LLM (not a custom-trained model) -- same deployment constraint as this repo (Gemini/OpenAI, not self-hosted), reinforcing that this is the most relevant of the 4 new papers found this cycle for this repo's actual architecture"
+      ],
+      "relevant_to": [
+        "h-gemini-only-masking-replay",
+        "h-masking-holdback"
+      ]
+    },
+    {
+      "id": "cmu-nvidia2026-hierarchical-policy-simulst",
+      "title": "Hierarchical Policy Optimization for Simultaneous Translation of Unbounded Speech",
+      "authors": "Siqi Ouyang, Shuoyang Ding, Oleksii Hrinchuk, Vitaly Lavrukhin, Brian Yan, Boris Ginsburg, Lei Li (CMU + NVIDIA)",
+      "year": 2026,
+      "venue": "ACL 2026 (Oral), arXiv:2604.21045 (submitted 2026-04-22)",
+      "url": "https://arxiv.org/abs/2604.21045",
+      "source": "websearch",
+      "status": "read",
+      "summary": "Builds on prior work that reformulates simultaneous speech translation as a multi-turn dialogue task so the LLM's KV-cache can be reused across turns instead of recomputing from scratch on every input growth (directly the same 'full re-translation every update is wasteful' problem SSBD above addresses, but solved via training instead of inference-time tricks). That prior multi-turn-SFT approach needs dialogue-form training data that's scarce and hard to synthesize well. This paper's contribution is Hierarchical Policy Optimization (HPO), an RL post-training step on top of imperfect SFT data, using a hierarchical reward balancing translation quality against latency. Reports En->Zh/De/Ja results: +7 COMET and +1.25 MetricX over the SFT-only baseline at a fixed 1.5s latency budget.",
+      "key_findings": [
+        "Explicitly evaluates En->Japanese (this repo's exact language pair) and reports it improves substantially with RL post-training over a naive multi-turn SFT baseline -- concrete evidence that multi-turn/KV-cache-reuse framing for streaming translation continuations works for En->Ja specifically, not just European-language pairs",
+        "Entirely a training-time method (RL fine-tuning of an open-weights model with accessible KV-cache) -- NOT applicable to this repo, which calls Gemini/OpenAI as closed API endpoints with no fine-tuning or KV-cache access exposed for this use case",
+        "Useful negative/contextual finding for h-cross-utterance-flicker: this paper's whole premise (treat each new utterance/continuation as a new turn reusing cached context, rather than as an independent from-scratch re-translation) is precisely the training-time fix for the cross-batch 'near-total rewrite' problem this repo measured empirically in cycle 4 (cross-batch translation NE ~1.47). Confirms the cross-batch drift this repo found is a recognized, actively-researched problem in 2026 SOTA systems, but the SOTA fix requires model access this repo doesn't have -- reinforces that any fix here must be prompt-engineering-level (e.g. explicitly passing prior-utterance translation as context in the prompt) rather than architectural"
+      ],
+      "relevant_to": [
+        "h-cross-utterance-flicker"
+      ]
+    },
+    {
+      "id": "papi2026-doa-decoder-only-attention-policy",
+      "title": "DOA: Training-Free Decoder-Only Attention Policy for Long-Form Simultaneous Translation with SpeechLLMs",
+      "authors": "Sara Papi, Luisa Bentivogli (Fondazione Bruno Kessler)",
+      "year": 2026,
+      "venue": "arXiv:2605.31432 (submitted 2026-05-29)",
+      "url": "https://arxiv.org/abs/2605.31432",
+      "source": "websearch",
+      "status": "read",
+      "summary": "Addresses the same READ/WRITE emit-timing problem as AlignAtt(4LLM), but for decoder-only Speech-LLMs that (unlike encoder-decoder AlignAtt systems) have no explicit cross-attention between source audio and generated text to read an alignment signal from. DOA derives a proxy alignment purely from the decoder's own self-attention weights (attention from generated text tokens back onto the audio/prompt tokens in the shared decoder stream), training-free, and uses it as the emit-decision policy for long-form (not just single-utterance) simultaneous translation.",
+      "key_findings": [
+        "Same family as AlignAtt4LLM (already read, cycle 2): both need white-box access to the translating model's attention weights at inference time (offline-selected alignment heads for AlignAtt4LLM, self-attention proxy for DOA) -- neither is implementable against this repo's API-only Gemini/OpenAI translator, which exposes no attention weights",
+        "'Training-free' here means no fine-tuning of the SpeechLLM is needed, not that it works with a black-box API -- it still requires the caller to run the model locally and read internal activations, which this repo's API-based architecture structurally cannot do",
+        "Reconfirms (a second time, independently of AlignAtt4LLM) that attention-based emit policies are the dominant 2026 research direction for LLM-based SimulST, but also reconfirms this repo's earlier decision to scope h-localagreement-asr-commit to plain LocalAgreement-2 (observable-text-only) is the right call given the API-only constraint -- no new action needed, just additional grounding for a decision already made"
+      ],
+      "relevant_to": [
+        "h-localagreement-asr-commit"
+      ]
+    },
+    {
+      "id": "hoang2026-dynamic-lagging",
+      "title": "Dynamic Lagging for Simultaneous Translation",
+      "authors": "Hieu Hoang (Microsoft), Amittai Axelrod",
+      "year": 2026,
+      "venue": "arXiv:2609.05799 (submitted 2026-09-05)",
+      "url": "https://arxiv.org/abs/2609.05799",
+      "source": "websearch",
+      "status": "read",
+      "summary": "Microsoft Research paper on cascaded SimulST addressing exactly the flicker problem this repo measured in h-cross-utterance-flicker (cross-batch translation NE~1.47). Fine-tunes a sentence-trained decoder-only LLM (Qwen3-8B) to be 'prefix-aware' by training it on stable prefixes -- the longest prefix any partial-source translation shares with the model's own full-source translation -- mixed with ordinary full-sentence pairs. At inference, the model is prompted with a single force-decode turn that carries the previously committed target text forward as more source arrives, so the output is flicker-free by construction rather than by post-hoc masking. Evaluated EN->DE/JA/ZH with simulated streaming via reference-transcript prefixes.",
+      "key_findings": [
+        "Directly targets this repo's own confirmed problem (cross-batch translation NE~1.47 vs ~0.0001 within-batch, from h-cross-utterance-flicker) with a named mechanism: commit-forward via force-decoding the previously emitted target as a prefix.",
+        "The core method requires fine-tuning (LoRA/full on Qwen3-8B) which this repo's API-only Gemini/OpenAI translator cannot do -- not directly implementable as-is.",
+        "However the *inference-time shape* of the fix (force-decode/carry-forward the previously committed translation as context for the next continuation batch) is a prompt-level idea achievable without fine-tuning: pass the prior batch's emitted Japanese text back into the prompt for the next batch and instruct the model to extend/preserve it rather than re-translating from scratch -- this is a plausible zero-shot approximation worth testing as a new hypothesis.",
+        "EN->JA is one of the three evaluated language pairs, so this is directly on-target for the repo's EN->JA use case rather than a different-language-pair result that may not transfer."
+      ],
+      "relevant_to": [
+        "h-continuation-context-anchor"
+      ]
+    },
+    {
+      "id": "mllp-vrain-iwslt2026-simulst",
+      "title": "MLLP-VRAIN UPV system for the IWSLT 2026 Simultaneous Speech Translation task",
+      "authors": "MLLP-VRAIN (Universitat Politecnica de Valencia)",
+      "year": 2026,
+      "venue": "arXiv:2606.17255 / ACL Anthology 2026.iwslt-1.24 (IWSLT 2026, San Diego)",
+      "url": "https://arxiv.org/abs/2606.17255",
+      "source": "websearch",
+      "status": "read",
+      "summary": "UPV/MLLP-VRAIN's IWSLT 2026 SimulST shared-task system report. Builds a cascaded pipeline (Parakeet ASR + Qwen 3.5 MT) with adaptive 'black-box' read/write policies -- i.e. policies that only need the model's observable output, not internal attention weights, distinguishing it from the AlignAtt-family papers already read (alignatt4llm-iwslt2026, papi2026-doa) that need white-box access this repo's API-only translator doesn't have. Also describes allowing the last two previously emitted target tokens to be rewritten when a 'catastrophic failure' is detected, keeping the resulting flicker minimal. For three of the En-> language directions they also add a context track: ASR word-boosting plus a RAG mechanism over offline pre-translated exemplars for domain-specific context.",
+      "key_findings": [
+        "Black-box policy framing (no internal model access needed) is architecturally compatible with this repo's API-only Gemini/OpenAI translator, unlike the AlignAtt/DOA family already read -- worth another look for the emit-timing hypothesis (h-localagreement-asr-commit) as an alternative or complement to plain LocalAgreement-2.",
+        "The 'rewrite only the last two tokens unless catastrophic failure' idea is conceptually the same shape as this repo's existing h-masking-holdback hypothesis (bound how much of a re-translation is allowed to change) but framed as a *decoding-time* constraint rather than a masking/prompt constraint -- could sharpen h-masking-holdback's design (e.g., cap edit distance between successive translation_partial revisions instead of/in addition to masking source text).",
+        "The RAG-over-pre-translated-exemplars context track is for domain adaptation (glossary-like), overlapping conceptually with this repo's existing keyterm/glossary features already tested in prior experiments -- not a new angle by itself.",
+        "No fully aligned latency/quality numbers surfaced via WebSearch snippets alone (WebFetch to arxiv.org is EGRESS_BLOCKED in this sandbox, consistent with cycles 2-5); the MCIF En->De +5.82 XCOMET-XL year-over-year figure found is for a different track/direction than this repo's En->Ja and not directly comparable."
+      ],
+      "relevant_to": [
+        "h-localagreement-asr-commit",
+        "h-masking-holdback"
+      ]
+    },
+    {
+      "id": "koshkin2024-tollmatch-zeroshot-context-aware",
+      "title": "LLMs Are Zero-Shot Context-Aware Simultaneous Translators",
+      "authors": "Roman Koshkin, Katsuhito Sudoh, Satoshi Nakamura (NAIST)",
+      "year": 2024,
+      "venue": "EMNLP 2024 (arXiv:2406.13476)",
+      "url": "https://arxiv.org/abs/2406.13476",
+      "source": "websearch",
+      "status": "read",
+      "summary": "NAIST group's EMNLP 2024 paper (toLLMatch) showing that open-source LLMs, used zero-shot with no fine-tuning, can match or beat prior specialized SimulST baselines by exploiting document/discourse-level context passed in the prompt. This is architecturally the closest match found so far to this repo's own setup: an API/prompt-level LLM translator with no access to model internals or weights. They report that injecting even minimal background/context information into the prompt gives further gains, especially on technical/domain-specific subject matter.",
+      "key_findings": [
+        "Zero-shot, prompt-only context injection (no fine-tuning) is directly reproducible against this repo's Gemini-API-based translator -- the most 'free lunch' shaped finding of any paper read so far, since it needs no architecture change, just prompt content.",
+        "'Injecting minimal background information' for gains on technical subject matter overlaps with this repo's existing keyterm/glossary/domain features (already tested), but the paper's specific mechanism is discourse-level context (e.g. prior sentences/utterances), not a static glossary -- this is the same shape of idea as passing the previously-committed translation of an utterance's earlier batches forward as prompt context, which is exactly what h-cross-utterance-flicker's finding (cross-batch NE~1.47) suggests this repo is currently NOT doing.",
+        "Reference open-source implementation exists (github.com/RomanKoshkin/toLLMatch) that could be read for the exact prompt template/context-window mechanics if this becomes a hypothesis, though re-implementing against this repo's own Gemini-based pipeline (not toLLMatch's specific backbone) would still be needed.",
+        "Combined with hoang2026-dynamic-lagging's force-decode/commit-forward idea, this strongly suggests a concrete, zero-cost-to-implement (prompt-only, no fine-tuning) new hypothesis: pass each utterance's already-committed/most-stable prior translation text back into the prompt for its next continuation batch, instructing the model to extend rather than re-translate from scratch, then re-measure cross-batch translation NE the same way h-cross-utterance-flicker did."
+      ],
+      "relevant_to": [
+        "h-continuation-context-anchor"
+      ]
+    },
+    {
+      "id": "polak2026-meta-evaluation-latency-metrics",
+      "title": "Better late than never: Meta-evaluation of latency metrics for simultaneous speech-to-text translation",
+      "authors": "Polák, Papi, Bentivogli, Bojar",
+      "year": 2026,
+      "venue": "arXiv",
+      "url": "https://arxiv.org/abs/2509.17349",
+      "source": "websearch",
+      "status": "read",
+      "summary": "First large-scale meta-evaluation of latency metrics for simultaneous speech-to-text translation, comparing metrics against a defined \"True Latency\" ground truth across languages and systems. Finds existing latency metrics are inconsistent and structurally biased by how the reference audio is segmented into sentences/utterances. Introduces YAAL (Yet Another Average Lagging) plus SOFTSEGMENTER, a segmentation-aware evaluation suite for both short- and long-form simultaneous translation.",
+      "key_findings": [
+        "Segmentation bias is structural: metrics disagree more when reference segmentation changes, not just when system quality changes.",
+        "YAAL reaches 98% pairwise system-ranking accuracy vs True Latency ground truth, vs 54-73% for established metrics on degenerate/edge-case systems.",
+        "SOFTSEGMENTER is proposed as a segmentation-robust companion tool for long-form audio, where utterance boundaries are ambiguous.",
+        "Directly relevant to this repo's own flicker/latency metrics (flicker_metrics.py) as a check on whether our latency numbers could be segmentation-sensitive in the same way."
+      ],
+      "relevant_to": []
+    },
+    {
+      "id": "machacek-polak2025-cuni-offline-cla-latency",
+      "title": "Simultaneous Translation with Offline Speech and LLM Models in CUNI Submission to IWSLT 2025",
+      "authors": "Macháček, Polák",
+      "year": 2025,
+      "venue": "arXiv / IWSLT 2025",
+      "url": "https://arxiv.org/abs/2506.17077",
+      "source": "websearch",
+      "status": "read",
+      "summary": "CUNI's IWSLT 2025 submission using offline (non-streaming) speech and LLM models for simultaneous translation, selected via COMET-XL and evaluated with LongYAAL latency metrics. Section 5.1 introduces a character-level \"Continuous Levenshtein Alignment\" (CLA) method for measuring ASR word latency, with an open-source implementation (github.com/ufal/asr_latency).",
+      "key_findings": [
+        "CLA aligns gold and ASR-candidate transcripts at the character level (not word level), which is more robust to minor deviations like word-ending mismatches.",
+        "The alignment algorithm prefers continuous runs of copy/substitute edits over interruptions from inserts/deletes, avoiding \"coincident alignment\" to a deleted/inserted token that would produce an unrealistic latency value.",
+        "Crucially, this is a RETROACTIVE metric: it runs on existing timestamped gold transcripts + ASR candidate outputs after the fact, with no live/streaming ASR access needed -- confirmed via the repo README (processes ~11 min of transcript in ~1 min).",
+        "This directly matches the \"evaluation methodology that does not need live ASR\" gap from cycle 8 REFLECT, and could in principle be run against this repo's existing experiments/*.json asr_interim timestamps without any new API spend."
+      ],
+      "relevant_to": []
+    },
+    {
+      "id": "beavertalk2025-sentence-memory-bank",
+      "title": "BeaverTalk: Oregon State University's IWSLT 2025 Simultaneous Speech Translation System",
+      "authors": "Oregon State University (BeaverTalk team)",
+      "year": 2025,
+      "venue": "arXiv / IWSLT 2025",
+      "url": "https://arxiv.org/abs/2505.24016",
+      "source": "websearch",
+      "status": "read",
+      "summary": "Oregon State University's IWSLT 2025 cascaded system: VAD segmenter -> Whisper Large V2 ASR -> Gemma 3 12B (LoRA fine-tuned) for translation. Uses a conversational prompting strategy that carries a single prior-sentence memory bank from the source language into the prompt for the next sentence, to keep translations consistent across sentence boundaries in a streaming context.",
+      "key_findings": [
+        "Memory bank is deliberately small: ONE prior source-language sentence, not the full running transcript -- a concrete, minimal design point for what \"context anchor\" should carry.",
+        "Reports En->De BLEU 24.64/27.83 and En->Zh BLEU 34.07/37.23 at StreamLAAL 1837.86/3343.73 and 2216.99/3521.35 respectively (low/high latency regimes) -- gives a rough BLEU-vs-latency operating point for a memory-bank-style system, usable as an external sanity check even though metrics/domain differ from this repo's chrF-based ones.",
+        "The prior sentence used as context is the SOURCE-language sentence, not the target-language translation -- worth flagging as a design choice to consider for h-continuation-context-anchor, which should specify explicitly whether it anchors on source or target text.",
+        "Uses a fine-tuned (LoRA) LLM rather than a frozen general-purpose LLM via prompting alone -- a caveat when using this as grounding for a prompting-only (no fine-tuning) hypothesis like h-continuation-context-anchor in this repo, since gains may partly come from the fine-tuning rather than the memory-bank prompting alone."
+      ],
+      "relevant_to": []
+    }
+  ],
+  "_websearch_note": "One real WebSearch pass was run on 2026-09-08 (query: '2026 normalized erasure caption flicker simultaneous speech translation LLM cascade stability metric') to check for post-survey literature. It also cross-validated this pipeline's NE implementation: an independent summary described 'NE score of 0.2' as meaning roughly 1/5 of tokens change before settling, which matches what src/real_time_translation/experiments/flicker_metrics.py measured for this repo's own ASR-interim stream (asr_ne_word_mean ~= 0.20 across the existing experiment corpus).",
+  "_extraction_note_cycle2": "EXTRACT_PAPERS for the 3 websearch-found papers (2026-09-08, cycle 2) hit an environment gap: WebFetch returned EGRESS_BLOCKED for arxiv.org, research.google, and aclanthology.org in this sandbox (the network egress proxy blocks these domains outright; WebSearch itself works fine and was used instead). All three 'extracted' summaries/key_findings above are therefore built from WebSearch result snippets, not full-text extraction -- they're substantive and specific (not marketing language), but a session with working WebFetch to these domains should verify against full text before treating any numeric claim as precise, especially NeMo's actual stability-metric formula/numbers which WebSearch snippets did not surface.",
+  "_websearch_note_cycle9": "WebSearch pass on 2026-09-12 targeting the two gaps flagged in the cycle-8 reflection: (1) evaluation methodologies that do not require live ASR access, and (2) continuation-context-anchoring prompt design precedents. Found 3 new candidates: polak2026-meta-evaluation-latency-metrics (meta-evaluation of latency metrics themselves, directly usable offline), machacek-polak2025-cuni-offline-cla-latency (introduces a character-level Continuous Levenshtein Alignment ASR-latency metric computable retroactively against gold transcripts, no live ASR needed -- open-source impl at github.com/ufal/asr_latency), and beavertalk2025-sentence-memory-bank (IWSLT2025 system using a prior-sentence memory bank in the LLM prompt, direct precedent for h-continuation-context-anchor). Also re-surfaced alignatt4llm-iwslt2026 and mllp-vrain-iwslt2026-simulst (already in corpus, not re-added). WebFetch to arxiv.org is expected to be EGRESS_BLOCKED in this sandbox per the cycle-2 note -- EXTRACT_PAPERS should try WebFetch first but fall back to WebSearch snippets if so, same as before."
+}

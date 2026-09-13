@@ -1,0 +1,46 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 2650
+PlayResY: 1388
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Arial,57,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,1,4,2,2,132,132,92,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:06.25,0:00:06.32,Default,,0,0,0,,お
+Dialogue: 0,0:00:06.32,0:00:06.33,Default,,0,0,0,,お話 をして いただ こう と思って ます。
+Dialogue: 0,0:00:06.33,0:00:10.32,Default,,0,0,0,,お話 をして いただ こう と思って ます。
+Dialogue: 0,0:00:10.32,0:00:10.48,Default,,0,0,0,,二人
+Dialogue: 0,0:00:10.48,0:00:10.48,Default,,0,0,0,,二人 とも 両 者 とも ですね、 Google の研究 者、 になります。
+Dialogue: 0,0:00:10.48,0:00:14.48,Default,,0,0,0,,二人 とも 両 者 とも ですね、 Google の研究 者、 になります。
+Dialogue: 0,0:00:14.48,0:00:14.60,Default,,0,0,0,,で
+Dialogue: 0,0:00:14.60,0:00:14.61,Default,,0,0,0,,で、一人目がジャシャンゴーさんで、ライブストリーム
+Dialogue: 0,0:00:14.61,0:00:18.53,Default,,0,0,0,,で、一人目がジャシャンゴーさんで、ライブストリーム
+Dialogue: 0,0:00:18.53,0:00:18.76,Default,,0,0,0,,リアル
+Dialogue: 0,0:00:18.76,0:00:18.76,Default,,0,0,0,,リアルタイムでご覧いただきますね。
+Dialogue: 0,0:00:18.76,0:00:22.68,Default,,0,0,0,,リアルタイムでご覧いただきますね。
+Dialogue: 0,0:00:22.68,0:00:22.77,Default,,0,0,0,,二人
+Dialogue: 0,0:00:22.77,0:00:22.77,Default,,0,0,0,,二人目がユン・チィジョウさんということで、
+Dialogue: 0,0:00:22.77,0:00:26.74,Default,,0,0,0,,二人目がユン・チィジョウさんということで、
+Dialogue: 0,0:00:26.74,0:00:26.83,Default,,0,0,0,,した
+Dialogue: 0,0:00:26.83,0:00:26.83,Default,,0,0,0,,したビデオを流させていただく
+Dialogue: 0,0:00:26.83,0:00:31.33,Default,,0,0,0,,したビデオを流させていただく
+Dialogue: 0,0:00:31.33,0:00:31.47,Default,,0,0,0,,。
+Dialogue: 0,0:00:31.47,0:00:31.48,Default,,0,0,0,,。 で、 両 者 とも 英語 で ですね、 講演
+Dialogue: 0,0:00:31.48,0:00:37.25,Default,,0,0,0,,。 で、 両 者 とも 英語 で ですね、 講演
+Dialogue: 0,0:00:37.25,0:00:37.37,Default,,0,0,0,,つける
+Dialogue: 0,0:00:37.37,0:00:37.37,Default,,0,0,0,,つける こと も でき ます 。
+Dialogue: 0,0:00:37.37,0:00:39.33,Default,,0,0,0,,つける こと も でき ます 。
+Dialogue: 0,0:00:39.33,0:00:39.40,Default,,0,0,0,,オン
+Dialogue: 0,0:00:39.40,0:00:39.40,Default,,0,0,0,,オン にして いただいて、 字 幕 を
+Dialogue: 0,0:00:39.40,0:00:43.39,Default,,0,0,0,,オン にして いただいて、 字 幕 を
+Dialogue: 0,0:00:43.39,0:00:43.54,Default,,0,0,0,,日本の
+Dialogue: 0,0:00:43.54,0:00:43.54,Default,,0,0,0,,日本の字幕をオンにしてもらえればと思って
+Dialogue: 0,0:00:43.54,0:00:47.24,Default,,0,0,0,,日本の字幕をオンにしてもらえればと思って
+Dialogue: 0,0:00:47.24,0:00:47.25,Default,,0,0,0,,もう
+Dialogue: 0,0:00:47.25,0:00:47.25,Default,,0,0,0,,もう、
+Dialogue: 0,0:00:47.25,0:00:52.25,Default,,0,0,0,,もう、

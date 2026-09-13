@@ -1,0 +1,193 @@
+{
+  "date": "2026-04-15",
+  "experiment_name": "youtube_10m_to_12m_fixed",
+  "domain": null,
+  "input": {
+    "type": "youtube",
+    "url": "https://www.youtube.com/watch?v=wjZofJX0v4M",
+    "start_seconds": 600.0,
+    "end_seconds": 720.0
+  },
+  "models": {
+    "deepgram_model": "nova-3-general",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-3.1-pro-preview"
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "deepgram_endpointing": 800,
+    "deepgram_utterance_end_ms": 1000
+  },
+  "results": {
+    "segment_count": 19,
+    "avg_confidence": 0.9994174894736841,
+    "segments": [
+      {
+        "start_time": 0.0,
+        "end_time": 4.7,
+        "asr": "Into many distinct layers where again each layer is always structured as some kind",
+        "translation": "多くの異なる層に分かれており、そこでもまた、各層は常に何らかの形で構造化されています",
+        "confidence": 0.9970703,
+        "kept_terms": []
+      },
+      {
+        "start_time": 4.7,
+        "end_time": 9.0100004,
+        "asr": "of array of real numbers until you get to a final layer which you consider the output.",
+        "translation": "実数の配列として構成されており、最終的に出力とみなされる最後の層へと行き着きます。",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 9.01,
+        "end_time": 13.89,
+        "asr": "For example, the final layer in our text processing model is a list of numbers representing",
+        "translation": "例えば、私たちのテキスト処理モデルの最終層は、～を表す数値のリストです。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 13.89,
+        "end_time": 17.3299996,
+        "asr": "the probability distribution for all possible next tokens.",
+        "translation": "考えられるすべての次のトークンの確率分布です。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 17.33,
+        "end_time": 21.9699994,
+        "asr": "In deep learning, these model parameters are almost always referred to as weights.",
+        "translation": "ディープラーニングでは、これらのモデルパラメータはほぼ常に重みと呼ばれます。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 21.97,
+        "end_time": 25.350001,
+        "asr": "And this is because a key feature of these models is that the only weight",
+        "translation": "そしてこれは、これらのモデルの重要な特徴として、唯一の重みが",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 25.35,
+        "end_time": 30.139999000000003,
+        "asr": "these parameters interact with the data being processed is through weighted sums.",
+        "translation": "これらのパラメータが処理中のデータと相互作用するのは、重み付き和を介してだからです。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 30.14,
+        "end_time": 34.840001,
+        "asr": "Also sprinkle some nonlinear functions throughout, but they won't depend on parameters.",
+        "translation": "また、非線形関数も全体に散りばめられていますが、それらはパラメータには依存しません。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 39.42,
+        "end_time": 42.440000500000004,
+        "asr": "you'll instead find them packaged together",
+        "translation": "代わりに、それらが一つにまとめられているのがわかるでしょう。",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 42.44,
+        "end_time": 45.910001199999996,
+        "asr": "as various components in a matrix vector product.",
+        "translation": "行列ベクトル積の様々な構成要素として。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 45.91,
+        "end_time": 49.7099992,
+        "asr": "It amounts to saying the same thing if you think back to how matrix",
+        "translation": "行列の仕組みを思い返してみれば、結局のところ同じことを言っていることになります。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 49.71,
+        "end_time": 54.590001,
+        "asr": "multiplication works, each component in the output looks like a weighted sum.",
+        "translation": "乗算の仕組みを思い返せば、出力の各成分は重み付き和のようになります。",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 54.59,
+        "end_time": 58.990001500000005,
+        "asr": "It's just often conceptually cleaner for you and me to think about matrices",
+        "translation": "ただ、私たちにとっては、行列として考える方が概念的にすっきりしていることが多いのです。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 58.99,
+        "end_time": 62.8499968,
+        "asr": "that are filled with tunable parameters that transform vectors",
+        "translation": "ベクトルを変換する調整可能なパラメータで満たされた",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 62.85,
+        "end_time": 66.05000460000001,
+        "asr": "that are drawn from the data being processed.",
+        "translation": "処理中のデータから抽出されたものです。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 66.05,
+        "end_time": 74.489995,
+        "asr": "For example, those 175,000,000,000 weights in g p t three are organized into just under 28,000 distinct matrices.",
+        "translation": "例えば、g p t three の175,000,000,000個の重みは、28,000弱の異なる行列に編成されています。",
+        "confidence": 0.9970703,
+        "kept_terms": [
+          "g p t three"
+        ]
+      },
+      {
+        "start_time": 74.49,
+        "end_time": 77.51000429999999,
+        "asr": "Those matrices in turn fall into eight different categories",
+        "translation": "それらの行列は、さらに8つの異なるカテゴリに分類されます。",
+        "confidence": 0.9996745,
+        "kept_terms": []
+      },
+      {
+        "start_time": 77.51,
+        "end_time": 82.23999570000001,
+        "asr": "and what you and I are gonna do is step through each one of those categories to understand what that type",
+        "translation": "そしてこれから一緒に、それらのカテゴリーを一つずつ見ていき、そのタイプがどのようなものかを理解していきましょう。",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 82.24,
+        "end_time": 85.26000429999999,
+        "asr": "does. As we go through, I think it's kind of fun to reference",
+        "translation": "するのかを理解していきます。見ていく中で、参照してみると面白いと思うのが、",
+        "confidence": 1.0,
+        "kept_terms": []
+      }
+    ],
+    "full_asr": "Into many distinct layers where again each layer is always structured as some kind\nof array of real numbers until you get to a final layer which you consider the output.\nFor example, the final layer in our text processing model is a list of numbers representing\nthe probability distribution for all possible next tokens.\nIn deep learning, these model parameters are almost always referred to as weights.\nAnd this is because a key feature of these models is that the only weight\nthese parameters interact with the data being processed is through weighted sums.\nAlso sprinkle some nonlinear functions throughout, but they won't depend on parameters.\nyou'll instead find them packaged together\nas various components in a matrix vector product.\nIt amounts to saying the same thing if you think back to how matrix\nmultiplication works, each component in the output looks like a weighted sum.\nIt's just often conceptually cleaner for you and me to think about matrices\nthat are filled with tunable parameters that transform vectors\nthat are drawn from the data being processed.\nFor example, those 175,000,000,000 weights in g p t three are organized into just under 28,000 distinct matrices.\nThose matrices in turn fall into eight different categories\nand what you and I are gonna do is step through each one of those categories to understand what that type\ndoes. As we go through, I think it's kind of fun to reference",
+    "full_translation": "多くの異なる層に分かれており、そこでもまた、各層は常に何らかの形で構造化されています\n実数の配列として構成されており、最終的に出力とみなされる最後の層へと行き着きます。\n例えば、私たちのテキスト処理モデルの最終層は、～を表す数値のリストです。\n考えられるすべての次のトークンの確率分布です。\nディープラーニングでは、これらのモデルパラメータはほぼ常に重みと呼ばれます。\nそしてこれは、これらのモデルの重要な特徴として、唯一の重みが\nこれらのパラメータが処理中のデータと相互作用するのは、重み付き和を介してだからです。\nまた、非線形関数も全体に散りばめられていますが、それらはパラメータには依存しません。\n代わりに、それらが一つにまとめられているのがわかるでしょう。\n行列ベクトル積の様々な構成要素として。\n行列の仕組みを思い返してみれば、結局のところ同じことを言っていることになります。\n乗算の仕組みを思い返せば、出力の各成分は重み付き和のようになります。\nただ、私たちにとっては、行列として考える方が概念的にすっきりしていることが多いのです。\nベクトルを変換する調整可能なパラメータで満たされた\n処理中のデータから抽出されたものです。\n例えば、g p t three の175,000,000,000個の重みは、28,000弱の異なる行列に編成されています。\nそれらの行列は、さらに8つの異なるカテゴリに分類されます。\nそしてこれから一緒に、それらのカテゴリーを一つずつ見ていき、そのタイプがどのようなものかを理解していきましょう。\nするのかを理解していきます。見ていく中で、参照してみると面白いと思うのが、"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null
+  },
+  "notes": "",
+  "created_at_utc": "2026-04-15T20:31:21.938342+00:00",
+  "elapsed_seconds": 179.296
+}

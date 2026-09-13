@@ -1,0 +1,923 @@
+{
+  "date": "2026-07-22",
+  "experiment_name": "en_talk_transition_accuracy_check",
+  "domain": "llm_lecture_ja_to_en_transition",
+  "input": {
+    "type": "local_video",
+    "path": "experiments\\clips\\clip_6m40_90s_entalk.wav",
+    "start_seconds": 0.0,
+    "duration_seconds": null
+  },
+  "models": {
+    "deepgram_model": "nova-3",
+    "deepgram_language": "multi",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-2.5-flash",
+    "gemini_thinking_budget": 0
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "translation_workers": 4,
+    "gemini_rpm_limit": 9,
+    "deepgram_endpointing": 300,
+    "deepgram_utterance_end_ms": 1000,
+    "deepgram_max_interim_duration": 2.5
+  },
+  "results": {
+    "segment_count": 2,
+    "avg_confidence": 0.83203125,
+    "avg_end_to_end_latency_seconds": 3.5022288179397583,
+    "max_end_to_end_latency_seconds": 4.768373966217041,
+    "avg_mt_latency_seconds": 0.060999274253845215,
+    "segments": [
+      {
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.0,
+        "asr_final_arrival": 4.649599313735962,
+        "translation_complete_arrival": 4.768373966217041,
+        "translation_first_token_arrival": 4.649599313735962,
+        "end_to_end_latency": 4.768373966217041,
+        "mt_latency": 0.1187746524810791,
+        "asr": "当 面で ですね、 活躍 されている 研究 者 になって",
+        "translation": "当面でですね、活躍されている研究者になって",
+        "confidence": 0.9604492
+      },
+      {
+        "asr_start_time": 4.08,
+        "asr_end_time": 5.1,
+        "asr_final_arrival": 6.312859773635864,
+        "translation_complete_arrival": 6.316083669662476,
+        "translation_first_token_arrival": 6.312859773635864,
+        "end_to_end_latency": 2.2360836696624755,
+        "mt_latency": 0.003223896026611328,
+        "asr": "で 本日",
+        "translation": "本日",
+        "confidence": 0.7036133
+      }
+    ],
+    "events": [
+      {
+        "kind": "asr_interim",
+        "playback_offset": 1.1544580459594727,
+        "wall_clock_lag": 1.1544580459594727,
+        "text": "Tormente Tormente des, ne. Katze",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 1.0,
+        "confidence": 0.48453775
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 2.239994764328003,
+        "wall_clock_lag": 2.239994764328003,
+        "text": "当 面で ですね、 活躍 されている",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.0,
+        "confidence": 0.9604492
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 3.425266981124878,
+        "wall_clock_lag": 3.425266981124878,
+        "text": "当 面で ですね、 活躍 されている 研究 者 になって",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.0,
+        "confidence": 0.9604492
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 4.649599313735962,
+        "wall_clock_lag": 4.649599313735962,
+        "text": "当",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.0,
+        "confidence": 0.9604492
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 4.651974439620972,
+        "wall_clock_lag": 4.651974439620972,
+        "text": "当面でですね、活躍されている研究者になって",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.0,
+        "confidence": 0.9604492
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 4.768373966217041,
+        "wall_clock_lag": 4.768373966217041,
+        "text": "当面でですね、活躍されている研究者になって",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.0,
+        "confidence": 0.9604492
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 5.6383140087127686,
+        "wall_clock_lag": 1.5583140087127685,
+        "text": "で 本日",
+        "is_final": false,
+        "asr_start_time": 4.08,
+        "asr_end_time": 5.1,
+        "confidence": 0.7036133
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 6.312859773635864,
+        "wall_clock_lag": 2.232859773635864,
+        "text": "本日",
+        "is_final": true,
+        "asr_start_time": 4.08,
+        "asr_end_time": 5.1,
+        "confidence": 0.7036133
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 6.316083669662476,
+        "wall_clock_lag": 2.2360836696624755,
+        "text": "本日",
+        "is_final": true,
+        "asr_start_time": 4.08,
+        "asr_end_time": 5.1,
+        "confidence": 0.7036133
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 6.755444526672363,
+        "wall_clock_lag": 2.675444526672363,
+        "text": "本日 お話し 頂 きたい",
+        "is_final": false,
+        "asr_start_time": 4.08,
+        "asr_end_time": 6.1,
+        "confidence": 0.9453125
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 7.838958978652954,
+        "wall_clock_lag": 3.758958978652954,
+        "text": "で、 本日 お話し いただく タイトル は、 Overview of",
+        "is_final": false,
+        "asr_start_time": 4.08,
+        "asr_end_time": 7.1,
+        "confidence": 0.9560547
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 8.875583410263062,
+        "wall_clock_lag": 4.7955834102630615,
+        "text": "で、 本日 お話し いただく タイトル は、 Overview of Russian LanguageMobile",
+        "is_final": false,
+        "asr_start_time": 4.08,
+        "asr_end_time": 8.1000005,
+        "confidence": 0.87524414
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 11.02149748802185,
+        "wall_clock_lag": 1.9714974880218499,
+        "text": "ことで、",
+        "is_final": false,
+        "asr_start_time": 9.05,
+        "asr_end_time": 10.1000002,
+        "confidence": 0.77612305
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 11.82161831855774,
+        "wall_clock_lag": 2.7716183185577385,
+        "text": "、 ま、",
+        "is_final": false,
+        "asr_start_time": 9.05,
+        "asr_end_time": 10.8,
+        "confidence": 0.984375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 13.644836664199829,
+        "wall_clock_lag": 2.2048366641998296,
+        "text": "LNM",
+        "is_final": false,
+        "asr_start_time": 11.44,
+        "asr_end_time": 12.5000004,
+        "confidence": 0.7682292
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 14.754542589187622,
+        "wall_clock_lag": 3.3145425891876226,
+        "text": "LNM 講 座 はですね、 基 礎",
+        "is_final": false,
+        "asr_start_time": 11.44,
+        "asr_end_time": 13.5000004,
+        "confidence": 0.96972656
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 15.859710693359375,
+        "wall_clock_lag": 4.4197106933593755,
+        "text": "LNM 经 差 はですね 基 礎 と 応 用 で、 色",
+        "is_final": false,
+        "asr_start_time": 11.44,
+        "asr_end_time": 14.5000004,
+        "confidence": 0.8203125
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 16.962385416030884,
+        "wall_clock_lag": 5.522385416030884,
+        "text": "LNM 经 差 はですね 基 礎 と 応 用 で、 いろいろ と",
+        "is_final": false,
+        "asr_start_time": 11.44,
+        "asr_end_time": 15.5000004,
+        "confidence": 0.93310547
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 21.42942500114441,
+        "wall_clock_lag": 2.849425001144411,
+        "text": "覚えて いただいた",
+        "is_final": false,
+        "asr_start_time": 18.58,
+        "asr_end_time": 19.6000005,
+        "confidence": 0.9980469
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 22.645675659179688,
+        "wall_clock_lag": 4.065675659179689,
+        "text": "覚えて いただいた 知識 とかですね。",
+        "is_final": false,
+        "asr_start_time": 18.58,
+        "asr_end_time": 20.700000799999998,
+        "confidence": 0.9980469
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 23.698165893554688,
+        "wall_clock_lag": 5.118165893554689,
+        "text": "覚えて いただいた 知識 とかですね。 用 語 を フル",
+        "is_final": false,
+        "asr_start_time": 18.58,
+        "asr_end_time": 21.700000799999998,
+        "confidence": 0.9892578
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 24.798547744750977,
+        "wall_clock_lag": 6.218547744750978,
+        "text": "覚えて いただいた 知識 とかですね。 用 語 を フル 活用 しながら",
+        "is_final": false,
+        "asr_start_time": 18.58,
+        "asr_end_time": 22.700001,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 25.928351163864136,
+        "wall_clock_lag": 3.368351163864137,
+        "text": "今日 の話",
+        "is_final": false,
+        "asr_start_time": 22.56,
+        "asr_end_time": 23.600000899999998,
+        "confidence": 0.9375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 26.881531476974487,
+        "wall_clock_lag": 4.321531476974489,
+        "text": "今日 の話 聞いて いただける",
+        "is_final": false,
+        "asr_start_time": 22.56,
+        "asr_end_time": 24.600001,
+        "confidence": 0.8803711
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 27.933439254760742,
+        "wall_clock_lag": 5.3734392547607435,
+        "text": "今日 の話 聞いて いただけると いい んじゃないか",
+        "is_final": false,
+        "asr_start_time": 22.56,
+        "asr_end_time": 25.600001,
+        "confidence": 0.87353516
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 29.019811868667603,
+        "wall_clock_lag": 6.459811868667604,
+        "text": "今日 の話 聞いて いただけると いい んじゃないかな と思い",
+        "is_final": false,
+        "asr_start_time": 22.56,
+        "asr_end_time": 26.600001,
+        "confidence": 0.8105469
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 30.736890077590942,
+        "wall_clock_lag": 3.716890077590943,
+        "text": "はい。",
+        "is_final": false,
+        "asr_start_time": 27.02,
+        "asr_end_time": 28.0999999,
+        "confidence": 0.8000488
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 32.43213438987732,
+        "wall_clock_lag": 3.7921343898773188,
+        "text": "じゃあ ここから",
+        "is_final": false,
+        "asr_start_time": 28.64,
+        "asr_end_time": 29.7000014,
+        "confidence": 0.9160156
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 33.54091000556946,
+        "wall_clock_lag": 4.900910005569457,
+        "text": "じゃあ ここ からは ですね、",
+        "is_final": false,
+        "asr_start_time": 28.64,
+        "asr_end_time": 30.7000014,
+        "confidence": 0.9770508
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 34.61537456512451,
+        "wall_clock_lag": 5.975374565124511,
+        "text": "じゃあ ここ からは ですね、 あの度 舎 の方に バ ト ンタ ッチ",
+        "is_final": false,
+        "asr_start_time": 28.64,
+        "asr_end_time": 31.7000014,
+        "confidence": 0.9770508
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 35.736690282821655,
+        "wall_clock_lag": 7.096690282821655,
+        "text": "じゃあ ここ からは ですね、 あの度 舎 の方に バ ト ンタ ッチ して、 あの",
+        "is_final": false,
+        "asr_start_time": 28.64,
+        "asr_end_time": 32.7000014,
+        "confidence": 0.97802734
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 36.84377336502075,
+        "wall_clock_lag": 4.583773365020754,
+        "text": "スピ ーチ にして もら おう と",
+        "is_final": false,
+        "asr_start_time": 32.26,
+        "asr_end_time": 33.700002399999995,
+        "confidence": 0.97265625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 37.92396903038025,
+        "wall_clock_lag": 5.663969030380251,
+        "text": "スピ ーチ してもら おう と思います。",
+        "is_final": false,
+        "asr_start_time": 32.26,
+        "asr_end_time": 34.700002399999995,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 38.99324941635132,
+        "wall_clock_lag": 6.73324941635132,
+        "text": "スピ ーチ してもら おう と思います。 はい。 ジャ シャ ン、",
+        "is_final": false,
+        "asr_start_time": 32.26,
+        "asr_end_time": 35.700002399999995,
+        "confidence": 0.9819336
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 40.08751821517944,
+        "wall_clock_lag": 7.827518215179445,
+        "text": "スピ ーチ してもら おう と思います。 はい。 ジャ シャ ン、 can you please start your",
+        "is_final": false,
+        "asr_start_time": 32.26,
+        "asr_end_time": 36.700002399999995,
+        "confidence": 0.9863281
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 40.75872850418091,
+        "wall_clock_lag": 5.268728504180906,
+        "text": "can you please start your presentation",
+        "is_final": false,
+        "asr_start_time": 35.49,
+        "asr_end_time": 37.299997600000005,
+        "confidence": 0.7446289
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 41.83778476715088,
+        "wall_clock_lag": 6.347784767150877,
+        "text": "can you please start your presentation from now on?",
+        "is_final": false,
+        "asr_start_time": 35.49,
+        "asr_end_time": 38.299997600000005,
+        "confidence": 0.94384766
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 42.04396677017212,
+        "wall_clock_lag": 6.553966770172117,
+        "text": "can you please start your presentation from now on? Yeah.",
+        "is_final": false,
+        "asr_start_time": 35.49,
+        "asr_end_time": 38.4999983,
+        "confidence": 0.9760742
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 43.14338517189026,
+        "wall_clock_lag": 7.653385171890257,
+        "text": "can you please start your presentation from now on? Yeah. No problem.",
+        "is_final": false,
+        "asr_start_time": 35.49,
+        "asr_end_time": 39.4999983,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 44.00464129447937,
+        "wall_clock_lag": 8.514641294479368,
+        "text": "can you please start your presentation from now on? Yeah. No problem.",
+        "is_final": false,
+        "asr_start_time": 35.49,
+        "asr_end_time": 40.299997600000005,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 45.0665237903595,
+        "wall_clock_lag": 4.876523790359499,
+        "text": "Let me share",
+        "is_final": false,
+        "asr_start_time": 40.19,
+        "asr_end_time": 41.2000021,
+        "confidence": 0.98095703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 56.22035837173462,
+        "wall_clock_lag": 6.770358371734616,
+        "text": "K. Can I ask",
+        "is_final": false,
+        "asr_start_time": 49.45,
+        "asr_end_time": 51.499999200000005,
+        "confidence": 0.60595703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 57.34993314743042,
+        "wall_clock_lag": 7.899933147430417,
+        "text": "K. Can you see my screen?",
+        "is_final": false,
+        "asr_start_time": 49.45,
+        "asr_end_time": 52.499999200000005,
+        "confidence": 0.96533203
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 58.42264652252197,
+        "wall_clock_lag": 8.97264652252197,
+        "text": "Can you see my screen? Ah, yes.",
+        "is_final": false,
+        "asr_start_time": 49.45,
+        "asr_end_time": 53.499999,
+        "confidence": 0.9448242
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 59.94550156593323,
+        "wall_clock_lag": 6.085501565933228,
+        "text": "Okay. Alright.",
+        "is_final": false,
+        "asr_start_time": 53.86,
+        "asr_end_time": 54.9000009,
+        "confidence": 0.9897461
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 61.040563344955444,
+        "wall_clock_lag": 7.180563344955445,
+        "text": "Okay. Very good.",
+        "is_final": false,
+        "asr_start_time": 53.86,
+        "asr_end_time": 55.900001,
+        "confidence": 0.9941406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 61.62158465385437,
+        "wall_clock_lag": 7.761584653854371,
+        "text": "Okay. Very good.",
+        "is_final": false,
+        "asr_start_time": 53.86,
+        "asr_end_time": 56.400001,
+        "confidence": 0.9941406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 62.05709981918335,
+        "wall_clock_lag": 8.19709981918335,
+        "text": "Okay. Very good. Yeah.",
+        "is_final": false,
+        "asr_start_time": 53.86,
+        "asr_end_time": 56.7999986,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 62.649375200271606,
+        "wall_clock_lag": 8.789375200271607,
+        "text": "Okay. Very good. Yeah.",
+        "is_final": false,
+        "asr_start_time": 53.86,
+        "asr_end_time": 57.400001,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 63.76577830314636,
+        "wall_clock_lag": 9.905778303146363,
+        "text": "Okay. Very good. Yeah. Hello,",
+        "is_final": false,
+        "asr_start_time": 53.86,
+        "asr_end_time": 58.400001,
+        "confidence": 0.98828125
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 64.3416633605957,
+        "wall_clock_lag": 7.131663360595702,
+        "text": "Hello, everyone.",
+        "is_final": false,
+        "asr_start_time": 57.21,
+        "asr_end_time": 58.9000024,
+        "confidence": 0.9885254
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 65.38445210456848,
+        "wall_clock_lag": 8.17445210456848,
+        "text": "Hello, everyone. Yeah. My name",
+        "is_final": false,
+        "asr_start_time": 57.21,
+        "asr_end_time": 59.9000024,
+        "confidence": 0.9890137
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 66.54568791389465,
+        "wall_clock_lag": 9.335687913894652,
+        "text": "Hello, everyone. Yeah. My name is Jaachenko.",
+        "is_final": false,
+        "asr_start_time": 57.21,
+        "asr_end_time": 60.9000024,
+        "confidence": 0.9238281
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 66.8108479976654,
+        "wall_clock_lag": 9.600847997665404,
+        "text": "Hello, everyone. Yeah. My name is Jaachenko. I",
+        "is_final": false,
+        "asr_start_time": 57.21,
+        "asr_end_time": 61.2000017,
+        "confidence": 0.9428711
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 68.09631395339966,
+        "wall_clock_lag": 7.146313953399655,
+        "text": "And currently",
+        "is_final": false,
+        "asr_start_time": 60.95,
+        "asr_end_time": 62.2999985,
+        "confidence": 0.9291992
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 69.26026391983032,
+        "wall_clock_lag": 8.31026391983032,
+        "text": "And, currently, I'm a senior",
+        "is_final": false,
+        "asr_start_time": 60.95,
+        "asr_end_time": 63.4000008,
+        "confidence": 0.99658203
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 70.49409127235413,
+        "wall_clock_lag": 9.544091272354123,
+        "text": "And, currently, I'm a senior research scientist",
+        "is_final": false,
+        "asr_start_time": 60.95,
+        "asr_end_time": 64.4000008,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 71.51291584968567,
+        "wall_clock_lag": 10.562915849685666,
+        "text": "And, currently, I'm a senior research scientist in Google Research",
+        "is_final": false,
+        "asr_start_time": 60.95,
+        "asr_end_time": 65.499999,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 72.74056553840637,
+        "wall_clock_lag": 11.79056553840637,
+        "text": "And currently, I'm a senior research scientist in Google Research Australia.",
+        "is_final": false,
+        "asr_start_time": 60.95,
+        "asr_end_time": 66.5999977,
+        "confidence": 0.9941406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 73.81248641014099,
+        "wall_clock_lag": 12.862486410140988,
+        "text": "And currently, I'm a senior research scientist in Google Research Australia, and also thank",
+        "is_final": false,
+        "asr_start_time": 60.95,
+        "asr_end_time": 67.5999977,
+        "confidence": 0.9941406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 75.23223638534546,
+        "wall_clock_lag": 14.282236385345456,
+        "text": "And currently, I'm a senior research scientist in Google Research Australia. And, also, thanks for",
+        "is_final": false,
+        "asr_start_time": 60.95,
+        "asr_end_time": 68.900001,
+        "confidence": 0.99853516
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 76.34373879432678,
+        "wall_clock_lag": 15.39373879432678,
+        "text": "And currently, I'm a senior research scientist in Google Research Australia. And, also, thanks for muscle labs in my",
+        "is_final": false,
+        "asr_start_time": 60.95,
+        "asr_end_time": 69.900001,
+        "confidence": 0.9941406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 77.08179569244385,
+        "wall_clock_lag": 8.291795692443841,
+        "text": "Marsau Labs' invitation, and",
+        "is_final": false,
+        "asr_start_time": 68.79,
+        "asr_end_time": 70.59999760000001,
+        "confidence": 0.74658203
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 78.26262593269348,
+        "wall_clock_lag": 9.472625932693475,
+        "text": "Marsau Labs invitation. I'm very happy to",
+        "is_final": false,
+        "asr_start_time": 68.79,
+        "asr_end_time": 71.59999760000001,
+        "confidence": 0.8366699
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 79.24459767341614,
+        "wall_clock_lag": 10.454597673416131,
+        "text": "Marsau Labs invitation. I'm very happy to discuss",
+        "is_final": false,
+        "asr_start_time": 68.79,
+        "asr_end_time": 72.59999760000001,
+        "confidence": 0.92871094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 80.32681941986084,
+        "wall_clock_lag": 11.536819419860834,
+        "text": "Marsau Labs invitation. I'm very happy to discuss with",
+        "is_final": false,
+        "asr_start_time": 68.79,
+        "asr_end_time": 73.59999760000001,
+        "confidence": 0.9145508
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 81.30007600784302,
+        "wall_clock_lag": 7.810076007843023,
+        "text": "you guys, and",
+        "is_final": false,
+        "asr_start_time": 73.49,
+        "asr_end_time": 74.50000209999999,
+        "confidence": 0.6693115
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 82.56961345672607,
+        "wall_clock_lag": 9.07961345672608,
+        "text": "you guys, and thanks for",
+        "is_final": false,
+        "asr_start_time": 73.49,
+        "asr_end_time": 75.50000209999999,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 83.55710411071777,
+        "wall_clock_lag": 10.067104110717779,
+        "text": "you guys, and thanks for coming this talk.",
+        "is_final": false,
+        "asr_start_time": 73.49,
+        "asr_end_time": 76.50000209999999,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 84.20584893226624,
+        "wall_clock_lag": 10.71584893226624,
+        "text": "you guys, and thanks for coming this talk.",
+        "is_final": false,
+        "asr_start_time": 73.49,
+        "asr_end_time": 77.1000006,
+        "confidence": 0.99609375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 85.27058100700378,
+        "wall_clock_lag": 11.78058100700379,
+        "text": "you guys, and thanks for coming this talk and hopeful",
+        "is_final": false,
+        "asr_start_time": 73.49,
+        "asr_end_time": 78.1000006,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 85.93788409233093,
+        "wall_clock_lag": 8.977884092330939,
+        "text": "And, hopefully, we",
+        "is_final": false,
+        "asr_start_time": 76.96,
+        "asr_end_time": 78.50000089999999,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 86.67197751998901,
+        "wall_clock_lag": 9.71197751998902,
+        "text": "And, hopefully, we could",
+        "is_final": false,
+        "asr_start_time": 76.96,
+        "asr_end_time": 79.40000239999999,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 87.84858107566833,
+        "wall_clock_lag": 10.888581075668341,
+        "text": "And, hopefully, we could you could have",
+        "is_final": false,
+        "asr_start_time": 76.96,
+        "asr_end_time": 80.40000239999999,
+        "confidence": 0.9995117
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 88.89876174926758,
+        "wall_clock_lag": 11.938761749267584,
+        "text": "And, hopefully, we could you could have learned something",
+        "is_final": false,
+        "asr_start_time": 76.96,
+        "asr_end_time": 81.40000239999999,
+        "confidence": 0.9995117
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 89.5378851890564,
+        "wall_clock_lag": 9.13788518905639,
+        "text": "learned something from my talk",
+        "is_final": false,
+        "asr_start_time": 80.4,
+        "asr_end_time": 81.9999985,
+        "confidence": 1.0
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 90.78040814399719,
+        "wall_clock_lag": 10.380408143997187,
+        "text": "learned something from my talk, and, also, we could",
+        "is_final": false,
+        "asr_start_time": 80.4,
+        "asr_end_time": 83.099997,
+        "confidence": 0.9980469
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 91.87065982818604,
+        "wall_clock_lag": 11.47065982818603,
+        "text": "learned something from my talk, and, also, we could",
+        "is_final": false,
+        "asr_start_time": 80.4,
+        "asr_end_time": 84.099997,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 93.0031521320343,
+        "wall_clock_lag": 12.603152132034296,
+        "text": "learned something from my talk, and, also, we could discuss together",
+        "is_final": false,
+        "asr_start_time": 80.4,
+        "asr_end_time": 85.1999954,
+        "confidence": 0.9980469
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 93.20223951339722,
+        "wall_clock_lag": 9.392239513397215,
+        "text": "discuss together",
+        "is_final": false,
+        "asr_start_time": 83.81,
+        "asr_end_time": 85.400004,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 94.47929835319519,
+        "wall_clock_lag": 10.669298353195188,
+        "text": "discuss together for some",
+        "is_final": false,
+        "asr_start_time": 83.81,
+        "asr_end_time": 86.5000024,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 95.43428134918213,
+        "wall_clock_lag": 11.624281349182127,
+        "text": "discuss together for some have",
+        "is_final": false,
+        "asr_start_time": 83.81,
+        "asr_end_time": 87.3000055,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 96.49023842811584,
+        "wall_clock_lag": 12.680238428115842,
+        "text": "discuss together for some have have some",
+        "is_final": false,
+        "asr_start_time": 83.81,
+        "asr_end_time": 88.400004,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 97.05635952949524,
+        "wall_clock_lag": 9.896359529495243,
+        "text": "help some fruitful",
+        "is_final": false,
+        "asr_start_time": 87.16,
+        "asr_end_time": 88.8999979,
+        "confidence": 0.74316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 98.09432625770569,
+        "wall_clock_lag": 10.934326257705692,
+        "text": "have some fruitful discussions",
+        "is_final": false,
+        "asr_start_time": 87.16,
+        "asr_end_time": 89.8999979,
+        "confidence": 0.99609375
+      }
+    ],
+    "full_asr": "当 面で ですね、 活躍 されている 研究 者 になって\nで 本日",
+    "full_translation": "当面でですね、活躍されている研究者になって\n本日"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null
+  },
+  "notes": "Real EN->JA translation test: JA host handoff (6:40-7:18) into Jiaxian Guo's actual English talk (7:18-8:10), including a known ASR-mishearing test case ('Marsau Labs' should be 'Matsuo Lab', added to dictionary.csv). gemini-2.5-flash (flash-lite daily quota exhausted).",
+  "created_at_utc": "2026-07-22T13:13:04.176541+00:00",
+  "elapsed_seconds": 120.626
+}

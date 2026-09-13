@@ -1,0 +1,409 @@
+{
+  "date": "2026-09-03",
+  "experiment_name": "smoketest",
+  "domain": null,
+  "input": {
+    "type": "local_video",
+    "path": "experiments/refs/audio/wjZofJX0v4M.webm",
+    "start_seconds": 300.0,
+    "duration_seconds": 15.0
+  },
+  "models": {
+    "deepgram_model": "nova-3-general",
+    "deepgram_language": "en",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-3-flash-preview",
+    "gemini_thinking_budget": 0
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "translation_workers": 4,
+    "gemini_rpm_limit": 9,
+    "deepgram_endpointing": 500,
+    "deepgram_utterance_end_ms": 1000,
+    "deepgram_max_interim_duration": 2.5,
+    "domain_packs": [],
+    "dictionary_size": 46
+  },
+  "results": {
+    "segment_count": 2,
+    "avg_confidence": 1.0,
+    "avg_end_to_end_latency_seconds": 3.1053778553009037,
+    "max_end_to_end_latency_seconds": 4.378426971435547,
+    "avg_mt_latency_seconds": 0.0011380910873413086,
+    "segments": [
+      {
+        "asr_start_time": 6.31,
+        "asr_end_time": 8.3000002,
+        "asr_final_arrival": 8.14232873916626,
+        "translation_complete_arrival": 8.14232873916626,
+        "translation_first_token_arrival": 8.14232873916626,
+        "end_to_end_latency": 1.8323287391662602,
+        "mt_latency": 0.0,
+        "asr": "I'm glossing over some details",
+        "translation": "詳細についてはいくつか省略しますが、",
+        "confidence": 1.0
+      },
+      {
+        "asr_start_time": 6.31,
+        "asr_end_time": 11.28,
+        "asr_final_arrival": 10.686150789260864,
+        "translation_complete_arrival": 10.688426971435547,
+        "translation_first_token_arrival": 10.686150789260864,
+        "end_to_end_latency": 4.378426971435547,
+        "mt_latency": 0.002276182174682617,
+        "asr": "I'm glossing over some details about some normalization steps that happen in between, but",
+        "translation": "その間に行われるいくつかの正規化ステップについての詳細は省略しますが、",
+        "confidence": 1.0
+      }
+    ],
+    "events": [
+      {
+        "kind": "asr_interim",
+        "playback_offset": 0.7350547313690186,
+        "wall_clock_lag": 0.7350547313690186,
+        "text": "And are",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 1.0,
+        "confidence": 0.9790039,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 1.537003755569458,
+        "wall_clock_lag": 1.537003755569458,
+        "text": "And our primary job is",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.0,
+        "confidence": 0.9951172,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 2.338277816772461,
+        "wall_clock_lag": 2.338277816772461,
+        "text": "And our primary job is going to be to understand",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.0,
+        "confidence": 1.0,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 3.1430368423461914,
+        "wall_clock_lag": 3.1430368423461914,
+        "text": "And our primary job is going to be to understand how to read",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 4.0,
+        "confidence": 1.0,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 3.949922800064087,
+        "wall_clock_lag": 0.6899228000640871,
+        "text": "how to read the underlying",
+        "is_final": false,
+        "asr_start_time": 3.26,
+        "asr_end_time": 5.0,
+        "confidence": 0.99902344,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 4.66900897026062,
+        "wall_clock_lag": 1.4090089702606203,
+        "text": "how to read the underlying matrices.",
+        "is_final": false,
+        "asr_start_time": 3.26,
+        "asr_end_time": 5.9,
+        "confidence": 0.99902344,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 4.825881719589233,
+        "wall_clock_lag": 1.5658817195892336,
+        "text": "how to read the underlying matrices.",
+        "is_final": false,
+        "asr_start_time": 3.26,
+        "asr_end_time": 6.1,
+        "confidence": 0.99902344,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 5.030627727508545,
+        "wall_clock_lag": 5.030627727508545,
+        "text": "そして、",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 4.0,
+        "confidence": 1.0,
+        "is_utterance_end": false
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 5.105025768280029,
+        "wall_clock_lag": 5.105025768280029,
+        "text": "そして、私たちの主な仕事は、どのように読み解くかを理解することにあり、",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 4.0,
+        "confidence": 1.0,
+        "is_utterance_end": false
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 5.140214681625366,
+        "wall_clock_lag": 5.140214681625366,
+        "text": "そして、私たちの主な仕事は、どのように読み解くかを理解することにあり、",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 4.0,
+        "confidence": 1.0,
+        "is_utterance_end": false
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 5.144697904586792,
+        "wall_clock_lag": 1.8846979045867922,
+        "text": "how to read the underlying matrices.",
+        "is_final": false,
+        "asr_start_time": 3.26,
+        "asr_end_time": 6.5,
+        "confidence": 0.99902344,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 5.306172847747803,
+        "wall_clock_lag": 2.046172847747803,
+        "text": "how to read the underlying matrices.",
+        "is_final": false,
+        "asr_start_time": 3.26,
+        "asr_end_time": 6.6999998,
+        "confidence": 1.0,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 6.115649700164795,
+        "wall_clock_lag": 2.855649700164795,
+        "text": "how to read the underlying matrices. I'm glossing over",
+        "is_final": false,
+        "asr_start_time": 3.26,
+        "asr_end_time": 7.6999996,
+        "confidence": 0.99902344,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 6.665851831436157,
+        "wall_clock_lag": 0.3558518314361576,
+        "text": "I'm glossing over some details",
+        "is_final": false,
+        "asr_start_time": 6.31,
+        "asr_end_time": 8.3000002,
+        "confidence": 1.0,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 7.384854078292847,
+        "wall_clock_lag": 1.074854078292847,
+        "text": "I'm glossing over some details about some normalization",
+        "is_final": false,
+        "asr_start_time": 6.31,
+        "asr_end_time": 9.3000002,
+        "confidence": 1.0,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 8.094454050064087,
+        "wall_clock_lag": 4.834454050064087,
+        "text": "その",
+        "is_final": true,
+        "asr_start_time": 3.26,
+        "asr_end_time": 7.6999996,
+        "confidence": 0.99902344,
+        "is_utterance_end": false
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 8.095242023468018,
+        "wall_clock_lag": 4.835242023468018,
+        "text": "その根底にある行列をどう読み解くかについてですが、ここでは詳しく触",
+        "is_final": true,
+        "asr_start_time": 3.26,
+        "asr_end_time": 7.6999996,
+        "confidence": 0.99902344,
+        "is_utterance_end": false
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 8.09599494934082,
+        "wall_clock_lag": 4.8359949493408205,
+        "text": "その根底にある行列をどう読み解くかについてですが、ここでは詳しく触れずに、",
+        "is_final": true,
+        "asr_start_time": 3.26,
+        "asr_end_time": 7.6999996,
+        "confidence": 0.99902344,
+        "is_utterance_end": false
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 8.142302989959717,
+        "wall_clock_lag": 4.882302989959717,
+        "text": "その根底にある行列をどう読み解くかについてですが、ここでは詳しく触れずに、",
+        "is_final": true,
+        "asr_start_time": 3.26,
+        "asr_end_time": 7.6999996,
+        "confidence": 0.99902344,
+        "is_utterance_end": false
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 8.14232873916626,
+        "wall_clock_lag": 1.8323287391662602,
+        "text": "詳細についてはいくつか省略しますが、",
+        "is_final": true,
+        "asr_start_time": 6.31,
+        "asr_end_time": 8.3000002,
+        "confidence": 1.0,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 8.192283868789673,
+        "wall_clock_lag": 1.8822838687896732,
+        "text": "I'm glossing over some details about some normalization steps that happen in",
+        "is_final": false,
+        "asr_start_time": 6.31,
+        "asr_end_time": 10.3000002,
+        "confidence": 1.0,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 9.833046674728394,
+        "wall_clock_lag": -1.4469533252716058,
+        "text": "this is after all a high",
+        "is_final": false,
+        "asr_start_time": 11.28,
+        "asr_end_time": 12.3000005,
+        "confidence": 0.99121094,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 10.67065691947937,
+        "wall_clock_lag": -0.6093430805206292,
+        "text": "this is after all a high level preview.",
+        "is_final": false,
+        "asr_start_time": 11.28,
+        "asr_end_time": 13.399999999999999,
+        "confidence": 0.9941406,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 10.686150789260864,
+        "wall_clock_lag": 4.376150789260865,
+        "text": "その間",
+        "is_final": true,
+        "asr_start_time": 6.31,
+        "asr_end_time": 11.28,
+        "confidence": 1.0,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 10.686923027038574,
+        "wall_clock_lag": 4.376923027038575,
+        "text": "その間に行われるいくつかの正規化ステップについての詳細は省略しますが、",
+        "is_final": true,
+        "asr_start_time": 6.31,
+        "asr_end_time": 11.28,
+        "confidence": 1.0,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 10.688426971435547,
+        "wall_clock_lag": 4.378426971435547,
+        "text": "その間に行われるいくつかの正規化ステップについての詳細は省略しますが、",
+        "is_final": true,
+        "asr_start_time": 6.31,
+        "asr_end_time": 11.28,
+        "confidence": 1.0,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 11.50147795677185,
+        "wall_clock_lag": 0.22147795677185123,
+        "text": "this is after all a high level preview. After that, the process",
+        "is_final": false,
+        "asr_start_time": 11.28,
+        "asr_end_time": 14.399999999999999,
+        "confidence": 0.99853516,
+        "is_utterance_end": true
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 14.134692907333374,
+        "wall_clock_lag": 2.8546929073333747,
+        "text": "これはあくまで",
+        "is_final": true,
+        "asr_start_time": 11.28,
+        "asr_end_time": 14.399999999999999,
+        "confidence": 0.99853516,
+        "is_utterance_end": false
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 14.135329723358154,
+        "wall_clock_lag": 2.855329723358155,
+        "text": "これはあくまでハイレベルなプレビューですので。その後、プロセスは",
+        "is_final": true,
+        "asr_start_time": 11.28,
+        "asr_end_time": 14.399999999999999,
+        "confidence": 0.99853516,
+        "is_utterance_end": false
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 14.14512586593628,
+        "wall_clock_lag": 2.86512586593628,
+        "text": "これはあくまでハイレベルなプレビューですので。その後、プロセスは",
+        "is_final": true,
+        "asr_start_time": 11.28,
+        "asr_end_time": 14.399999999999999,
+        "confidence": 0.99853516,
+        "is_utterance_end": false
+      }
+    ],
+    "full_asr": "I'm glossing over some details\nI'm glossing over some details about some normalization steps that happen in between, but",
+    "full_translation": "詳細についてはいくつか省略しますが、\nその間に行われるいくつかの正規化ステップについての詳細は省略しますが、"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null,
+    "glossary_adherence_rate": null,
+    "glossary_expected_terms": 0,
+    "glossary_matched_terms": 0,
+    "glossary_missed_terms": []
+  },
+  "notes": "",
+  "created_at_utc": "2026-09-03T06:30:51.356713+00:00",
+  "elapsed_seconds": 29.087
+}

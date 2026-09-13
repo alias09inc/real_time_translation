@@ -1,0 +1,502 @@
+{
+  "version": 1,
+  "current_state": "SEARCH_PAPERS",
+  "cycle": 6,
+  "last_updated": "2026-09-13T00:20:13.971755+00:00",
+  "active_hypothesis_ids": [],
+  "active_experiment_batch": null,
+  "history": [
+    {
+      "from": null,
+      "to": "SEARCH_PAPERS",
+      "at": "2026-09-08T00:00:00Z",
+      "note": "Pipeline initialized. Cycle 0 literature base is the survey already delivered in-conversation (2026-09-08); cycle 1 starts from GENERATE_HYPOTHESES territory but formally begins at SEARCH_PAPERS to pick up anything published after the survey and to fill gaps it flagged (see PLAYBOOK.md)."
+    },
+    {
+      "from": "SEARCH_PAPERS",
+      "to": "EXTRACT_PAPERS",
+      "at": "2026-09-08T07:28:21.438611+00:00",
+      "note": "Ran one real WebSearch pass for post-survey literature; found 3 candidate papers (AlignAtt4LLM IWSLT2026, Google live-caption-stability blog, NeMo@IWSLT2026 cascade), added as 'found' stubs to papers.json"
+    },
+    {
+      "from": "EXTRACT_PAPERS",
+      "to": "READ_PAPERS",
+      "at": "2026-09-08T07:28:21.464386+00:00",
+      "note": "Extraction deferred to next cycle for the 3 new websearch papers (snippet-level only so far); the 4 survey papers were already read in the seed data"
+    },
+    {
+      "from": "READ_PAPERS",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-08T07:28:21.489085+00:00",
+      "note": "3 hypotheses already seeded at init (h-flicker-metric, h-masking-holdback, h-localagreement-asr-commit); no new ones added this cycle to keep depth over breadth per PLAYBOOK"
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-08T07:28:21.513850+00:00",
+      "note": "Checking budget for h-flicker-metric (/bin/zsh, retroactive-only)"
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-08T07:28:31.353720+00:00",
+      "note": "h-flicker-metric auto-approved (cost 0 USD, retroactive only, no new API calls)"
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-08T07:28:31.405609+00:00",
+      "note": "Ran uv run real-time-translation-exp-flicker over experiments/*.json -> experiments/flicker_metrics.csv"
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-08T07:29:25.026594+00:00",
+      "note": "Wrote research_agent/reports/20260908_cycle1_report.md (Japanese) and updated 00_pipeline_overview_ja.md"
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-08T07:29:25.052686+00:00",
+      "note": "Reflection appended to reflections.md"
+    },
+    {
+      "from": "REFLECT",
+      "to": "SEARCH_PAPERS",
+      "at": "2026-09-08T07:29:25.076828+00:00",
+      "note": "Cycle 1 complete, starting cycle 2 (to be picked up by the scheduled cloud agent)"
+    },
+    {
+      "from": "SEARCH_PAPERS",
+      "to": "EXTRACT_PAPERS",
+      "at": "2026-09-08T10:01:24.155083+00:00",
+      "note": "Cycle 2 SEARCH_PAPERS: reusing 3 unread websearch stubs from cycle 1 (AlignAtt4LLM, Google caption-stability blog, NeMo IWSLT2026 cascade) as this cycle's extraction targets, per reflections.md cycle-1 recommendation. No additional WebSearch needed this cycle -- prioritizing actually extracting/reading what was already found over widening the search further."
+    },
+    {
+      "from": "EXTRACT_PAPERS",
+      "to": "READ_PAPERS",
+      "at": "2026-09-08T10:02:51.139989+00:00",
+      "note": "Extracted all 3 websearch papers via WebSearch snippets (WebFetch blocked on arxiv.org/research.google/aclanthology.org in this sandbox). Key finding: AlignAtt4LLM needs white-box attention access unavailable to this repo's API-only translator, so h-localagreement-asr-commit stays scoped to plain LocalAgreement-2."
+    },
+    {
+      "from": "READ_PAPERS",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-08T10:03:03.933489+00:00",
+      "note": "Read all 3 websearch papers. Cross-checked against experiments/results.csv: neither queued hypothesis (masking-holdback, localagreement-asr-commit) overlaps already-answered chunk-length/endpointing/keyterm sweeps, so no duplication concern."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-08T10:03:17.796802+00:00",
+      "note": "No new hypotheses added (backlog=2, under cap). Refined h-localagreement-asr-commit's grounded_in/description to explicitly scope it to plain LocalAgreement-2 per the AlignAtt4LLM finding."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-08T10:03:21.596791+00:00",
+      "note": "Both queued hypotheses already auto_approved from cycle 1; re-confirmed check-budget(1.5)=AUTO_APPROVE (0/7 USD spent today, per-batch cap 3 USD). Proceeding to RUN_EXPERIMENTS."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-08T10:06:07.014313+00:00",
+      "note": "No experiment ran (Deepgram egress blocked, see hypotheses.json blocked_reason). Nothing to analyze -- not fabricating results. Proceeding to WRITE_REPORT per PLAYBOOK's degraded-mode instructions to report the environment gap."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-08T10:06:10.875756+00:00",
+      "note": "Writing cycle 2 Japanese report covering: papers extracted/read, hypothesis scoping correction (AlignAtt4LLM), masking-holdback code implementation, and the Deepgram-egress environment blocker + proposed Gemini-only workaround."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-08T10:07:37.089540+00:00",
+      "note": "Wrote research_agent/reports/20260908_cycle2_report.md (Japanese) and updated 00_pipeline_overview_ja.md section 7."
+    },
+    {
+      "from": "REFLECT",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-08T10:08:07.487991+00:00",
+      "note": "Cycle 2 complete. Skipping SEARCH_PAPERS for cycle 3 -- the existing literature base already grounds h-gemini-only-masking-replay, which just needs to be implemented and run next. GENERATE_HYPOTHESES next cycle should mostly be a no-op (confirm backlog, don't add more) before moving straight to implementing that hypothesis."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-08T10:41:06.091541+00:00",
+      "note": "Cycle 3 GENERATE_HYPOTHESES: no-op confirmed per cycle-2 reflection plan. Backlog stays at 4 (h-flicker-metric tested, h-masking-holdback queued, h-localagreement-asr-commit queued, h-gemini-only-masking-replay queued), under the 6 cap. No new hypotheses added -- prioritizing depth (actually running queued work) over breadth this cycle."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-08T10:41:11.778352+00:00",
+      "note": "Cycle 3 HUMAN_APPROVAL: re-verified environment before picking a hypothesis -- unlike cycle 2, api.deepgram.com now returns 200 (curl -H Authorization: Token $DEEPGRAM_API_KEY https://api.deepgram.com/v1/projects) and ffmpeg was successfully installed via apt-get (was missing this session). Both env blockers from cycle 2 are resolved. All 3 non-tested hypotheses (h-masking-holdback $1.5, h-localagreement-asr-commit $1.5 not yet implemented, h-gemini-only-masking-replay $0.3 not yet implemented) remain auto_approved/queued; check-budget(1.5) = AUTO_APPROVE (0/7 USD spent today). Deviating from strict cheapest-first ordering: picking h-masking-holdback over the cheaper h-gemini-only-masking-replay workaround because (a) its code was already implemented and committed in cycle 2 and only needs a live run now that the blocker is gone, (b) a real live run answers the hypothesis directly instead of via an approximation the hypothesis's own required_changes flagged as needing care to be apples-to-apples, (c) h-gemini-only-masking-replay stays queued as a fallback for a future session if the Deepgram block recurs."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-08T10:46:13.207592+00:00",
+      "note": "No experiment ran this cycle either -- h-masking-holdback blocked by Deepgram listen-websocket 403 (see hypotheses.json blocked_reason cycle-3 update), h-localagreement-asr-commit blocked by the same root cause and not yet implemented, h-gemini-only-masking-replay needs new code (replay_masking.py) that was deliberately NOT rushed this cycle after discovering mid-design that flicker_metrics.py's translation-NE grouping is per-batch not per-utterance (see hypotheses.json note_cycle3) -- building the replay harness against the wrong metric would produce a misleading result, worse than not running it. Nothing to analyze, nothing fabricated. Proceeding to WRITE_REPORT per PLAYBOOK's degraded-mode instructions."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-08T10:46:20.166598+00:00",
+      "note": "Cycle 3 ANALYZE_RESULTS: confirmed no billable experiment ran (Deepgram REST reachable but listen-websocket 403; see blocked_reason). Writing cycle 3 Japanese report covering: environment re-check (partial unblock: REST yes, streaming WS no, ffmpeg now installed), the new WS-specific blocker, the translation-NE grouping design gap found before implementing h-gemini-only-masking-replay, and the PLAYBOOK.md self-improvements made (WS-level connectivity check, uv-sync-zoom-extra workaround)."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-08T10:47:16.975829+00:00",
+      "note": "Wrote research_agent/reports/20260908_cycle3_report.md (Japanese) and updated 00_pipeline_overview_ja.md section 7 with the cycle-3 WS-vs-REST distinction and the uv-sync-zoom-extra workaround."
+    },
+    {
+      "from": "REFLECT",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-08T10:47:50.972030+00:00",
+      "note": "Cycle 3 complete. Skipping SEARCH_PAPERS for cycle 4 -- existing literature (arivazhagan2020-retranslation, arivazhagan2019-erasure) already grounds the recommended next hypothesis (cross-utterance/cross-continuation translation NE, a $0 retroactive analysis fixing a real gap in h-flicker-metric's methodology found this cycle -- see reflections.md). GENERATE_HYPOTHESES next cycle should add that as a new hypothesis (backlog would go to 5, still under the 6 cap) before deciding whether to also revisit the blocked live-ASR hypotheses."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-08T12:16:55.030778+00:00",
+      "note": "Cycle 4 GENERATE_HYPOTHESES: added h-cross-utterance-flicker ($0 retroactive analysis) per cycle-3 reflection plan, fixing flicker_metrics.py's group_translation() blind spot (within-batch only, misses cross-continuation from-scratch retranslation drift across _stream_batch calls for the same utterance). Also corrected a factual error found while scoping it: h-gemini-only-masking-replay's description wrongly claimed utterance_id is a logged per-event field in results.events/TimedEvent -- verified against video_segment.py and an actual experiment JSON that only is_utterance_end is present; corrected that entry's description in place. Backlog now 4 queued/proposed (under 6 cap): h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay (all queued, still blocked on Deepgram infra per their blocked_reason), h-cross-utterance-flicker (new, proposed, not yet approval-checked). Stopping here per this session's scope (one bounded state transition) -- HUMAN_APPROVAL's check-budget pass for h-cross-utterance-flicker is next session's/next invocation's unit of work."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-08T12:49:10.599277+00:00",
+      "note": "Cycle 4 HUMAN_APPROVAL: checked budget for h-cross-utterance-flicker (0.0 USD) -> AUTO_APPROVE, uses_existing_clips=true, set approval=auto_approved/status=queued. Backlog now 5 queued (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay still blocked on Deepgram infra; h-cross-utterance-flicker newly queued, 0 USD retroactive, no infra dependency at all)."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-08T12:51:53.859746+00:00",
+      "note": "Cycle 4 RUN_EXPERIMENTS: implemented and ran h-cross-utterance-flicker (group_translation_by_utterance), 47 experiment JSON files reanalyzed, 0 USD spend. Also 3 hypotheses remain blocked on Deepgram infra (unchanged this cycle, not re-attempted since h-cross-utterance-flicker needed no live experiment). Proceeding to ANALYZE_RESULTS."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-08T12:52:29.561798+00:00",
+      "note": "Cycle 4 ANALYZE_RESULTS: h-cross-utterance-flicker confirmed and stronger than predicted -- cross-batch translation NE ~1.47 (median 1.28) across 275 multi-batch utterance spans (6.2% of all 4471 spans), vs ~0.0001 within-batch. Manually verified against smoketest raw events: cross-batch retranslations are near-total rewrites, not incremental refinement. status=tested. Writing cycle 4 Japanese report next."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-08T12:53:30.804712+00:00",
+      "note": "Cycle 4 WRITE_REPORT: wrote research_agent/reports/20260908_cycle4_report.md (Japanese) covering h-cross-utterance-flicker's result (cross-batch translation NE ~1.47 vs ~0.0001 within-batch, 6.2% of utterances affected), and added a section-8 addendum to 00_pipeline_overview_ja.md noting the metric-granularity lesson."
+    },
+    {
+      "from": "REFLECT",
+      "to": "SEARCH_PAPERS",
+      "at": "2026-09-08T12:54:34.243783+00:00",
+      "note": "Cycle 4 REFLECT: appended reflection entry. Key takeaways: h-cross-utterance-flicker's result raises priority of the blocked live-ASR hypotheses; uv-run-still-resyncs-zoom-extra gap found and documented in PLAYBOOK.md (use 'python3 -m <module>' directly for pure-analysis scripts instead); literature search hasn't run fresh since cycle 1 (3 cycles reusing/skipping) -- advancing to SEARCH_PAPERS for cycle 5 rather than GENERATE_HYPOTHESES to address that, with a concrete new angle (multi-batch/continuation retranslation stability policies) from this cycle's finding."
+    },
+    {
+      "from": "SEARCH_PAPERS",
+      "to": "EXTRACT_PAPERS",
+      "at": "2026-09-09T00:13:56.201558+00:00",
+      "note": "Cycle 5 SEARCH_PAPERS: ran fresh WebSearch pass (first since cycle 1) targeting the concrete angle flagged in cycle-4 reflection -- multi-batch/continuation retranslation stability policies, given h-cross-utterance-flicker's confirmed large cross-batch drift (NE~1.47). Found 4 new relevant papers as 'found' stubs: chen2024-revision-controllable-decoding (ICASSP 2024, Microsoft, beam-search revision-window + chunk preservation to bound flicker -- most directly on-target), zoom2025-self-speculative-retranslation (arXiv 2509.21740, display-only masking separating shown-stable vs internally-fluid suffix for LLM re-translation), cmu-nvidia2026-hierarchical-policy-simulst (arXiv 2604.21045, LLM multi-turn/KV-cache-reuse framing for streaming translation continuations, evaluated incl. En->Ja), papi2026-doa-decoder-only-attention-policy (arXiv 2605.31432, training-free decoder self-attention READ/WRITE policy for long-form SimulST with SpeechLLMs). Also found but not added as a paper stub: hlt-mt/simulstream (arXiv 2512.17648, IWSLT2026's official eval toolkit with emission+deletion tracking -- noted as a tooling reference, not a hypothesis-grounding finding, so skipped per stub-only-for-promising-hypothesis-material scope) and arXiv:2407.11010 (cascaded-system beam-search instability, tangential to this repo's non-cascaded LLM translator)."
+    },
+    {
+      "from": "EXTRACT_PAPERS",
+      "to": "READ_PAPERS",
+      "at": "2026-09-09T12:19:29.822584+00:00",
+      "note": "Cycle 5 EXTRACT_PAPERS: extracted all 4 new websearch-found papers via WebSearch snippets (WebFetch confirmed still EGRESS_BLOCKED on arxiv.org, same as cycles 2-4). chen2024-revision-controllable-decoding: beam-search-internal revision window, continuous stability/quality tradeoff -- not implementable API-side but supports h-masking-holdback's approach. zoom2025-self-speculative-retranslation: names 'display-only masking' explicitly, directly grounds h-gemini-only-masking-replay; speculative-decoding speedup itself not applicable (API-only, no draft/verify access). cmu-nvidia2026-hierarchical-policy-simulst: RL multi-turn/KV-cache training fix for cross-continuation drift, evaluated incl. En->Ja (+7 COMET/+1.25 MetricX @1.5s) -- training-time only, not applicable, but strong contextual grounding for h-cross-utterance-flicker's finding (NE~1.47 cross-batch) being a recognized problem; reinforces the repo's realistic fix is prompt-level context-passing, not architectural. papi2026-doa-decoder-only-attention-policy: same AlignAtt-family white-box-attention constraint as alignatt4llm-iwslt2026, reconfirms h-localagreement-asr-commit's LocalAgreement-2-only scoping, no new action."
+    },
+    {
+      "from": "READ_PAPERS",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-09T12:20:02.812018+00:00",
+      "note": "Cycle 5 READ_PAPERS: marked all 4 new papers status=read (summaries/key_findings already written during EXTRACT_PAPERS were substantive, not just snippets, so no additional rewrite needed). Cross-referenced against hypotheses.json and experiments/: zoom2025-self-speculative-retranslation's 'display-only masking' term directly and independently grounds the existing h-gemini-only-masking-replay hypothesis (still queued, blocked on Deepgram infra, not yet implemented) -- strengthens its literature grounding but doesn't change its scope, so no new hypothesis needed for it. cmu-nvidia2026-hierarchical-policy-simulst and papi2026-doa/chen2024 are both training-time or white-box-attention methods not implementable against this repo's API-only translator (same conclusion as alignatt4llm-iwslt2026 in cycle 2) -- confirms no new experiment-worthy hypothesis should be generated from those 3 papers alone. Backlog remains 3 queued (h-masking-holdback .5, h-localagreement-asr-commit .5, h-gemini-only-masking-replay /bin/bash.3), all still blocked on the Deepgram listen-websocket 403 first seen cycle 3 and not yet re-verified this cycle. Per PLAYBOOK depth-over-breadth guidance and the fact all 3 queued hypotheses are unimplemented/unrun (not lack of hypotheses), GENERATE_HYPOTHESES this cycle is a no-op: no new hypotheses added, backlog stays at 3 (well under the 6 cap). Next unit of work: HUMAN_APPROVAL check-budget pass (all 3 already auto_approved from prior cycles, so this should re-confirm and move straight to RUN_EXPERIMENTS with a fresh environment/Deepgram-websocket check)."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-09T12:20:19.982984+00:00",
+      "note": "Cycle 5: moving to HUMAN_APPROVAL to re-check budget for the 3 queued hypotheses before running."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-09T12:20:20.017440+00:00",
+      "note": "Cycle 5 HUMAN_APPROVAL: re-confirmed check-budget for all 3 queued hypotheses (h-masking-holdback 1.5, h-localagreement-asr-commit 1.5, h-gemini-only-masking-replay 0.3) -> all AUTO_APPROVE (0/7 USD spent today). All already had approval=auto_approved from prior cycles, uses_existing_clips=true, so no state change needed on the hypotheses themselves. Proceeding to RUN_EXPERIMENTS to re-verify the Deepgram listen-websocket blocker found in cycle 3-4 before picking one."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-09T12:27:22.705680+00:00",
+      "note": "Cycle 5 RUN_EXPERIMENTS: environment check found ffmpeg missing (installed via apt-get, clean) and set up a fresh python3.13 venv (uv pip install -e '.[experiments]') to get websockets/deepgram-sdk deps for a real listen-websocket handshake test. Root-caused the Deepgram blocker precisely: the egress proxy TLS-terminates and mangles the WebSocket upgrade handshake (Deepgram responds HTTP 400 'Connection header did not include upgrade' once TLS verification is bypassed to get past an unrelated OpenSSL CA quirk) -- a proxy capability gap, not a key/quota/code issue. h-masking-holdback and h-localagreement-asr-commit both still blocked on this (updated their blocked_reason with the precise signature for whoever fixes the proxy). Attempted h-gemini-only-masking-replay (the one hypothesis that doesn't need Deepgram) and found a genuine structural blocker while designing replay_masking.py: masking-holdback only affects continuation batches of multi-batch utterances, but TimedEvent never logged per-batch SOURCE (English) text for continuation batches -- only the translated Japanese text -- so none of the 47 existing experiment JSONs contain the data this hypothesis's 'replay existing JSON, zero new Deepgram spend' premise needs. Fixed the root gap for FUTURE recordings only (/bin/bash, no API calls): added TimedEvent.original_text to video_segment.py, populated at all 3 event sites, verified with ruff check and a full flicker_metrics.py re-run over the existing 47-file corpus (numbers unchanged: asr_ne_word_mean=0.2004, translation_ne_char_mean=0.0001, translation_ne_char_cross_batch_mean=1.4430, matching cycle 4). This does NOT unblock replay against the 47 existing JSONs (they predate the field) -- h-gemini-only-masking-replay now also effectively needs one live Deepgram recording once the proxy is fixed, same as the other two. No experiment ran, 0 USD spent, nothing fabricated. All 3 queued hypotheses remain blocked for cycle 5; only the code fix (video_segment.py) and hypothesis bookkeeping changed."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-09T12:27:33.515518+00:00",
+      "note": "Cycle 5 ANALYZE_RESULTS: nothing to analyze (no experiment ran). Confirmed all findings are precise environment/data-gap diagnoses, not fabricated results. Proceeding to write the Japanese cycle-5 report covering: 4 new papers read, the WS-proxy root cause, the h-gemini-only-masking-replay structural blocker + TimedEvent.original_text fix."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-09T12:28:26.121162+00:00",
+      "note": "Cycle 5 WRITE_REPORT: wrote research_agent/reports/20260909_cycle5_report.md (Japanese) covering the 4 new papers, the precise Deepgram WS-proxy root cause (mangled Connection:Upgrade header, distinct from cycle 3's generic 403), and the h-gemini-only-masking-replay structural data gap + TimedEvent.original_text fix. 00_pipeline_overview_ja.md not touched -- no structural pipeline change this cycle."
+    },
+    {
+      "from": "REFLECT",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-09T12:29:28.656431+00:00",
+      "note": "Cycle 5 REFLECT complete. Appended reflection entry: search pass was worthwhile (grounded existing hypotheses, correctly resulted in a no-op rather than backlog padding); the real value this cycle was going deeper on 2 'blocked' hypotheses instead of accepting blocked status at face value (precise WS-proxy root cause; h-gemini-only-masking-replay's structural data gap caught before writing the harness). Improved PLAYBOOK.md: (1) extended the Deepgram WS diagnostic script to distinguish a proxy CA cert-verification red herring from the real HTTP-level rejection reason, (2) documented that ruff needs 'uv pip install ruff' separately in the experiments venv. Advancing to GENERATE_HYPOTHESES (skipping SEARCH_PAPERS) for cycle 6 -- literature base is fresh, no new angle needed right now; next session should stay a no-op there unless the WS proxy issue is resolved (then run h-masking-holdback immediately, code is ready) or a new /bin/bash/no-live-API angle occurs (e.g. cycle-4's flagged time-to-second-batch distribution analysis)."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-10T00:14:19.293374+00:00",
+      "note": "Cycle 6 GENERATE_HYPOTHESES: added h-utterance-batch-timing ($0 retroactive analysis, direct follow-up to h-cross-utterance-flicker's flagged wall-clock-timing caveat). Backlog now 4 queued/proposed (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay all still blocked on Deepgram WS-proxy infra; h-utterance-batch-timing new, proposed), under the 6 cap. Re-verified environment: ffmpeg missing again this session (reinstalled via apt-get), REST reachable, but listen-websocket handshake still fails with the same proxy WS-upgrade-mangling signature as cycle 5 -- appended cycle-6 confirmation to the 3 blocked hypotheses' blocked_reason, no change in underlying infra gap. Moving to HUMAN_APPROVAL to check budget for the new hypothesis."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-10T00:14:35.129523+00:00",
+      "note": "Cycle 6 HUMAN_APPROVAL: check-budget(0.0)=AUTO_APPROVE for h-utterance-batch-timing (uses_existing_clips=true, retroactive-only). Set approval=auto_approved/status=queued. The 3 other queued hypotheses remain blocked on Deepgram WS-proxy infra (reconfirmed this cycle). Proceeding to RUN_EXPERIMENTS to implement h-utterance-batch-timing -- it needs no live ASR/LLM calls."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-10T00:17:29.812484+00:00",
+      "note": "Cycle 6 RUN_EXPERIMENTS complete: h-utterance-batch-timing implemented and run (0 USD). Set hypothesis result_summary/status=tested already (analysis was trivial enough to record inline with the implementation). Proceeding to ANALYZE_RESULTS to confirm no further analysis needed before WRITE_REPORT."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-10T00:17:35.993011+00:00",
+      "note": "Cycle 6 ANALYZE_RESULTS: confirmed h-utterance-batch-timing's result (first_batch_duration clusters at ~2.5-3.5s, matching deepgram_max_interim_duration) is complete and sound. Proceeding to write the cycle-6 Japanese report."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-10T00:18:26.132049+00:00",
+      "note": "Cycle 6 WRITE_REPORT: wrote research_agent/reports/20260910_cycle6_report.md (Japanese) covering the WS-proxy re-check (unchanged from cycle 5) and h-utterance-batch-timing's result. 00_pipeline_overview_ja.md not touched -- no structural pipeline change this cycle."
+    },
+    {
+      "from": "REFLECT",
+      "to": "SEARCH_PAPERS",
+      "at": "2026-09-10T00:19:23.944004+00:00",
+      "note": "Cycle 6 REFLECT complete. Appended reflection entry. Recommending SEARCH_PAPERS for cycle 7 (rather than GENERATE_HYPOTHESES) since $0 retroactive analyses on the existing 47-file corpus are now largely exhausted (within-batch NE, cross-batch NE, and cross-batch timing all measured) -- a fresh literature pass is more likely to add value than another no-op. If the WS proxy issue is resolved first, prioritize running h-masking-holdback immediately instead."
+    },
+    {
+      "from": "SEARCH_PAPERS",
+      "to": "EXTRACT_PAPERS",
+      "at": "2026-09-10T12:18:12.293834+00:00",
+      "note": "Cycle 7 SEARCH_PAPERS: fresh WebSearch pass per cycle-6 reflection (retroactive corpus analyses largely exhausted, literature stale since cycle 5). Found 3 new candidates: hoang2026-dynamic-lagging (arXiv 2609.05799, Microsoft, fine-tune-based prefix-commit-forward, evaluated EN->JA, directly targets the cross-batch flicker measured by h-cross-utterance-flicker), mllp-vrain-iwslt2026-simulst (arXiv 2606.17255, black-box adaptive policies + bounded-rewrite-on-catastrophic-failure, more directly implementable against an API-only translator), koshkin2024-tollmatch-zeroshot-context-aware (EMNLP 2024, arXiv 2406.13476, zero-shot LLM SimulST with explicit context carryover, no fine-tuning -- closest architectural match to this repo's API-only Gemini translator found so far, included despite predating the survey baseline dates because of its high relevance). Added all 3 as status=found stubs to papers.json. Deepgram/Google keys are set in this session's env but not yet re-verified for reachability (that check belongs to RUN_EXPERIMENTS, not this state); ffmpeg currently missing (installable via apt-get per prior cycles' notes, will redo when RUN_EXPERIMENTS is reached)."
+    },
+    {
+      "from": "EXTRACT_PAPERS",
+      "to": "READ_PAPERS",
+      "at": "2026-09-10T12:19:28.969870+00:00",
+      "note": "Cycle 7 EXTRACT_PAPERS: extracted all 3 new websearch-found papers via WebSearch snippets (WebFetch confirmed still EGRESS_BLOCKED on arxiv.org, same as cycles 2-5). Substantive summaries/key_findings written directly (not just extraction-level snippets), same pattern as cycle 5. Leading finding: hoang2026-dynamic-lagging (force-decode commit-forward) + koshkin2024-tollmatch (zero-shot prompt-only context injection) together suggest a concrete, zero-fine-tuning, zero-new-API-cost-to-design hypothesis: pass an utterance's already-committed prior translation back into the prompt for its next continuation batch instead of re-translating from scratch, to reduce the confirmed cross-batch flicker (h-cross-utterance-flicker, NE~1.47). mllp-vrain-iwslt2026-simulst's black-box policy + bounded-rewrite-on-catastrophic-failure noted as relevant to h-localagreement-asr-commit and h-masking-holdback respectively."
+    },
+    {
+      "from": "READ_PAPERS",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-10T12:20:26.648871+00:00",
+      "note": "Cycle 7 READ_PAPERS: marked hoang2026-dynamic-lagging, mllp-vrain-iwslt2026-simulst, koshkin2024-tollmatch-zeroshot-context-aware as read (summaries/key_findings were already substantive from EXTRACT_PAPERS). Cross-referenced the leading idea (commit-forward prior translation into continuation-batch prompts) directly against pipeline.py: confirmed _stream_batch() retranslates continuation batches from scratch with zero anchor to the utterance's own already-emitted translation, and commit_context() only fires once per whole utterance, never per continuation batch -- a real, previously-undocumented code gap, not just a literature gap. No overlap with already-answered experiments/results.csv sweeps. Advancing to write this up as a new hypothesis."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-10T12:21:25.768102+00:00",
+      "note": "Cycle 7 GENERATE_HYPOTHESES complete: added h-continuation-context-anchor ($1.5 est, uses_existing_clips=true). Backlog now 4 queued/proposed under the 6 cap. Moving to HUMAN_APPROVAL to check its budget."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-10T12:21:36.398482+00:00",
+      "note": "Cycle 7 HUMAN_APPROVAL: h-continuation-context-anchor auto_approved/queued. Proceeding to RUN_EXPERIMENTS to re-verify environment before picking a hypothesis (4 queued: h-continuation-context-anchor is new and needs the same live Deepgram ASR path as the 3 still-blocked ones)."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-10T12:23:32.175702+00:00",
+      "note": "Cycle 7 RUN_EXPERIMENTS: no experiment ran -- all 4 queued hypotheses blocked on the persistent Deepgram listen-websocket proxy issue (unchanged since cycle 3, re-confirmed this cycle with a direct handshake test). Nothing to analyze, nothing fabricated. Proceeding to WRITE_REPORT per PLAYBOOK's degraded-mode instructions."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-10T12:23:32.217855+00:00",
+      "note": "Cycle 7 ANALYZE_RESULTS: confirmed no billable experiment ran this cycle; the environment blocker is precisely diagnosed and unchanged from cycles 5-6. Writing the cycle-7 Japanese report covering: 3 new papers found/read, the code-level confirmation of the continuation-batch context gap in pipeline.py, the new h-continuation-context-anchor hypothesis, and the persistent Deepgram WS-proxy environment blocker (still needs human/infra action)."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-10T12:24:31.477928+00:00",
+      "note": "Cycle 7 WRITE_REPORT: wrote research_agent/reports/20260910_cycle7_report.md (Japanese) covering the 3 new papers, the code-level confirmation of the continuation-batch context gap, h-continuation-context-anchor, and the persistent Deepgram WS-proxy blocker. 00_pipeline_overview_ja.md not touched -- no structural pipeline change this cycle."
+    },
+    {
+      "from": "REFLECT",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-10T12:25:06.856972+00:00",
+      "note": "Cycle 7 REFLECT complete. Appended reflection entry to reflections.md. Advancing to GENERATE_HYPOTHESES for cycle 8 (skipping SEARCH_PAPERS) -- literature is fresh and already yielded h-continuation-context-anchor this cycle. If the WS proxy is still blocked next cycle, consider implementing h-continuation-context-anchor's code now (ready-to-run pattern) even before it can be tested live."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-11T00:14:26.958870+00:00",
+      "note": "Cycle 8 GENERATE_HYPOTHESES: no-op confirmed. Backlog is 4 queued (h-masking-holdback 1.5, h-localagreement-asr-commit 1.5, h-gemini-only-masking-replay 0.3, h-continuation-context-anchor 1.5), all well under the 6 cap and all already auto_approved; 3 tested (h-flicker-metric, h-cross-utterance-flicker, h-utterance-batch-timing). All 15 papers in papers.json are status=read -- no unread stubs to extract new hypotheses from, and every read paper's applicable idea is already grounded into an existing hypothesis (checked each: alignatt4llm-iwslt2026/papi2026-doa both white-box-attention-only and already excluded from h-localagreement-asr-commit's scope; chen2024-revision-controllable-decoding/zoom2025-self-speculative-retranslation/cmu-nvidia2026-hierarchical-policy-simulst already cited as supporting context for h-masking-holdback/h-gemini-only-masking-replay/h-cross-utterance-flicker respectively; hoang2026-dynamic-lagging/koshkin2024-tollmatch/mllp-vrain-iwslt2026-simulst already grounding h-continuation-context-anchor or noted as relevant-but-not-new per cycle-7 history). Per PLAYBOOK depth-over-breadth guidance and this being the 4th/5th consecutive cycle where the real blocker is the persistent Deepgram WS-proxy issue (not a lack of hypotheses to test), adding a new hypothesis now would just pad the backlog without addressing what is actually stalling progress. No changes to hypotheses.json this state. Proceeding to HUMAN_APPROVAL to re-check budget/approval status for the 4 queued hypotheses before RUN_EXPERIMENTS re-verifies the environment."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-11T12:15:30.147437+00:00",
+      "note": "Cycle 8 HUMAN_APPROVAL: no hypotheses with approval unset/proposed -- all 4 queued (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor) already auto_approved from prior cycles. Re-verified check-budget for 1.5 and 0.3 -> AUTO_APPROVE, daily cap rolled over to 2026-09-11 (0.0 spent). Proceeding to RUN_EXPERIMENTS to verify environment."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-11T12:29:10.275732+00:00",
+      "note": "Cycle 8 RUN_EXPERIMENTS: no experiment ran. Re-verified environment end to end -- Deepgram REST reachable (200) but the listen-websocket handshake still fails with the same proxy WS-upgrade-mangling signature as cycles 5-7 (HTTP 400 'Connection header did not include upgrade' with TLS verification disabled; cert-verified attempt fails on the proxy CA key-usage-extension quirk). ffmpeg install hit unrelated mirror 404s again and did not complete this session (moot -- Deepgram block applies regardless). Independently re-confirmed h-gemini-only-masking-replay's cycle-5 finding still holds: all 47 existing experiment JSONs predate the original_text field (2026-09-09) and have no date >= 2026-09-08, so no per-batch source text exists to replay; asr_interim timestamps don't reliably substitute (only 14/42 batch keys match exactly on a sample file). All 4 queued hypotheses (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor) remain blocked on the same root cause (no live Deepgram access in this sandbox). No /bin/bash retroactive hypotheses remain queued (h-flicker-metric/h-cross-utterance-flicker/h-utterance-batch-timing already tested in prior cycles). Appended cycle-8 UPDATE entries to each hypothesis's blocked_reason. /bin/bash spent, nothing fabricated."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-11T12:29:15.229655+00:00",
+      "note": "Cycle 8 ANALYZE_RESULTS: confirmed no billable experiment ran this cycle; nothing to analyze numerically. The one substantive finding this cycle is a data-availability gap for h-gemini-only-masking-replay (independently re-derived, matches cycle 5's conclusion) -- worth stating clearly in the Japanese report since it means this hypothesis cannot be de-risked from Deepgram access at all anymore, contrary to its original 'zero new Deepgram spend' premise."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-11T12:30:12.652010+00:00",
+      "note": "Cycle 8 WRITE_REPORT: wrote research_agent/reports/20260911_cycle8_report.md (Japanese) covering the re-confirmed env blocker (4th consecutive cycle, same signature) and the re-derived h-gemini-only-masking-replay data-gap finding. Did not touch 00_pipeline_overview_ja.md -- no material pipeline-shape change this cycle."
+    },
+    {
+      "from": "REFLECT",
+      "to": "SEARCH_PAPERS",
+      "at": "2026-09-11T12:31:04.487772+00:00",
+      "note": "Cycle 8 REFLECT complete. Appended reflection entry to reflections.md; made one small PLAYBOOK.md self-improvement (ffmpeg apt-get install is not reliably one-shot, cap retries at ~2 and move on). No new hypothesis added (backlog already saturated with 4 blocked, no new /bin/bash angle found). Advancing to SEARCH_PAPERS for cycle 9 -- literature is one cycle stale and the backlog can't grow productively without either new literature or Deepgram access returning; will search for evaluation methodologies that don't need live ASR and for continuation-context-anchoring prompt design examples."
+    },
+    {
+      "from": "SEARCH_PAPERS",
+      "to": "EXTRACT_PAPERS",
+      "at": "2026-09-12T00:13:08.446074+00:00",
+      "note": "Cycle 9 SEARCH_PAPERS: WebSearch pass targeting cycle-8's two flagged gaps (offline eval metrics not needing live ASR; continuation-context-anchor prompting precedents). Added 3 candidate papers as 'found' stubs: polak2026-meta-evaluation-latency-metrics, machacek-polak2025-cuni-offline-cla-latency, beavertalk2025-sentence-memory-bank. Re-surfaced but did not re-add 2 already-known papers (alignatt4llm-iwslt2026, mllp-vrain-iwslt2026-simulst)."
+    },
+    {
+      "from": "EXTRACT_PAPERS",
+      "to": "READ_PAPERS",
+      "at": "2026-09-12T00:14:11.434784+00:00",
+      "note": "Cycle 9 EXTRACT_PAPERS: extracted concrete claims for the 3 new papers via WebSearch snippets (arxiv/aclanthology WebFetch still EGRESS_BLOCKED) plus a direct WebFetch of the CLA metric's own repo (github.com/ufal/asr_latency, not arxiv). All 3 confirmed relevant to the two cycle-8-flagged gaps."
+    },
+    {
+      "from": "READ_PAPERS",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-12T00:14:28.037071+00:00",
+      "note": "Cycle 9 READ_PAPERS: finalized summaries/key_findings for the 3 new papers (already substantive from EXTRACT_PAPERS), marked read. Confirmed no overlap with existing 47 experiments or flicker_metrics.py -- CLA retroactive ASR-latency metric and YAAL/SOFTSEGMENTER are new territory."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-12T00:15:43.132802+00:00",
+      "note": "Cycle 9 GENERATE_HYPOTHESES: added 1 new hypothesis (h-cla-asr-latency-metric, $0 retroactive), kept backlog at 5 queued+proposed (within ~6 cap), prioritized depth. Updated h-continuation-context-anchor's grounding with beavertalk2025-sentence-memory-bank."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-12T00:15:56.878471+00:00",
+      "note": "Cycle 9 HUMAN_APPROVAL: h-cla-asr-latency-metric auto-approved (0.0, fits both caps). 5 hypotheses now queued with approval != needs_human (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor all previously auto_approved but blocked; h-cla-asr-latency-metric newly queued and $0/retroactive so not blocked on live access). Advancing to RUN_EXPERIMENTS."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-12T00:34:14.931128+00:00",
+      "note": "Cycle 9 RUN_EXPERIMENTS: implemented and ran h-cla-asr-latency-metric ($0 retroactive, 19 experiments analyzed). Re-verified Deepgram listen-websocket still blocked (identical HTTP 400 signature, cycles 5-9); other 4 queued hypotheses remain blocked, updated their blocked_reason. Advancing to ANALYZE_RESULTS."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-12T00:34:58.217751+00:00",
+      "note": "Cycle 9 ANALYZE_RESULTS: compared CLA latency against avg_end_to_end_latency_seconds for the endpointing sweep -- existing metric noisy/non-monotonic (7.3-18.9s), CLA flat (~4.07-4.10s). Hypothesis prediction directionally confirmed. status=tested. Advancing to WRITE_REPORT."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-12T00:36:14.051302+00:00",
+      "note": "Cycle 9 WRITE_REPORT: wrote research_agent/reports/20260912_cycle9_report.md (Japanese) covering the new h-cla-asr-latency-metric result (CLA flat vs noisy avg_end_to_end_latency_seconds across endpointing sweep), the still-unchanged Deepgram websocket blocker (5 cycles now), and a new question for the human (whether deepgram_endpointing is actually reaching the connection). Did not touch 00_pipeline_overview_ja.md -- no material pipeline-shape change."
+    },
+    {
+      "from": "REFLECT",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-12T00:36:58.585689+00:00",
+      "note": "Cycle 9 REFLECT complete. Appended reflection entry to reflections.md (lessons on sanity-checking retroactive metrics' intermediate values, not just aggregate means, before trusting them). No playbook change needed this cycle. Skipping a fresh SEARCH_PAPERS pass and advancing directly to GENERATE_HYPOTHESES: ANALYZE_RESULTS surfaced a concrete code-only $0 hypothesis candidate (verify deepgram_endpointing actually reaches the Deepgram connection setup) motivated by CLA's flat-latency finding, not by new literature."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-12T12:13:39.927473+00:00",
+      "note": "Cycle 10 GENERATE_HYPOTHESES: added h-endpointing-connection-verify ($0 code-only static-analysis), the concrete follow-up flagged by cycle-9's h-cla-asr-latency-metric ANALYZE_RESULTS (does config.deepgram_endpointing actually reach the Deepgram connection, or does the flat CLA latency across the endpointing sweep mean the config value never arrives?). Backlog now 5 queued/proposed (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor all still blocked on Deepgram WS-proxy infra; h-endpointing-connection-verify new, proposed, needs no live API access at all). Under the 6 cap. Moving to HUMAN_APPROVAL to check its budget."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-12T12:13:53.412509+00:00",
+      "note": "Cycle 10 HUMAN_APPROVAL: check-budget(0.0)=AUTO_APPROVE for h-endpointing-connection-verify (uses_existing_clips=true, needs no live API access at all). Set approval=auto_approved/status=queued. The other 4 queued hypotheses remain auto_approved but blocked on the persistent Deepgram WS-proxy infra issue. Proceeding to RUN_EXPERIMENTS to verify environment then pick a hypothesis -- h-endpointing-connection-verify is the only queued one not blocked on live Deepgram access, so it is this cycle's pick regardless of env state."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-12T12:15:00.373310+00:00",
+      "note": "Cycle 10 RUN_EXPERIMENTS: implemented h-endpointing-connection-verify as a pure static code audit ($0, no live experiment). Environment check: DEEPGRAM_API_KEY/GOOGLE_API_KEY both set, ffmpeg MISSING this session (not installed -- moot, since this hypothesis needs no audio/API calls at all). Traced config.deepgram_endpointing end-to-end from config.py through youtube_segment.py/video_segment.py CLI overrides, pipeline.py, deepgram_client.py's _build_options(), down into the deepgram-sdk's own listen.v1.connect() query-string construction (verified by downloading the deepgram-sdk 5.3.4 wheel, matching this repo's pyproject.toml pin, directly from PyPI and reading its source -- PyPI is unaffected by the sandbox's Deepgram-specific egress block). Confirmed the wiring is correct with no break; result written to hypothesis.result_summary, status=tested. Other 4 queued hypotheses remain blocked on Deepgram WS-proxy infra (not re-verified this cycle since ffmpeg/websocket check would be moot for a hypothesis that needed no live run). Advancing to ANALYZE_RESULTS."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-12T12:15:11.750832+00:00",
+      "note": "Cycle 10 ANALYZE_RESULTS: h-endpointing-connection-verify's result_summary (written inline during RUN_EXPERIMENTS since the code audit itself constituted the full analysis) is complete and sound -- confirms explanation (b) from h-cla-asr-latency-metric is ruled out (no wiring bug), leaving explanation (a) (clip/threshold-range insensitivity, or CLA measuring settled-text stability rather than utterance-boundary timing) as the standing account for cycle 9's flat CLA-latency finding across the endpointing sweep. Nothing further to analyze numerically (no new experiment JSON/results.csv row -- this was a code-correctness question, not a metric comparison). Advancing to WRITE_REPORT."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-12T12:16:10.264321+00:00",
+      "note": "Cycle 10 WRITE_REPORT: wrote research_agent/reports/20260912_cycle10_report.md (Japanese) covering h-endpointing-connection-verify's result (config.deepgram_endpointing wiring confirmed correct end-to-end, no bug; ruled out explanation (b) from cycle 9's flat-CLA finding). Did not touch 00_pipeline_overview_ja.md -- no material pipeline-shape change this cycle."
+    },
+    {
+      "from": "REFLECT",
+      "to": "GENERATE_HYPOTHESES",
+      "at": "2026-09-12T12:17:05.011514+00:00",
+      "note": "Cycle 10 REFLECT complete. Appended reflection entry to reflections.md. Playbook self-improvements: fixed stale hardcoded macOS path in Step 0 (this session's clone lives elsewhere, on feat/rm2278/async-containers not main), documented the two mismatched cycle counters. Advancing to GENERATE_HYPOTHESES directly (skipping SEARCH_PAPERS) for cycle 11 -- h-endpointing-connection-verify's result flags a concrete non-literature-driven next question (measure is_final/UtteranceEnd event timing directly, not just settled-text stability, to properly settle explanation (a) left open this cycle). If Deepgram WS-proxy access has returned by then, prioritize running h-masking-holdback live immediately instead."
+    },
+    {
+      "from": "GENERATE_HYPOTHESES",
+      "to": "HUMAN_APPROVAL",
+      "at": "2026-09-13T00:12:34.292214+00:00",
+      "note": "Cycle 11 GENERATE_HYPOTHESES: added h-asr-final-emission-latency ($0 retroactive analysis of is_final emission timing vs settled-text CLA stability, direct follow-up to h-endpointing-connection-verify's explanation (a)). Backlog now 5 queued/proposed (h-masking-holdback, h-localagreement-asr-commit, h-gemini-only-masking-replay, h-continuation-context-anchor all still blocked on Deepgram WS-proxy infra; h-asr-final-emission-latency new, needs no live API access, uses only already-logged is_final/playback_offset fields). Under the 6 cap. Moving to HUMAN_APPROVAL to check its budget."
+    },
+    {
+      "from": "HUMAN_APPROVAL",
+      "to": "RUN_EXPERIMENTS",
+      "at": "2026-09-13T00:12:49.515236+00:00",
+      "note": "Cycle 11 HUMAN_APPROVAL: check-budget(0.0)=AUTO_APPROVE for h-asr-final-emission-latency (uses_existing_clips=true, retroactive-only, no live API access needed). Set approval=auto_approved/status=queued. The other 4 queued hypotheses remain auto_approved but blocked on the persistent Deepgram WS-proxy infra issue. Proceeding to RUN_EXPERIMENTS -- h-asr-final-emission-latency is the only queued hypothesis not blocked on live Deepgram access, so it is this cycle's pick regardless of env state."
+    },
+    {
+      "from": "RUN_EXPERIMENTS",
+      "to": "ANALYZE_RESULTS",
+      "at": "2026-09-13T00:17:25.719836+00:00",
+      "note": "Cycle 11 RUN_EXPERIMENTS complete: h-asr-final-emission-latency implemented and run (0 USD). Result: pct_soft_finalized ~50-65% flat across the entire endpointing sweep, no clear scaling with deepgram_endpointing in either soft or genuine-final batch durations. Proceeding to ANALYZE_RESULTS to write result_summary."
+    },
+    {
+      "from": "ANALYZE_RESULTS",
+      "to": "WRITE_REPORT",
+      "at": "2026-09-13T00:18:13.817225+00:00",
+      "note": "Cycle 11 ANALYZE_RESULTS: h-asr-final-emission-latency's result_summary written and confirmed (soft-finalize rate flat 50-65% across the endpointing sweep, no monotonic trend, sweep2 endpointing>=800ms bit-identical). Writing the cycle-11 Japanese report next covering this result plus the hypothesis's mid-implementation correction (no distinct asr_final event kind; the real signal is is_utterance_end)."
+    },
+    {
+      "from": "WRITE_REPORT",
+      "to": "REFLECT",
+      "at": "2026-09-13T00:19:25.759819+00:00",
+      "note": "Cycle 11 WRITE_REPORT: wrote research_agent/reports/20260913_cycle11_report.md (Japanese) covering h-asr-final-emission-latency's mid-implementation correction (no distinct asr_final event kind; real signal is is_utterance_end) and its confirmed result. 00_pipeline_overview_ja.md not touched -- no material pipeline-shape change this cycle."
+    },
+    {
+      "from": "REFLECT",
+      "to": "SEARCH_PAPERS",
+      "at": "2026-09-13T00:20:13.971690+00:00",
+      "note": "Cycle 11 REFLECT complete. Appended reflection entry to reflections.md. No playbook changes this cycle. Advancing to SEARCH_PAPERS for cycle 12 -- $0 retroactive-analysis angles against the existing 47-file corpus feel largely exhausted after this cycle's genuine/soft-finalize-mix finding (within-batch NE, cross-batch NE, timing, CLA, wiring audit, and now finalize-mix have all been measured). If the Deepgram WS-proxy issue is resolved by then, prioritize running h-masking-holdback live immediately instead."
+    }
+  ]
+}

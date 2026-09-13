@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Live Captions</title>
+  <style>
+    body { font-family: monospace; margin: 1rem; background: #0b1221; color: #e8f0ff; }
+    #status { margin-bottom: 0.5rem; font-weight: bold; }
+    #stats {
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      background: #1a2744;
+      border-radius: 4px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.5rem;
+    }
+    .stat { text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: bold; }
+    .stat-label { font-size: 0.8rem; color: #8899aa; }
+    .lag-good { color: #4ade80; }
+    .lag-warn { color: #fbbf24; }
+    .lag-bad { color: #f87171; }
+    #log { white-space: pre-wrap; line-height: 1.6; max-height: 70vh; overflow-y: auto; }
+    .entry { padding: 0.25rem 0; border-bottom: 1px solid #1a2744; }
+    .entry-time { color: #6b7280; }
+    .entry-lag { font-size: 0.85rem; margin-left: 0.5rem; }
+    .entry-type { color: #60a5fa; margin: 0 0.5rem; }
+    .entry-type.translation { color: #a78bfa; }
+    .entry-type.asr_partial { color: #34d399; }
+  </style>
+</head>
+<body>
+  <div id="status">Connecting…</div>
+  <div id="stats">
+    <div class="stat">
+      <div class="stat-value" id="current-lag">-</div>
+      <div class="stat-label">Current Lag (s)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="avg-lag">-</div>
+      <div class="stat-label">Avg Lag (s)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="max-lag">-</div>
+      <div class="stat-label">Max Lag (s)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="msg-count">0</div>
+      <div class="stat-label">Messages</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="queue-stats">-</div>
+      <div class="stat-label">Queue (proc/drop/sum)</div>
+    </div>
+  </div>
+  <div id="log"></div>
+  <script>
+    /* =================================================================
+     * NEW 2026-02-04: Added lag monitoring UI for debugging
+     * ================================================================= */
+    const statusEl = document.getElementById('status');
+    const logEl = document.getElementById('log');
+    const currentLagEl = document.getElementById('current-lag');
+    const avgLagEl = document.getElementById('avg-lag');
+    const maxLagEl = document.getElementById('max-lag');
+    const msgCountEl = document.getElementById('msg-count');
+    const queueStatsEl = document.getElementById('queue-stats');
+
+    // Lag tracking - keeps last 100 measurements for averaging
+    const lagHistory = [];
+    const MAX_LAG_HISTORY = 100;
+    let maxLag = 0;  // Track worst-case lag
+    let msgCount = 0;  // Total messages received
+
+    // Update lag statistics display
+    function updateLagDisplay(lag) {
+      lagHistory.push(lag);
+      if (lagHistory.length > MAX_LAG_HISTORY) lagHistory.shift();  // Rolling window
+      
+      // Calculate average lag over window
+      const avg = lagHistory.reduce((a, b) => a + b, 0) / lagHistory.length;
+      maxLag = Math.max(maxLag, lag);  // Track maximum
+      msgCount++;
+
+      // Update UI with color coding
+      currentLagEl.textContent = lag.toFixed(2);
+      currentLagEl.className = 'stat-value ' + getLagClass(lag);
+      
+      avgLagEl.textContent = avg.toFixed(2);
+      avgLagEl.className = 'stat-value ' + getLagClass(avg);
+      
+      maxLagEl.textContent = maxLag.toFixed(2);
+      maxLagEl.className = 'stat-value ' + getLagClass(maxLag);
+      
+      msgCountEl.textContent = msgCount;
+    }
+
+    // Color code based on lag severity
+    function getLagClass(lag) {
+      if (lag < 3) return 'lag-good';   // Green: acceptable
+      if (lag < 7) return 'lag-warn';   // Yellow: concerning
+      return 'lag-bad';                  // Red: problematic
+    }
+
+    /* NEW 2026-02-04: Fetch queue stats from translator service */
+    async function fetchQueueStats() {
+      try {
+        // Fetch from translator service's /stats endpoint
+        const res = await fetch('http://localhost:8002/stats');
+        const data = await res.json();
+        // Display: processed/dropped/summarized counts
+        queueStatsEl.textContent = `${data.processed}/${data.dropped}/${data.summarized}`;
+        // Hover shows more detail
+        queueStatsEl.title = `Queue: ${data.queue_size}, Pending: ${data.pending_for_summary}, Lag: ${data.current_lag?.toFixed(1)}s`;
+      } catch (e) {
+        queueStatsEl.textContent = '-';  // Service not available
+      }
+    }
+    setInterval(fetchQueueStats, 2000);  // Poll every 2s
+
+    // Connect to WebSocket for real-time caption stream
+    const ws = new WebSocket('ws://localhost:8001/ws/caption');
+
+    ws.onopen = () => {
+      statusEl.textContent = 'Connected. Waiting for captions…';
+      fetchQueueStats();  // Initial fetch
+    };
+    ws.onerror = () => statusEl.textContent = 'WebSocket error';
+    ws.onclose = () => statusEl.textContent = 'Disconnected';
+
+    // Handle incoming messages
+    ws.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        const now = Date.now() / 1000;  // Current time in seconds
+        const msgTime = msg.ts || now;   // Message timestamp (when speech occurred)
+        const lag = now - msgTime;        // End-to-end latency
+
+        // Update stats for translation messages (the main metric we care about)
+        if (msg.type === 'translation') {
+          updateLagDisplay(lag);
+        }
+
+        // Format display with source/translation text
+        const body = msg.translated ?? msg.text ?? msg.src ?? JSON.stringify(msg);
+        const timeStr = new Date(msgTime * 1000).toLocaleTimeString();
+        const recvStr = new Date(now * 1000).toLocaleTimeString();
+        
+        const entry = document.createElement('div');
+        entry.className = 'entry';
+        
+        // Color and display lag information
+        const lagClass = getLagClass(lag);
+        const lagInfo = msg.lag ? ` (server: ${msg.lag.toFixed(1)}s)` : '';  // Server-measured lag
+        
+        entry.innerHTML = `
+          <span class="entry-time">[${timeStr} → ${recvStr}]</span>
+          <span class="entry-lag ${lagClass}">+${lag.toFixed(1)}s${lagInfo}</span>
+          <span class="entry-type ${msg.type || ''}">${msg.type || ''}</span>
+          ${escapeHtml(body)}
+        `;
+        logEl.prepend(entry);  // Newest at top
+
+        // Limit log entries to prevent memory issues
+        while (logEl.children.length > 200) {
+          logEl.removeChild(logEl.lastChild);
+        }
+      } catch (e) {
+        console.error('Parse error:', e);
+      }
+    };
+
+    // Prevent XSS when displaying message content
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

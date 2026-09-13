@@ -1,0 +1,1193 @@
+{
+  "date": "2026-07-22",
+  "experiment_name": "baseline_with_soft_finalize",
+  "domain": "llm_lecture_mixed_ja_en",
+  "input": {
+    "type": "local_video",
+    "path": "experiments\\clips\\clip_3m00_90s.wav",
+    "start_seconds": 0.0,
+    "duration_seconds": null
+  },
+  "models": {
+    "deepgram_model": "nova-3",
+    "deepgram_language": "multi",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-2.5-flash",
+    "gemini_thinking_budget": 0
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "translation_workers": 4,
+    "gemini_rpm_limit": 9,
+    "deepgram_endpointing": 500,
+    "deepgram_utterance_end_ms": 1000,
+    "deepgram_max_interim_duration": 4.0
+  },
+  "results": {
+    "segment_count": 7,
+    "avg_confidence": 0.9304199200000001,
+    "avg_end_to_end_latency_seconds": 6.90696889604841,
+    "max_end_to_end_latency_seconds": 8.374932842254637,
+    "avg_mt_latency_seconds": 0.15682319232395717,
+    "segments": [
+      {
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.02,
+        "asr_final_arrival": 6.358170032501221,
+        "translation_complete_arrival": 6.464941024780273,
+        "translation_first_token_arrival": 6.358170032501221,
+        "end_to_end_latency": 6.464941024780273,
+        "mt_latency": 0.10677099227905273,
+        "asr": "リンク を 後 ほど お 送 りする と思うので、",
+        "translation": "リンクを後ほどお送りすると思うので",
+        "confidence": 0.9819336
+      },
+      {
+        "asr_start_time": 3.02,
+        "asr_end_time": 7.630000000000001,
+        "asr_final_arrival": 9.579250812530518,
+        "translation_complete_arrival": 9.82418441772461,
+        "translation_first_token_arrival": 9.579250812530518,
+        "end_to_end_latency": 6.80418441772461,
+        "mt_latency": 0.2449336051940918,
+        "asr": "あのー、 そちら から ご 質問 いただければと思います。 で、 質問 はですね、 あの、 英語 で、 あの、",
+        "translation": "そちらからご質問いただければと思います。で、質問はですね、あの、英語で、あの、",
+        "confidence": 0.9785156
+      },
+      {
+        "asr_start_time": 7.63,
+        "asr_end_time": 11.8,
+        "asr_final_arrival": 14.676666021347046,
+        "translation_complete_arrival": 14.900202512741089,
+        "translation_first_token_arrival": 14.676666021347046,
+        "end_to_end_latency": 7.270202512741089,
+        "mt_latency": 0.22353649139404297,
+        "asr": "質問 いただく ように お願い できれば と思います。 えっと、 まあ、 英語 得意 で ない",
+        "translation": "質問 いただく ように お願い できれば と思います。えっと、まあ、英語得意でない",
+        "confidence": 0.8964844
+      },
+      {
+        "asr_start_time": 10.65,
+        "asr_end_time": 13.7000002,
+        "asr_final_arrival": 18.226289987564087,
+        "translation_complete_arrival": 18.392521381378174,
+        "translation_first_token_arrival": 18.226289987564087,
+        "end_to_end_latency": 7.7425213813781735,
+        "mt_latency": 0.16623139381408691,
+        "asr": "英語 得意 で ない 方、 あの、 GPT だ ったりとか、 LLM で",
+        "translation": "英語 得意 で ない 方、 あの、 GPT だったりとか、 LLM で",
+        "confidence": 0.8474121
+      },
+      {
+        "asr_start_time": 13.7,
+        "asr_end_time": 17.920000299999998,
+        "asr_final_arrival": 21.149457693099976,
+        "translation_complete_arrival": 21.369511604309082,
+        "translation_first_token_arrival": 21.149457693099976,
+        "end_to_end_latency": 7.669511604309083,
+        "mt_latency": 0.22005391120910645,
+        "asr": "あの、翻 訳 してもら える か すぐ 出 せる と思いますので、 英語 に、 あのー、",
+        "translation": "翻訳してもらえるかすぐ出せると思いますので、英語に、あのー、",
+        "confidence": 0.99121094
+      },
+      {
+        "asr_start_time": 17.92,
+        "asr_end_time": 22.700000700000004,
+        "asr_final_arrival": 26.159382343292236,
+        "translation_complete_arrival": 26.29493284225464,
+        "translation_first_token_arrival": 26.159382343292236,
+        "end_to_end_latency": 8.374932842254637,
+        "mt_latency": 0.13555049896240234,
+        "asr": "出 力 した ものを、 あのー、 質問 して いただく ように お願い できれば と思います。",
+        "translation": "出力したものを、あのー、質問していただくようにお願いできればと思います。",
+        "confidence": 0.9970703
+      },
+      {
+        "asr_start_time": 22.86,
+        "asr_end_time": 23.899999,
+        "asr_final_arrival": 26.881803035736084,
+        "translation_complete_arrival": 26.882488489151,
+        "translation_first_token_arrival": 26.881803035736084,
+        "end_to_end_latency": 4.0224884891510015,
+        "mt_latency": 0.0006854534149169922,
+        "asr": "はい。",
+        "translation": "はい。",
+        "confidence": 0.8203125
+      }
+    ],
+    "events": [
+      {
+        "kind": "asr_interim",
+        "playback_offset": 2.206206798553467,
+        "wall_clock_lag": 2.206206798553467,
+        "text": "リンク を 後 ほど",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 2.0,
+        "confidence": 0.96777344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 3.3002617359161377,
+        "wall_clock_lag": 3.3002617359161377,
+        "text": "リンク を 後 ほど お 送 りする と思うので、",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.0,
+        "confidence": 0.9819336
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 4.398272514343262,
+        "wall_clock_lag": 4.398272514343262,
+        "text": "リンク を 後 ほど お 送 りする と思うので、 あのー、 そっち",
+        "is_final": false,
+        "asr_start_time": 0.0,
+        "asr_end_time": 4.0,
+        "confidence": 0.9892578
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 5.5310280323028564,
+        "wall_clock_lag": 2.5110280323028564,
+        "text": "あのー、 そちら から ご 質問 いただけ",
+        "is_final": false,
+        "asr_start_time": 3.02,
+        "asr_end_time": 5.0,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 6.358170032501221,
+        "wall_clock_lag": 6.358170032501221,
+        "text": "リンク",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.02,
+        "confidence": 0.9819336
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 6.359154939651489,
+        "wall_clock_lag": 6.359154939651489,
+        "text": "リンクを後ほどお送りすると思うので",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.02,
+        "confidence": 0.9819336
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 6.464941024780273,
+        "wall_clock_lag": 6.464941024780273,
+        "text": "リンクを後ほどお送りすると思うので",
+        "is_final": true,
+        "asr_start_time": 0.0,
+        "asr_end_time": 3.02,
+        "confidence": 0.9819336
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 6.591687440872192,
+        "wall_clock_lag": 3.5716874408721924,
+        "text": "あのー、 そちら から ご 質問 いただければと思います",
+        "is_final": false,
+        "asr_start_time": 3.02,
+        "asr_end_time": 6.0,
+        "confidence": 0.99609375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 7.693000555038452,
+        "wall_clock_lag": 4.673000555038453,
+        "text": "あのー、 そちら から ご 質問 いただければと思います。 で、 質問 はですね、 あの、",
+        "is_final": false,
+        "asr_start_time": 3.02,
+        "asr_end_time": 7.0,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 8.796902418136597,
+        "wall_clock_lag": 5.776902418136597,
+        "text": "あのー、 そちら から ご 質問 いただければと思います。 で、 質問 はですね、 あの、 英語 で 質問",
+        "is_final": false,
+        "asr_start_time": 3.02,
+        "asr_end_time": 8.0,
+        "confidence": 0.9902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 9.539785861968994,
+        "wall_clock_lag": 1.9097858619689942,
+        "text": "質問 いただく ように お願い",
+        "is_final": false,
+        "asr_start_time": 7.63,
+        "asr_end_time": 8.6999997,
+        "confidence": 0.9892578
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 9.579250812530518,
+        "wall_clock_lag": 6.559250812530518,
+        "text": "そ",
+        "is_final": true,
+        "asr_start_time": 3.02,
+        "asr_end_time": 7.630000000000001,
+        "confidence": 0.9785156
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 9.59830117225647,
+        "wall_clock_lag": 6.57830117225647,
+        "text": "そちらからご質問いただければと思います。で、質問はですね、あの、",
+        "is_final": true,
+        "asr_start_time": 3.02,
+        "asr_end_time": 7.630000000000001,
+        "confidence": 0.9785156
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 9.659273862838745,
+        "wall_clock_lag": 6.6392738628387455,
+        "text": "そちらからご質問いただければと思います。で、質問はですね、あの、英語で、あの、",
+        "is_final": true,
+        "asr_start_time": 3.02,
+        "asr_end_time": 7.630000000000001,
+        "confidence": 0.9785156
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 9.82418441772461,
+        "wall_clock_lag": 6.80418441772461,
+        "text": "そちらからご質問いただければと思います。で、質問はですね、あの、英語で、あの、",
+        "is_final": true,
+        "asr_start_time": 3.02,
+        "asr_end_time": 7.630000000000001,
+        "confidence": 0.9785156
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 10.747884750366211,
+        "wall_clock_lag": 3.117884750366211,
+        "text": "質問 頂 く ように お願い できれば と思います。",
+        "is_final": false,
+        "asr_start_time": 7.63,
+        "asr_end_time": 9.8,
+        "confidence": 0.9790039
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 11.836683988571167,
+        "wall_clock_lag": 4.206683988571167,
+        "text": "質問 いただく ように お願い できれば と思います。 えっと、 ま、",
+        "is_final": false,
+        "asr_start_time": 7.63,
+        "asr_end_time": 10.8,
+        "confidence": 0.96435547
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 12.941427946090698,
+        "wall_clock_lag": 5.311427946090698,
+        "text": "質問 いただく ように お願い できれば と思います。 えっと、 まあ、 英語 得意 で ない",
+        "is_final": false,
+        "asr_start_time": 7.63,
+        "asr_end_time": 11.8,
+        "confidence": 0.8964844
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 13.92279601097107,
+        "wall_clock_lag": 3.272796010971069,
+        "text": "英語 得意 で ない 方、 あの、 GPT だ",
+        "is_final": false,
+        "asr_start_time": 10.65,
+        "asr_end_time": 12.7000002,
+        "confidence": 0.91845703
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 14.676666021347046,
+        "wall_clock_lag": 7.046666021347046,
+        "text": "質問 ",
+        "is_final": true,
+        "asr_start_time": 7.63,
+        "asr_end_time": 11.8,
+        "confidence": 0.8964844
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 14.677422285079956,
+        "wall_clock_lag": 7.047422285079956,
+        "text": "質問 いただく ように お願い できれば と思います。えっと、まあ、英語得意",
+        "is_final": true,
+        "asr_start_time": 7.63,
+        "asr_end_time": 11.8,
+        "confidence": 0.8964844
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 14.714524745941162,
+        "wall_clock_lag": 7.084524745941162,
+        "text": "質問 いただく ように お願い できれば と思います。えっと、まあ、英語得意でない",
+        "is_final": true,
+        "asr_start_time": 7.63,
+        "asr_end_time": 11.8,
+        "confidence": 0.8964844
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 14.900202512741089,
+        "wall_clock_lag": 7.270202512741089,
+        "text": "質問 いただく ように お願い できれば と思います。えっと、まあ、英語得意でない",
+        "is_final": true,
+        "asr_start_time": 7.63,
+        "asr_end_time": 11.8,
+        "confidence": 0.8964844
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 15.00983452796936,
+        "wall_clock_lag": 4.35983452796936,
+        "text": "英語 得意 で ない 方、 あの、 GPT だ ったりとか、 LLM で",
+        "is_final": false,
+        "asr_start_time": 10.65,
+        "asr_end_time": 13.7000002,
+        "confidence": 0.84887695
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 16.100894689559937,
+        "wall_clock_lag": 5.450894689559936,
+        "text": "英語 得意 で ない 方、 あの、 GPT だ ったりとか LLM で、 あの、 本 役 してもら える",
+        "is_final": false,
+        "asr_start_time": 10.65,
+        "asr_end_time": 14.7,
+        "confidence": 0.94311523
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 17.199581146240234,
+        "wall_clock_lag": 3.499581146240235,
+        "text": "あの、翻 訳 してもら え れば すぐ 出 せる",
+        "is_final": false,
+        "asr_start_time": 13.7,
+        "asr_end_time": 15.7,
+        "confidence": 0.984375
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 18.226289987564087,
+        "wall_clock_lag": 7.576289987564087,
+        "text": "英語 得意 で",
+        "is_final": true,
+        "asr_start_time": 10.65,
+        "asr_end_time": 13.7000002,
+        "confidence": 0.8474121
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 18.22710132598877,
+        "wall_clock_lag": 7.577101325988769,
+        "text": "英語 得意 で ない 方、 あの、 GPT だったりとか、 LLM で",
+        "is_final": true,
+        "asr_start_time": 10.65,
+        "asr_end_time": 13.7000002,
+        "confidence": 0.8474121
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 18.30824899673462,
+        "wall_clock_lag": 4.60824899673462,
+        "text": "あの、翻 訳 してもら え れば すぐ 出 せる と思いますので、",
+        "is_final": false,
+        "asr_start_time": 13.7,
+        "asr_end_time": 16.700001,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 18.392521381378174,
+        "wall_clock_lag": 7.7425213813781735,
+        "text": "英語 得意 で ない 方、 あの、 GPT だったりとか、 LLM で",
+        "is_final": true,
+        "asr_start_time": 10.65,
+        "asr_end_time": 13.7000002,
+        "confidence": 0.8474121
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 19.3947331905365,
+        "wall_clock_lag": 5.6947331905365,
+        "text": "あの、翻 訳 してもら える か すぐ 出 せる と思いますので、 英語 に、 あのー、",
+        "is_final": false,
+        "asr_start_time": 13.7,
+        "asr_end_time": 17.700001,
+        "confidence": 0.99316406
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 19.845224618911743,
+        "wall_clock_lag": 6.145224618911744,
+        "text": "翻 訳 してもら える か すぐ 出 せる と思いますので、 英語 に、 あのー、",
+        "is_final": false,
+        "asr_start_time": 13.7,
+        "asr_end_time": 18.1000006,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 20.79625391960144,
+        "wall_clock_lag": 2.8762539196014387,
+        "text": "出 力 した",
+        "is_final": false,
+        "asr_start_time": 17.92,
+        "asr_end_time": 18.999999900000002,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 21.149457693099976,
+        "wall_clock_lag": 7.449457693099976,
+        "text": "翻訳",
+        "is_final": true,
+        "asr_start_time": 13.7,
+        "asr_end_time": 17.920000299999998,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 21.18219757080078,
+        "wall_clock_lag": 7.482197570800782,
+        "text": "翻訳してもらえるかすぐ出せると思いますので、英語に、あのー、",
+        "is_final": true,
+        "asr_start_time": 13.7,
+        "asr_end_time": 17.920000299999998,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 21.369511604309082,
+        "wall_clock_lag": 7.669511604309083,
+        "text": "翻訳してもらえるかすぐ出せると思いますので、英語に、あのー、",
+        "is_final": true,
+        "asr_start_time": 13.7,
+        "asr_end_time": 17.920000299999998,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 21.995373010635376,
+        "wall_clock_lag": 4.075373010635374,
+        "text": "出 力 した ものを、 あのー、",
+        "is_final": false,
+        "asr_start_time": 17.92,
+        "asr_end_time": 20.1000003,
+        "confidence": 0.9951172
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 23.09059238433838,
+        "wall_clock_lag": 5.170592384338377,
+        "text": "出 力 した ものを、 あのー、 質問 して いただく ように お",
+        "is_final": false,
+        "asr_start_time": 17.92,
+        "asr_end_time": 21.1000003,
+        "confidence": 0.99609375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 24.288872957229614,
+        "wall_clock_lag": 6.3688729572296126,
+        "text": "出 力 した ものを、 あのー、 質問 して いただく ように お願い できれば と思い ま",
+        "is_final": false,
+        "asr_start_time": 17.92,
+        "asr_end_time": 22.200000700000004,
+        "confidence": 0.9873047
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 24.840809106826782,
+        "wall_clock_lag": 6.9208091068267805,
+        "text": "出 力 した ものを、 あのー、 質問 して いただく ように お願い できれば と思います。",
+        "is_final": false,
+        "asr_start_time": 17.92,
+        "asr_end_time": 22.700000700000004,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 26.15746831893921,
+        "wall_clock_lag": 3.2974683189392096,
+        "text": "はい。",
+        "is_final": false,
+        "asr_start_time": 22.86,
+        "asr_end_time": 23.899999,
+        "confidence": 0.8203125
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 26.159382343292236,
+        "wall_clock_lag": 8.239382343292235,
+        "text": "出力したものを、",
+        "is_final": true,
+        "asr_start_time": 17.92,
+        "asr_end_time": 22.700000700000004,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 26.16024351119995,
+        "wall_clock_lag": 8.24024351119995,
+        "text": "出力したものを、あのー、質問していただくようにお願いできればと思います。",
+        "is_final": true,
+        "asr_start_time": 17.92,
+        "asr_end_time": 22.700000700000004,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 26.29493284225464,
+        "wall_clock_lag": 8.374932842254637,
+        "text": "出力したものを、あのー、質問していただくようにお願いできればと思います。",
+        "is_final": true,
+        "asr_start_time": 17.92,
+        "asr_end_time": 22.700000700000004,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "translation_partial",
+        "playback_offset": 26.881803035736084,
+        "wall_clock_lag": 4.0218030357360846,
+        "text": "はい。",
+        "is_final": true,
+        "asr_start_time": 22.86,
+        "asr_end_time": 23.899999,
+        "confidence": 0.8203125
+      },
+      {
+        "kind": "translation_complete",
+        "playback_offset": 26.882488489151,
+        "wall_clock_lag": 4.0224884891510015,
+        "text": "はい。",
+        "is_final": true,
+        "asr_start_time": 22.86,
+        "asr_end_time": 23.899999,
+        "confidence": 0.8203125
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 27.452409982681274,
+        "wall_clock_lag": 4.592409982681275,
+        "text": "はい。 では",
+        "is_final": false,
+        "asr_start_time": 22.86,
+        "asr_end_time": 24.9999994,
+        "confidence": 0.98291016
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 28.596102714538574,
+        "wall_clock_lag": 5.736102714538575,
+        "text": "はい。 では 講 義 の本 質",
+        "is_final": false,
+        "asr_start_time": 22.86,
+        "asr_end_time": 25.9999994,
+        "confidence": 0.96240234
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 29.757425785064697,
+        "wall_clock_lag": 6.897425785064698,
+        "text": "はい。 では 講 義 の方に 移 って いきたい と思ってる ん",
+        "is_final": false,
+        "asr_start_time": 22.86,
+        "asr_end_time": 27.1,
+        "confidence": 0.9760742
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 30.632171392440796,
+        "wall_clock_lag": 4.0321713924407945,
+        "text": "んですけども、 今回",
+        "is_final": false,
+        "asr_start_time": 26.6,
+        "asr_end_time": 27.8999992,
+        "confidence": 0.99902344
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 31.71315574645996,
+        "wall_clock_lag": 5.1131557464599595,
+        "text": "んですけども、 今回 小 島 さ んですね。",
+        "is_final": false,
+        "asr_start_time": 26.6,
+        "asr_end_time": 28.8999992,
+        "confidence": 0.9753418
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 32.804402351379395,
+        "wall_clock_lag": 6.204402351379393,
+        "text": "んですけども、 今回 小 島 さ んですね。 監 修 医 者 として",
+        "is_final": false,
+        "asr_start_time": 26.6,
+        "asr_end_time": 29.8999992,
+        "confidence": 0.9555664
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 33.900402307510376,
+        "wall_clock_lag": 7.3004023075103746,
+        "text": "んですけども、 今回 あ の小 島 さ んですね。 あの、 監 修 医 者 として 今日 今 入って き",
+        "is_final": false,
+        "asr_start_time": 26.6,
+        "asr_end_time": 30.899999,
+        "confidence": 0.96069336
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 34.66938400268555,
+        "wall_clock_lag": 4.749384002685545,
+        "text": "今日 今 入って きて くれて、 まあ",
+        "is_final": false,
+        "asr_start_time": 29.92,
+        "asr_end_time": 31.6000003,
+        "confidence": 0.984375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 35.57075619697571,
+        "wall_clock_lag": 5.650756196975706,
+        "text": "今日 今 入って きて くれて ますので、",
+        "is_final": false,
+        "asr_start_time": 29.92,
+        "asr_end_time": 32.2999992,
+        "confidence": 0.9921875
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 36.531450510025024,
+        "wall_clock_lag": 6.611450510025023,
+        "text": "今日 今 入って きて くれて ますので、 お じ さん さんの た",
+        "is_final": false,
+        "asr_start_time": 29.92,
+        "asr_end_time": 33.2999992,
+        "confidence": 0.9748535
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 37.6163763999939,
+        "wall_clock_lag": 7.696376399993895,
+        "text": "今日 今 入って きて くれて ますので、 お じ さん さん だったりとか 他の",
+        "is_final": false,
+        "asr_start_time": 29.92,
+        "asr_end_time": 34.299999,
+        "confidence": 0.9770508
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 38.69952368736267,
+        "wall_clock_lag": 4.469523687362674,
+        "text": "一人 残 し、",
+        "is_final": false,
+        "asr_start_time": 34.23,
+        "asr_end_time": 35.299999699999994,
+        "confidence": 0.9094238
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 39.947969913482666,
+        "wall_clock_lag": 5.717969913482669,
+        "text": "一人 残 し、 えっと、 皆さん の紹介",
+        "is_final": false,
+        "asr_start_time": 34.23,
+        "asr_end_time": 36.400002,
+        "confidence": 0.9897461
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 41.004547119140625,
+        "wall_clock_lag": 6.774547119140628,
+        "text": "一人 残 し、 えっと、 皆さん の紹介 いただける かなと思います の",
+        "is_final": false,
+        "asr_start_time": 34.23,
+        "asr_end_time": 37.400002,
+        "confidence": 0.9667969
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 42.091233253479004,
+        "wall_clock_lag": 7.861233253479007,
+        "text": "一人 残 し、 えっと、 皆さん の紹介 いただける かなと思います ので、 はい、 ちょっと こう",
+        "is_final": false,
+        "asr_start_time": 34.23,
+        "asr_end_time": 38.400002,
+        "confidence": 0.9526367
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 43.07368350028992,
+        "wall_clock_lag": 5.073683500289917,
+        "text": "ここから ボタン 立ち しよう と",
+        "is_final": false,
+        "asr_start_time": 38.0,
+        "asr_end_time": 39.2999992,
+        "confidence": 0.59521484
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 44.179486989974976,
+        "wall_clock_lag": 6.179486989974976,
+        "text": "ここから ボタン 立ち しよう と思います。 小 島 さん、 よろしく",
+        "is_final": false,
+        "asr_start_time": 38.0,
+        "asr_end_time": 40.2999992,
+        "confidence": 0.6533203
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 45.68854570388794,
+        "wall_clock_lag": 7.6885457038879395,
+        "text": "ここから ボタン 立ち しよう と思います。 小 島 さん よろしくお願いします。",
+        "is_final": false,
+        "asr_start_time": 38.0,
+        "asr_end_time": 41.7000008,
+        "confidence": 0.8859863
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 47.00200080871582,
+        "wall_clock_lag": 9.00200080871582,
+        "text": "ここから ボタン 立ち しよう と思います。 小 島 さん よろしくお願いします。 あ、 はい。",
+        "is_final": false,
+        "asr_start_time": 38.0,
+        "asr_end_time": 42.9000015,
+        "confidence": 0.79541016
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 47.107731103897095,
+        "wall_clock_lag": 5.577731103897094,
+        "text": "はい。",
+        "is_final": false,
+        "asr_start_time": 41.53,
+        "asr_end_time": 43.0000012,
+        "confidence": 0.6088867
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 48.2011284828186,
+        "wall_clock_lag": 6.671128482818602,
+        "text": "はい、 お願いします。 コメント",
+        "is_final": false,
+        "asr_start_time": 41.53,
+        "asr_end_time": 44.0000012,
+        "confidence": 0.5957031
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 49.30024814605713,
+        "wall_clock_lag": 7.770248146057128,
+        "text": "はい、 お願いします。 画面 共有 します。",
+        "is_final": false,
+        "asr_start_time": 41.53,
+        "asr_end_time": 45.0000012,
+        "confidence": 0.9121094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 56.73166513442993,
+        "wall_clock_lag": 7.121665134429932,
+        "text": "先ほど 川",
+        "is_final": false,
+        "asr_start_time": 49.61,
+        "asr_end_time": 51.7999986,
+        "confidence": 0.56689453
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 57.840003490448,
+        "wall_clock_lag": 8.230003490447999,
+        "text": "はい。 先ほど 川 崎 さん からも",
+        "is_final": false,
+        "asr_start_time": 49.61,
+        "asr_end_time": 52.7999986,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 58.72176694869995,
+        "wall_clock_lag": 9.111766948699952,
+        "text": "はい。 先ほど 川 崎 さん からも",
+        "is_final": false,
+        "asr_start_time": 49.61,
+        "asr_end_time": 53.5999979,
+        "confidence": 0.98828125
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 59.937939405441284,
+        "wall_clock_lag": 6.527939405441288,
+        "text": "ご紹介 あり まし",
+        "is_final": false,
+        "asr_start_time": 53.41,
+        "asr_end_time": 54.7000009,
+        "confidence": 0.72802734
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 61.13508439064026,
+        "wall_clock_lag": 7.725084390640262,
+        "text": "ご紹介 ありました が、 今日",
+        "is_final": false,
+        "asr_start_time": 53.41,
+        "asr_end_time": 55.700001,
+        "confidence": 0.9589844
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 62.11526012420654,
+        "wall_clock_lag": 8.705260124206546,
+        "text": "ご紹介 ありました が、 今日 ゲ スト 公園",
+        "is_final": false,
+        "asr_start_time": 53.41,
+        "asr_end_time": 56.700001,
+        "confidence": 0.9633789
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 63.553977966308594,
+        "wall_clock_lag": 10.143977966308597,
+        "text": "ご紹介 ありました が、 今日 ゲ スト 公 演 ということで、",
+        "is_final": false,
+        "asr_start_time": 53.41,
+        "asr_end_time": 58.0,
+        "confidence": 0.9633789
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 64.51642799377441,
+        "wall_clock_lag": 6.706427993774412,
+        "text": "二 名",
+        "is_final": false,
+        "asr_start_time": 57.81,
+        "asr_end_time": 58.9000002,
+        "confidence": 0.99121094
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 65.72244453430176,
+        "wall_clock_lag": 7.9124445343017555,
+        "text": "二 名 のリ ップ ゲ スト に です",
+        "is_final": false,
+        "asr_start_time": 57.81,
+        "asr_end_time": 59.999998600000005,
+        "confidence": 0.97265625
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 66.8148581981659,
+        "wall_clock_lag": 9.004858198165891,
+        "text": "二 名 のリ ップ ゲ スト に ですね、 お話",
+        "is_final": false,
+        "asr_start_time": 57.81,
+        "asr_end_time": 60.999998600000005,
+        "confidence": 0.9760742
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 67.9091203212738,
+        "wall_clock_lag": 10.099120321273801,
+        "text": "二 名 のリ ップ ゲ スト に ですね、 お話 をして いただ こう",
+        "is_final": false,
+        "asr_start_time": 57.81,
+        "asr_end_time": 61.999998600000005,
+        "confidence": 0.98535156
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 69.42622542381287,
+        "wall_clock_lag": 7.036225423812866,
+        "text": "ます。 と",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 63.4000021,
+        "confidence": 0.9970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 70.5274429321289,
+        "wall_clock_lag": 8.137442932128906,
+        "text": "ます。 二人 とも 両 者",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 64.4000021,
+        "confidence": 0.8935547
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 71.63280844688416,
+        "wall_clock_lag": 9.242808446884155,
+        "text": "ます。 二人 とも 両 者 とも ですね、 Google の",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 65.4000021,
+        "confidence": 0.9550781
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 72.72641134262085,
+        "wall_clock_lag": 10.336411342620849,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 66.400002,
+        "confidence": 0.9873047
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 73.49346590042114,
+        "wall_clock_lag": 11.103465900421142,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 67.099999,
+        "confidence": 0.9838867
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 74.46696376800537,
+        "wall_clock_lag": 12.07696376800537,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 68.0000006,
+        "confidence": 0.984375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 75.5598087310791,
+        "wall_clock_lag": 13.169808731079101,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 69.0000006,
+        "confidence": 0.984375
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 76.64561009407043,
+        "wall_clock_lag": 14.255610094070434,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 70.0000006,
+        "confidence": 0.9506836
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 77.74725937843323,
+        "wall_clock_lag": 15.357259378433227,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 71.000001,
+        "confidence": 0.9526367
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 79.2685182094574,
+        "wall_clock_lag": 16.878518209457397,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リ ーム",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 72.400002,
+        "confidence": 0.9526367
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 80.3627417087555,
+        "wall_clock_lag": 17.972741708755493,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で、 リア",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 73.400002,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 81.34267282485962,
+        "wall_clock_lag": 18.95267282485962,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 74.300004,
+        "confidence": 0.9589844
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 82.45274496078491,
+        "wall_clock_lag": 20.06274496078491,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 75.300004,
+        "confidence": 0.9526367
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 83.50337505340576,
+        "wall_clock_lag": 21.11337505340576,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 76.199998,
+        "confidence": 0.9526367
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 84.30333042144775,
+        "wall_clock_lag": 21.913330421447753,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 77.000001,
+        "confidence": 0.9526367
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 85.39842653274536,
+        "wall_clock_lag": 23.00842653274536,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 78.000001,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 86.5002338886261,
+        "wall_clock_lag": 24.110233888626098,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということ",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 79.0,
+        "confidence": 0.9589844
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 87.60269069671631,
+        "wall_clock_lag": 25.212690696716308,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 六",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 80.0,
+        "confidence": 0.9526367
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 88.70793223381042,
+        "wall_clock_lag": 26.317932233810424,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 81.0,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 89.79838275909424,
+        "wall_clock_lag": 27.408382759094238,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 人",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 82.0,
+        "confidence": 0.93847656
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 90.88649845123291,
+        "wall_clock_lag": 28.49649845123291,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 さ し",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 83.0,
+        "confidence": 0.9526367
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 92.08776783943176,
+        "wall_clock_lag": 29.697767839431762,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら います。",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 84.1,
+        "confidence": 0.95703125
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 92.51555275917053,
+        "wall_clock_lag": 30.12555275917053,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 両 者",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 84.5,
+        "confidence": 0.94970703
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 93.73189854621887,
+        "wall_clock_lag": 31.34189854621887,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 85.6,
+        "confidence": 0.9589844
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 94.82667589187622,
+        "wall_clock_lag": 32.43667589187622,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 86.6,
+        "confidence": 0.9589844
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 95.91762566566467,
+        "wall_clock_lag": 33.52762566566467,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 87.6,
+        "confidence": 0.9526367
+      },
+      {
+        "kind": "asr_interim",
+        "playback_offset": 97.87154769897461,
+        "wall_clock_lag": 35.48154769897461,
+        "text": "ます。 二人 とも、 両 者 とも ですね、 Google の研究 者、 になります。 で、 一人 目が ジャ シャ ン ゴ ー さんで、 ライブ スト リーミング で リアル タイム で ご覧 いただきます ね。 二人 目が ゆ ん ち い じ ょう さん ということで、 僕が した ビ デオ をちょっと 本 日は 流 させて もら 。 で、 両 者 とも 英語 で ですね、 講 演 して いただく ので、 必要 であれば 日本語 の",
+        "is_final": false,
+        "asr_start_time": 62.39,
+        "asr_end_time": 89.400002,
+        "confidence": 0.9716797
+      }
+    ],
+    "full_asr": "リンク を 後 ほど お 送 りする と思うので、\nあのー、 そちら から ご 質問 いただければと思います。 で、 質問 はですね、 あの、 英語 で、 あの、\n質問 いただく ように お願い できれば と思います。 えっと、 まあ、 英語 得意 で ない\n英語 得意 で ない 方、 あの、 GPT だ ったりとか、 LLM で\nあの、翻 訳 してもら える か すぐ 出 せる と思いますので、 英語 に、 あのー、\n出 力 した ものを、 あのー、 質問 して いただく ように お願い できれば と思います。\nはい。",
+    "full_translation": "リンクを後ほどお送りすると思うので\nそちらからご質問いただければと思います。で、質問はですね、あの、英語で、あの、\n質問 いただく ように お願い できれば と思います。えっと、まあ、英語得意でない\n英語 得意 で ない 方、 あの、 GPT だったりとか、 LLM で\n翻訳してもらえるかすぐ出せると思いますので、英語に、あのー、\n出力したものを、あのー、質問していただくようにお願いできればと思います。\nはい。"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null
+  },
+  "notes": "Added UtteranceEnd handling + 4s max-interim-duration soft-finalize to fix indefinite stalling on continuous speech.",
+  "created_at_utc": "2026-07-22T11:33:06.247529+00:00",
+  "elapsed_seconds": 121.572
+}

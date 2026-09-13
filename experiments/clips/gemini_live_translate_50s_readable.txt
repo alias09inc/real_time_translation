@@ -1,0 +1,95 @@
+[3.9s] input_transcript: mentioned that these concepts
+[4.3s] output_transcript: これらの概念
+[4.5s] input_transcript:  are very, very
+[4.8s] output_transcript: は非常に、
+[5.5s] input_transcript:  important.
+[5.9s] output_transcript: 非常に重要です。
+[6.4s] input_transcript:  for
+[7.5s] input_transcript:  some
+[7.8s] output_transcript: ある
+[8.5s] input_transcript:  such as for
+[8.8s] output_transcript: 例えば、
+[9.5s] input_transcript:  quantization
+[9.8s] output_transcript: 量子化など
+[10.5s] input_transcript:  before we just do
+[10.8s] output_transcript: 以前はただ
+[11.4s] input_transcript:  like element
+[11.8s] output_transcript: 要素ごとに
+[12.5s] input_transcript:  wise quantization
+[12.7s] output_transcript: 量子化を行ってい
+[13.5s] input_transcript:  currently we have vector
+[13.8s] output_transcript: ましたが、現在は
+[14.5s] input_transcript:  quantization.
+[14.8s] output_transcript: ベクトル量子化
+[15.5s] input_transcript:  So
+[15.8s] output_transcript: を行っています。
+[16.5s] input_transcript:  new new
+[16.8s] output_transcript: だから新しい
+[17.5s] input_transcript:  thing, right? We
+[17.8s] output_transcript: ことですよね？
+[18.5s] input_transcript:  still need to do it
+[18.8s] output_transcript: まだそれを
+[19.5s] input_transcript:  further. and for
+[19.8s] output_transcript: さらに進める必要
+[20.5s] input_transcript:  sparsity
+[20.9s] output_transcript: があります。そして
+[21.5s] input_transcript:  and MOE
+[21.8s] output_transcript: スパース性と
+[22.7s] input_transcript:  and also
+[22.8s] output_transcript: MOE、そして
+[24.4s] input_transcript:  there are
+[24.8s] output_transcript: まだ
+[25.5s] input_transcript:  still a lot of research
+[25.8s] output_transcript: 多くの研究
+[26.5s] input_transcript:  paper about this
+[26.8s] output_transcript: 論文がこれについて
+[27.6s] input_transcript:  kind of area.
+[27.8s] output_transcript: あります。
+[28.6s] input_transcript:  I think
+[28.8s] output_transcript: 私は、
+[29.5s] input_transcript:  all this
+[29.9s] output_transcript: これらすべて
+[30.6s] input_transcript:  things will be
+[30.8s] output_transcript: が非常に
+[31.6s] input_transcript:  very important.
+[31.8s] output_transcript: 重要になると思います。
+[32.4s] input_transcript:  Even for
+[32.8s] output_transcript:  KVC
+[33.6s] input_transcript:  also for
+[33.8s] output_transcript: についても、
+[34.5s] input_transcript:  KV cache,
+[34.8s] output_transcript:  KVキャッシュについても、
+[35.6s] input_transcript:  because the KV
+[35.9s] output_transcript:  KVキャッシュ
+[36.5s] input_transcript:  cache will decide
+[36.8s] output_transcript: がどのように
+[37.5s] input_transcript:  how how
+[37.9s] output_transcript: どれくらい
+[38.6s] input_transcript:  large is the
+[38.8s] output_transcript: データが大きいか
+[39.5s] input_transcript:  batch
+[39.8s] output_transcript: を決定するからです。
+[40.5s] input_transcript:  size. It will
+[40.8s] output_transcript: それは
+[41.5s] input_transcript:  impact the throughput.
+[41.8s] output_transcript: スループットに影響
+[42.6s] input_transcript:  and also
+[42.8s] output_transcript: します。また、
+[43.4s] input_transcript:  IO training
+[43.8s] output_transcript:  IOトレーニング
+[44.5s] input_transcript:  throughput.
+[44.8s] output_transcript: のスループットにも。
+[45.4s] input_transcript:  For serving,
+[45.9s] output_transcript: サービング
+[46.5s] input_transcript:  and it will be
+[46.8s] output_transcript: については、
+[47.5s] input_transcript:  very very important
+[47.8s] output_transcript: 非常に重要
+[48.6s] input_transcript:  to it's
+[48.8s] output_transcript: です。それは
+[49.5s] input_transcript:  like you could
+[49.9s] output_transcript: まるで、
+[50.5s] input_transcript:  say with
+[50.8s] output_transcript: 推論で
+[51.7s] input_transcript:  reasoning model
+[51.8s] output_transcript: モデルが

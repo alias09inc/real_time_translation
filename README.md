@@ -158,6 +158,69 @@ docker compose --profile debug down
 > **Note**:
 > `ws-debug`は`profiles: [debug]`で定義されているため、通常の`docker compose down`では停止されません。必ず`--profile debug`を付けて停止してください。
 
+
+### ローカルテスト（マイク → 字幕表示）
+
+Zoomを使わずにローカルマイクから字幕を表示するテスト方法です。
+
+#### 必要なもの
+- ffmpeg（ホストマシンにインストール）
+- Dockerが起動していること (docker compose build)
+
+#### 手順
+
+1. **サービスを起動**
+   ```bash
+   docker compose up -d
+   ```
+
+2. **マイク音声をRTMPにストリーム**
+   ```bash
+   # Linux (PulseAudio)
+   ./scripts/stream_mic.sh
+   # または直接実行
+   ffmpeg -f pulse -i default -ac 2 -ar 44100 -c:a aac -b:a 128k -f flv rtmp://localhost:1935/live/zoom
+
+   # macOS (AVFoundation)
+   ffmpeg -f avfoundation -i ":0" -ac 2 -ar 44100 -c:a aac -b:a 128k -f flv rtmp://localhost:1935/live/zoom
+
+   # Windows (dshow) - デバイス名は環境により異なる
+   ffmpeg -f dshow -i audio="Microphone" -ac 2 -ar 44100 -c:a aac -b:a 128k -f flv rtmp://localhost:1935/live/zoom
+   ```
+
+3. **字幕ページを開く**
+   ```bash
+   open scripts/captions.html        # macOS
+   xdg-open scripts/captions.html    # Linux
+   start scripts/captions.html       # Windows
+
+   # デフォルトのアプリがブラウザでない場合
+   google-chrome scripts/captions.html
+   firefox scripts/captions.html
+   ```
+
+4. **話しかけてテスト**
+   - マイクに向かって英語で話す
+   - 数秒後に日本語字幕が表示される
+   - ページ上部にラグ統計が表示される
+
+#### 字幕ページの見方
+
+| 表示 | 意味 |
+|------|------|
+| Current Lag | 現在の遅延（秒） |
+| Avg Lag | 平均遅延 |
+| Max Lag | 最大遅延 |
+| Messages | 受信メッセージ数 |
+| Queue (proc/drop/sum) | 処理済/破棄/要約 の件数 |
+
+ラグの色:
+- 🟢 緑 (<3秒): 正常
+- 🟡 黄 (3-7秒): 注意
+- 🔴 赤 (>7秒): 問題あり
+
+```
+
 マイクロサービス用の環境変数例は `.env.example` に追加済みです。
 
 Gemini利用時は `google.genai` (google-genai) のContext Cachingで
@@ -181,6 +244,21 @@ uv run ruff format .
 
 # リント
 uv run ruff check .
+```
+
+### 実験記録（YouTube指定区間）
+
+YouTubeの指定区間を入力として、**確定(=final)のASR + 翻訳**を
+`experiments/*.json` と `experiments/results.csv` に保存するランナーがあります。
+
+```bash
+uv sync --extra experiments
+
+# デフォルト: 10:00–20:00
+uv run real-time-translation-exp-youtube \
+   --url "https://www.youtube.com/watch?v=JycsHP-sGmw" \
+   --start 10:00 --end 20:00 \
+   --name youtube_10m_to_20m
 ```
 
 ## プロジェクト構造

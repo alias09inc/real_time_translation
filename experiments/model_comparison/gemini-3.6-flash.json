@@ -1,0 +1,1100 @@
+[
+  {
+    "index": 0,
+    "asr_start_time": 3846.92,
+    "source_text": "other companies. Yeah. Mhmm.",
+    "translation": "他の企業ですね。ええ、はい。",
+    "ttft_seconds": 1.935471773147583,
+    "total_seconds": 1.936868667602539,
+    "error": null
+  },
+  {
+    "index": 1,
+    "asr_start_time": 3849.81,
+    "source_text": "It's a very secret source for",
+    "translation": "〜にとって非常に秘密のソースで、",
+    "ttft_seconds": 3.5858452320098877,
+    "total_seconds": 3.589491844177246,
+    "error": null
+  },
+  {
+    "index": 2,
+    "asr_start_time": 3852.9999414,
+    "source_text": "that.",
+    "translation": "それのためのものです。",
+    "ttft_seconds": 2.888434648513794,
+    "total_seconds": 2.890393018722534,
+    "error": null
+  },
+  {
+    "index": 3,
+    "asr_start_time": 3853.67,
+    "source_text": "Other",
+    "translation": "その他の",
+    "ttft_seconds": 1.9341766834259033,
+    "total_seconds": 1.9360506534576416,
+    "error": null
+  },
+  {
+    "index": 4,
+    "asr_start_time": 3853.67,
+    "source_text": "Advantages.",
+    "translation": "利点",
+    "ttft_seconds": 2.272348642349243,
+    "total_seconds": 2.2737042903900146,
+    "error": null
+  },
+  {
+    "index": 5,
+    "asr_start_time": 3856.41,
+    "source_text": "K.",
+    "translation": "OK、",
+    "ttft_seconds": 3.1684317588806152,
+    "total_seconds": 3.170125722885132,
+    "error": null
+  },
+  {
+    "index": 6,
+    "asr_start_time": 3857.38,
+    "source_text": "Thank you. And the next question is, what",
+    "translation": "ありがとうございます。そして次の質問ですが、どのような",
+    "ttft_seconds": 2.021012544631958,
+    "total_seconds": 2.022937059402466,
+    "error": null
+  },
+  {
+    "index": 7,
+    "asr_start_time": 3860.4000195000003,
+    "source_text": "was the most exciting moment during",
+    "translation": "で最もワクワクした瞬間は",
+    "ttft_seconds": 3.1450655460357666,
+    "total_seconds": 3.1466145515441895,
+    "error": null
+  },
+  {
+    "index": 8,
+    "asr_start_time": 3862.35,
+    "source_text": "development? Please tell us an impressive story.",
+    "translation": "開発でしたか？印象的なエピソードを教えてください。",
+    "ttft_seconds": 2.0994455814361572,
+    "total_seconds": 2.101552724838257,
+    "error": null
+  },
+  {
+    "index": 9,
+    "asr_start_time": 3865.49,
+    "source_text": "If you guys",
+    "translation": "もし皆さんが",
+    "ttft_seconds": 1.9335126876831055,
+    "total_seconds": 1.935248851776123,
+    "error": null
+  },
+  {
+    "index": 10,
+    "asr_start_time": 3865.49,
+    "source_text": "If you have Thanks thanks for your question.",
+    "translation": "ご質問ありがとうございます",
+    "ttft_seconds": 2.010317087173462,
+    "total_seconds": 2.0133543014526367,
+    "error": null
+  },
+  {
+    "index": 11,
+    "asr_start_time": 3869.05,
+    "source_text": "Yeah. Actually, I think there are many impressive",
+    "translation": "ええ。実際、印象的なものはたくさんあると思いますし、",
+    "ttft_seconds": 2.094177484512329,
+    "total_seconds": 2.095858335494995,
+    "error": null
+  },
+  {
+    "index": 12,
+    "asr_start_time": 3872.4999512000004,
+    "source_text": "story.",
+    "translation": "物語があります。",
+    "ttft_seconds": 2.958075761795044,
+    "total_seconds": 2.960195541381836,
+    "error": null
+  },
+  {
+    "index": 13,
+    "asr_start_time": 3873.45,
+    "source_text": "From my from my perspective, like, Google has",
+    "translation": "私の視点から言うと、Googleは",
+    "ttft_seconds": 1.9300541877746582,
+    "total_seconds": 1.9328362941741943,
+    "error": null
+  },
+  {
+    "index": 14,
+    "asr_start_time": 3877.59,
+    "source_text": "made made",
+    "translation": "手掛けてきた",
+    "ttft_seconds": 2.98664927482605,
+    "total_seconds": 2.9880690574645996,
+    "error": null
+  },
+  {
+    "index": 15,
+    "asr_start_time": 3877.59,
+    "source_text": "many many many talents.",
+    "translation": "数多くの、実に多くの優秀な人材を",
+    "ttft_seconds": 3.408205270767212,
+    "total_seconds": 3.4106321334838867,
+    "error": null
+  },
+  {
+    "index": 16,
+    "asr_start_time": 3880.19,
+    "source_text": "Inside and also",
+    "translation": "社内でも、そしてまた",
+    "ttft_seconds": 1.8523845672607422,
+    "total_seconds": 1.8535053730010986,
+    "error": null
+  },
+  {
+    "index": 17,
+    "asr_start_time": 3880.19,
+    "source_text": "Inside. And, also, normally,",
+    "translation": "内部で。そしてまた、通常は、",
+    "ttft_seconds": 2.1109702587127686,
+    "total_seconds": 2.125685930252075,
+    "error": null
+  },
+  {
+    "index": 18,
+    "asr_start_time": 3885.16,
+    "source_text": "some sometimes",
+    "translation": "一部は時々",
+    "ttft_seconds": 2.7868592739105225,
+    "total_seconds": 2.7887632846832275,
+    "error": null
+  },
+  {
+    "index": 19,
+    "asr_start_time": 3885.16,
+    "source_text": "some sometimes our method will",
+    "translation": "時々、私たちの手法は",
+    "ttft_seconds": 2.1883914470672607,
+    "total_seconds": 2.190958023071289,
+    "error": null
+  },
+  {
+    "index": 20,
+    "asr_start_time": 3888.72,
+    "source_text": "currently, we cannot publish paper, but we do say a",
+    "translation": "」 / 「〜とは言っています」\n\n「現在は論文を発表することはできませんが、",
+    "ttft_seconds": 3.8564846515655518,
+    "total_seconds": 3.8588497638702393,
+    "error": null
+  },
+  {
+    "index": 21,
+    "asr_start_time": 3892.1999804999996,
+    "source_text": "lot how amazing",
+    "translation": "どれほど素晴らしいかを多く",
+    "ttft_seconds": 3.0724265575408936,
+    "total_seconds": 3.088045597076416,
+    "error": null
+  },
+  {
+    "index": 22,
+    "asr_start_time": 3893.36,
+    "source_text": "progress in Gemini. I think when you say",
+    "translation": "Geminiにおける進展について。あなたが〜とおっしゃる際、",
+    "ttft_seconds": 3.217524290084839,
+    "total_seconds": 3.219517707824707,
+    "error": null
+  },
+  {
+    "index": 23,
+    "asr_start_time": 3896.53,
+    "source_text": "ground broken things and also when you say many",
+    "translation": "画期的なことや、また多くの",
+    "ttft_seconds": 3.161264419555664,
+    "total_seconds": 3.1632301807403564,
+    "error": null
+  },
+  {
+    "index": 24,
+    "asr_start_time": 3900.4999707,
+    "source_text": "many",
+    "translation": "「多くの」",
+    "ttft_seconds": 3.1497960090637207,
+    "total_seconds": 3.151639938354492,
+    "error": null
+  },
+  {
+    "index": 25,
+    "asr_start_time": 3901.23,
+    "source_text": "you",
+    "translation": "あなたが",
+    "ttft_seconds": 2.724996328353882,
+    "total_seconds": 2.726355791091919,
+    "error": null
+  },
+  {
+    "index": 26,
+    "asr_start_time": 3901.23,
+    "source_text": "different methods could work",
+    "translation": "さまざまな手法が機能する可能性があります",
+    "ttft_seconds": 2.5627384185791016,
+    "total_seconds": 2.5642714500427246,
+    "error": null
+  },
+  {
+    "index": 27,
+    "asr_start_time": 3905.33,
+    "source_text": "also",
+    "translation": "また、",
+    "ttft_seconds": 1.4863708019256592,
+    "total_seconds": 1.4883501529693604,
+    "error": null
+  },
+  {
+    "index": 28,
+    "asr_start_time": 3906.72,
+    "source_text": "intuition. Some method but",
+    "translation": "直感。ある手法ですが、",
+    "ttft_seconds": 2.7267062664031982,
+    "total_seconds": 2.7285614013671875,
+    "error": null
+  },
+  {
+    "index": 29,
+    "asr_start_time": 3910.16,
+    "source_text": "but also work. That will be amazing.",
+    "translation": "しかし機能するでしょう。そうなれば素晴らしいことです。",
+    "ttft_seconds": 2.9898853302001953,
+    "total_seconds": 2.9914844036102295,
+    "error": null
+  },
+  {
+    "index": 30,
+    "asr_start_time": 3910.16,
+    "source_text": "but also work. That will be amazing.",
+    "translation": "しかし機能もする。そうなれば素晴らしいことです。",
+    "ttft_seconds": 2.540266990661621,
+    "total_seconds": 2.5423738956451416,
+    "error": null
+  },
+  {
+    "index": 31,
+    "asr_start_time": 3913.36,
+    "source_text": "Yeah. And also yeah.",
+    "translation": "ええ。それに、そうですね。",
+    "ttft_seconds": 1.7537941932678223,
+    "total_seconds": 1.7553942203521729,
+    "error": null
+  },
+  {
+    "index": 32,
+    "asr_start_time": 3916.12,
+    "source_text": "I think from my perspective is",
+    "translation": "私の考えとしては",
+    "ttft_seconds": 2.4545347690582275,
+    "total_seconds": 2.45564341545105,
+    "error": null
+  },
+  {
+    "index": 33,
+    "asr_start_time": 3919.699834,
+    "source_text": "like, as a researcher, I think",
+    "translation": "研究者として思うのは、",
+    "ttft_seconds": 2.456174612045288,
+    "total_seconds": 2.458876609802246,
+    "error": null
+  },
+  {
+    "index": 34,
+    "asr_start_time": 3921.09,
+    "source_text": "to say many different networks, to say many",
+    "translation": "多くの異なるネットワークと言いますか、多くの",
+    "ttft_seconds": 2.631519317626953,
+    "total_seconds": 2.634289026260376,
+    "error": null
+  },
+  {
+    "index": 35,
+    "asr_start_time": 3924.74,
+    "source_text": "different kind of talents to discuss this",
+    "translation": "これについて議論するための、多様な分野の人材が",
+    "ttft_seconds": 1.6630849838256836,
+    "total_seconds": 1.7859008312225342,
+    "error": null
+  },
+  {
+    "index": 36,
+    "asr_start_time": 3928.18,
+    "source_text": "message. It's it's very, very amazing. Yeah. Mhmm. Okay.",
+    "translation": "メッセージについて。本当に、とても素晴らしいですね。ええ、はい。",
+    "ttft_seconds": 3.4079627990722656,
+    "total_seconds": 3.410728693008423,
+    "error": null
+  },
+  {
+    "index": 37,
+    "asr_start_time": 3931.8,
+    "source_text": "Thank you very much for answering very question.",
+    "translation": "すべての質問にお答えいただき、本当にありがとうございます",
+    "ttft_seconds": 2.6390624046325684,
+    "total_seconds": 2.6413776874542236,
+    "error": null
+  },
+  {
+    "index": 38,
+    "asr_start_time": 3935.99,
+    "source_text": "And, may",
+    "translation": "そして、",
+    "ttft_seconds": 1.7395334243774414,
+    "total_seconds": 1.741403579711914,
+    "error": null
+  },
+  {
+    "index": 39,
+    "asr_start_time": 3935.99,
+    "source_text": "And the next question is, what strategy do you think",
+    "translation": "そして次の質問ですが、どのような戦略を",
+    "ttft_seconds": 2.8002243041992188,
+    "total_seconds": 2.802496910095215,
+    "error": null
+  },
+  {
+    "index": 40,
+    "asr_start_time": 3939.85,
+    "source_text": "holds the most promise for a low",
+    "translation": "低...にとって最も有望と思われるか",
+    "ttft_seconds": 3.257110595703125,
+    "total_seconds": 3.2588019371032715,
+    "error": null
+  },
+  {
+    "index": 41,
+    "asr_start_time": 3942.6,
+    "source_text": "hallucination LLM?",
+    "translation": "ハルシネーションの少ない大規模言語モデルでしょうか？",
+    "ttft_seconds": 3.152069330215454,
+    "total_seconds": 3.153949022293091,
+    "error": null
+  },
+  {
+    "index": 42,
+    "asr_start_time": 3944.13,
+    "source_text": "Any specific fine tuning algorithm or paradigm",
+    "translation": "特定のファインチューニングのアルゴリズムやパラダイムなどでしょうか",
+    "ttft_seconds": 1.8354623317718506,
+    "total_seconds": 1.8375980854034424,
+    "error": null
+  },
+  {
+    "index": 43,
+    "asr_start_time": 3947.300166,
+    "source_text": "you recommend?",
+    "translation": "お勧めはありますか？",
+    "ttft_seconds": 2.195361375808716,
+    "total_seconds": 2.1973860263824463,
+    "error": null
+  },
+  {
+    "index": 44,
+    "asr_start_time": 3948.26,
+    "source_text": "Such as training or SLM?",
+    "translation": "トレーニングやSLMといったものでしょうか？",
+    "ttft_seconds": 3.6018505096435547,
+    "total_seconds": 3.60471248626709,
+    "error": null
+  },
+  {
+    "index": 45,
+    "asr_start_time": 3950.71,
+    "source_text": "Yeah. I I think it's a very",
+    "translation": "ええ、それは非常に",
+    "ttft_seconds": 1.929389238357544,
+    "total_seconds": 1.9312989711761475,
+    "error": null
+  },
+  {
+    "index": 46,
+    "asr_start_time": 3954.8999414,
+    "source_text": "good",
+    "translation": "良い",
+    "ttft_seconds": 2.5449373722076416,
+    "total_seconds": 2.5467424392700195,
+    "error": null
+  },
+  {
+    "index": 47,
+    "asr_start_time": 3955.2,
+    "source_text": "for hallucination in LLM. I think it's",
+    "translation": "大規模言語モデルにおけるハルシネーションに対して。それは〜だと思っていますし、",
+    "ttft_seconds": 2.3642380237579346,
+    "total_seconds": 2.366392135620117,
+    "error": null
+  },
+  {
+    "index": 48,
+    "asr_start_time": 3958.2,
+    "source_text": "an open question.",
+    "translation": "オープンな問題です。",
+    "ttft_seconds": 3.1585469245910645,
+    "total_seconds": 3.1605212688446045,
+    "error": null
+  },
+  {
+    "index": 49,
+    "asr_start_time": 3959.39,
+    "source_text": "In Google, we do a lot, such as in simple",
+    "translation": "Googleでは多くの取り組みを行っており、例えばシンプルな",
+    "ttft_seconds": 2.454012155532837,
+    "total_seconds": 2.4558298587799072,
+    "error": null
+  },
+  {
+    "index": 50,
+    "asr_start_time": 3962.4000097999997,
+    "source_text": "simple QA. It's a",
+    "translation": "シンプルなQAなどです。これは",
+    "ttft_seconds": 2.7132391929626465,
+    "total_seconds": 2.714982032775879,
+    "error": null
+  },
+  {
+    "index": 51,
+    "asr_start_time": 3965.8,
+    "source_text": "a benchmark to evaluate how",
+    "translation": "どれほど〜かを評価するためのベンチマークで、",
+    "ttft_seconds": 2.7323880195617676,
+    "total_seconds": 2.7354772090911865,
+    "error": null
+  },
+  {
+    "index": 52,
+    "asr_start_time": 3969.27,
+    "source_text": "how",
+    "translation": "どのように",
+    "ttft_seconds": 2.458082675933838,
+    "total_seconds": 2.4598495960235596,
+    "error": null
+  },
+  {
+    "index": 53,
+    "asr_start_time": 3969.27,
+    "source_text": "how how how much the model",
+    "translation": "モデルがどれほど",
+    "ttft_seconds": 2.629056215286255,
+    "total_seconds": 2.630476474761963,
+    "error": null
+  },
+  {
+    "index": 54,
+    "asr_start_time": 3972.6999316,
+    "source_text": "holosync",
+    "translation": "ハルシネーションを起こすかをご理解いただくためのおすすめ質問はこちら：\n\n1.",
+    "ttft_seconds": 3.7840781211853027,
+    "total_seconds": 3.7856345176696777,
+    "error": null
+  },
+  {
+    "index": 55,
+    "asr_start_time": 3972.98,
+    "source_text": "In Google, we do it very real, and we use many different",
+    "translation": "Googleでは、非常にリアルに行っており、多くのさまざまな",
+    "ttft_seconds": 2.6251449584960938,
+    "total_seconds": 2.6278152465820312,
+    "error": null
+  },
+  {
+    "index": 56,
+    "asr_start_time": 3977.1,
+    "source_text": "methods. The thing is, like, you need to",
+    "translation": "手法を使っています。重要なのは、",
+    "ttft_seconds": 3.677957773208618,
+    "total_seconds": 3.6800267696380615,
+    "error": null
+  },
+  {
+    "index": 57,
+    "asr_start_time": 3980.1,
+    "source_text": "carefully",
+    "translation": "慎重に",
+    "ttft_seconds": 2.191093683242798,
+    "total_seconds": 2.1927754878997803,
+    "error": null
+  },
+  {
+    "index": 58,
+    "asr_start_time": 3981.38,
+    "source_text": "think about how how good is your long term model",
+    "translation": "長期的なモデルがどれほど優れているかを考える",
+    "ttft_seconds": 2.2801122665405273,
+    "total_seconds": 2.2822463512420654,
+    "error": null
+  },
+  {
+    "index": 59,
+    "asr_start_time": 3984.4000195000003,
+    "source_text": "is. Some you need to any",
+    "translation": "であるか。一部の...\"\n\n\"is.\" -> であるか。\n\"Some you need",
+    "ttft_seconds": 3.4983177185058594,
+    "total_seconds": 3.500588893890381,
+    "error": null
+  },
+  {
+    "index": 60,
+    "asr_start_time": 3986.08,
+    "source_text": "analysis language model hallucination.",
+    "translation": "言語モデルのハルシネーションの分析",
+    "ttft_seconds": 2.983743906021118,
+    "total_seconds": 2.9864375591278076,
+    "error": null
+  },
+  {
+    "index": 61,
+    "asr_start_time": 3989.1000195,
+    "source_text": "model hallucination. Like,",
+    "translation": "モデルのハルシネーション。たとえば、",
+    "ttft_seconds": 2.891308069229126,
+    "total_seconds": 2.9231255054473877,
+    "error": null
+  },
+  {
+    "index": 62,
+    "asr_start_time": 3990.03,
+    "source_text": "maybe sometimes because you fine tune",
+    "translation": "おそらく時には、ファインチューニングを行ったことが原因で、",
+    "ttft_seconds": 1.9199132919311523,
+    "total_seconds": 1.9220786094665527,
+    "error": null
+  },
+  {
+    "index": 63,
+    "asr_start_time": 3993.3998730000003,
+    "source_text": "the this language model,",
+    "translation": "この言語モデルを、",
+    "ttft_seconds": 3.017775774002075,
+    "total_seconds": 3.0197958946228027,
+    "error": null
+  },
+  {
+    "index": 64,
+    "asr_start_time": 3994.97,
+    "source_text": "This language model has no knowledge about your data site.",
+    "translation": "この言語モデルはあなたのデータサイトについての知識を持っていません。",
+    "ttft_seconds": 3.9071924686431885,
+    "total_seconds": 3.9098269939422607,
+    "error": null
+  },
+  {
+    "index": 65,
+    "asr_start_time": 3999.91,
+    "source_text": "But you want to let it to learn how to do any",
+    "translation": "ですが、これにどのような〜を行うかを学ばせたい場合、",
+    "ttft_seconds": 2.3693809509277344,
+    "total_seconds": 2.371133327484131,
+    "error": null
+  },
+  {
+    "index": 66,
+    "asr_start_time": 4003.1001855,
+    "source_text": "the data site.",
+    "translation": "') unless the <target> text clearly concludes a complete grammatical thought.\"\nSo",
+    "ttft_seconds": 3.8996212482452393,
+    "total_seconds": 3.902303695678711,
+    "error": null
+  },
+  {
+    "index": 67,
+    "asr_start_time": 4004.34,
+    "source_text": "What can what can you do? Is it can't just",
+    "translation": "一体何ができるのでしょうか？ 単に〜というわけにはいかないのか、",
+    "ttft_seconds": 2.537548065185547,
+    "total_seconds": 2.5393893718719482,
+    "error": null
+  },
+  {
+    "index": 68,
+    "asr_start_time": 4007.36,
+    "source_text": "hallucinate hallucinate the sound process?",
+    "translation": "音声プロセスをハルシネーションするのでしょうか？",
+    "ttft_seconds": 2.5330379009246826,
+    "total_seconds": 2.534929037094116,
+    "error": null
+  },
+  {
+    "index": 69,
+    "asr_start_time": 4011.43,
+    "source_text": "So just like you feel our people will",
+    "translation": "ですから、私どものメンバーが〜すると皆さんが感じているように",
+    "ttft_seconds": 2.8726141452789307,
+    "total_seconds": 2.8866617679595947,
+    "error": null
+  },
+  {
+    "index": 70,
+    "asr_start_time": 4014.6001659999997,
+    "source_text": "don't know some area",
+    "translation": "一部の領域を知らない",
+    "ttft_seconds": 2.1697027683258057,
+    "total_seconds": 2.171401023864746,
+    "error": null
+  },
+  {
+    "index": 71,
+    "asr_start_time": 4015.92,
+    "source_text": "we must answer this question.",
+    "translation": "この質問に答えなければなりません",
+    "ttft_seconds": 2.0279624462127686,
+    "total_seconds": 2.0297629833221436,
+    "error": null
+  },
+  {
+    "index": 72,
+    "asr_start_time": 4019.2,
+    "source_text": "Another we we will just hold",
+    "translation": "もう一つ、私たちは単に保留にする",
+    "ttft_seconds": 2.5332539081573486,
+    "total_seconds": 2.5431387424468994,
+    "error": null
+  },
+  {
+    "index": 73,
+    "asr_start_time": 4022.2,
+    "source_text": "hallucinate to answer question. Right?",
+    "translation": "質問に答えるためにハルシネーションを起こしてしまう、ですよね？",
+    "ttft_seconds": 2.8710196018218994,
+    "total_seconds": 2.872715711593628,
+    "error": null
+  },
+  {
+    "index": 74,
+    "asr_start_time": 4026.2,
+    "source_text": "So this is a complicated method, but one",
+    "translation": "ですので、これは複雑な方法ではありますが、",
+    "ttft_seconds": 1.6945645809173584,
+    "total_seconds": 1.6970179080963135,
+    "error": null
+  },
+  {
+    "index": 75,
+    "asr_start_time": 4029.8999512,
+    "source_text": "perspective is, like,",
+    "translation": "一つの視点としては、",
+    "ttft_seconds": 1.6861488819122314,
+    "total_seconds": 1.6884596347808838,
+    "error": null
+  },
+  {
+    "index": 76,
+    "asr_start_time": 4031.11,
+    "source_text": "just do the medicine for your launching model.",
+    "translation": "言語モデルに対してレジメン（治療法）を行う」 or simply 「言語モデルに特効薬",
+    "ttft_seconds": 3.706902503967285,
+    "total_seconds": 3.749830961227417,
+    "error": null
+  },
+  {
+    "index": 77,
+    "asr_start_time": 4034.2999414,
+    "source_text": "If you think that it's not",
+    "translation": "もしそうではないと思うなら、",
+    "ttft_seconds": 1.6561205387115479,
+    "total_seconds": 1.6579444408416748,
+    "error": null
+  },
+  {
+    "index": 78,
+    "asr_start_time": 4036.08,
+    "source_text": "compatible,",
+    "translation": "互換性がある、",
+    "ttft_seconds": 3.887092113494873,
+    "total_seconds": 3.888996124267578,
+    "error": null
+  },
+  {
+    "index": 79,
+    "asr_start_time": 4037.13,
+    "source_text": "to answer your question, maybe you should think about",
+    "translation": "ご質問にお答えすると、おそらく〜について考えるべきかもしれません",
+    "ttft_seconds": 3.218796491622925,
+    "total_seconds": 3.2208540439605713,
+    "error": null
+  },
+  {
+    "index": 80,
+    "asr_start_time": 4039.9000195000003,
+    "source_text": "how to",
+    "translation": "どのように",
+    "ttft_seconds": 2.1901543140411377,
+    "total_seconds": 2.192283868789673,
+    "error": null
+  },
+  {
+    "index": 81,
+    "asr_start_time": 4040.66,
+    "source_text": "enhance the user ability. Mhmm. Yeah.",
+    "translation": "ユーザーの能力を向上させるか。うーん、そうですね。",
+    "ttft_seconds": 2.360576629638672,
+    "total_seconds": 2.3631813526153564,
+    "error": null
+  },
+  {
+    "index": 82,
+    "asr_start_time": 4045.92,
+    "source_text": "And next question, where",
+    "translation": "そして次の質問ですが、どこ",
+    "ttft_seconds": 1.6921570301055908,
+    "total_seconds": 1.6945974826812744,
+    "error": null
+  },
+  {
+    "index": 83,
+    "asr_start_time": 4049.1001758,
+    "source_text": "is that next?",
+    "translation": "次はどこにあるのでしょうか",
+    "ttft_seconds": 3.8928191661834717,
+    "total_seconds": 3.8946781158447266,
+    "error": null
+  },
+  {
+    "index": 84,
+    "asr_start_time": 4050.8,
+    "source_text": "Battleground for LLM efficiency? Quantization's past",
+    "translation": "大規模言語モデルの効率性を巡る主戦場？量子化の過去",
+    "ttft_seconds": 2.0262863636016846,
+    "total_seconds": 2.081369400024414,
+    "error": null
+  },
+  {
+    "index": 85,
+    "asr_start_time": 4055.02,
+    "source_text": "distillation, speculative decoding, KV cash flow,",
+    "translation": "",
+    "ttft_seconds": null,
+    "total_seconds": 0.08099889755249023,
+    "error": "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'The service is currently unavailable.', 'status': 'UNAVAILABLE'}}"
+  },
+  {
+    "index": 86,
+    "asr_start_time": 4058.61,
+    "source_text": "serving, and y. I Yeah. I see",
+    "translation": "サービング、そして…ええ、なるほど",
+    "ttft_seconds": 3.423275947570801,
+    "total_seconds": 3.424790620803833,
+    "error": null
+  },
+  {
+    "index": 87,
+    "asr_start_time": 4061.9998926000003,
+    "source_text": "think",
+    "translation": "〜と思います",
+    "ttft_seconds": 3.555312395095825,
+    "total_seconds": 3.5570762157440186,
+    "error": null
+  },
+  {
+    "index": 88,
+    "asr_start_time": 4062.32,
+    "source_text": "yeah. Yeah. It's Upperground means I I",
+    "translation": "ええ、ええ、Upperground が意味するのは、",
+    "ttft_seconds": 2.191663980484009,
+    "total_seconds": 2.194366693496704,
+    "error": null
+  },
+  {
+    "index": 89,
+    "asr_start_time": 4065.6998828,
+    "source_text": "suppose",
+    "translation": "と思う",
+    "ttft_seconds": 2.2083866596221924,
+    "total_seconds": 2.2098684310913086,
+    "error": null
+  },
+  {
+    "index": 90,
+    "asr_start_time": 4067.27,
+    "source_text": "It's like",
+    "translation": "〜というか",
+    "ttft_seconds": 2.705287218093872,
+    "total_seconds": 2.7069313526153564,
+    "error": null
+  },
+  {
+    "index": 91,
+    "asr_start_time": 4067.27,
+    "source_text": "It's like a hot hot topic. Hot topic. Yeah.",
+    "translation": "超ホットな話題といった感じです。ホットなトピックですね。はい。",
+    "ttft_seconds": 2.1868767738342285,
+    "total_seconds": 2.1884334087371826,
+    "error": null
+  },
+  {
+    "index": 92,
+    "asr_start_time": 4070.47,
+    "source_text": "Yeah. I think I think yeah. It's very good question. I",
+    "translation": "ええ、そうですね。とても良い質問です。私は",
+    "ttft_seconds": 2.8931658267974854,
+    "total_seconds": 2.895193576812744,
+    "error": null
+  },
+  {
+    "index": 93,
+    "asr_start_time": 4073.52,
+    "source_text": "very good question. Actually,",
+    "translation": "とても良い質問ですね。実は、",
+    "ttft_seconds": 2.8724093437194824,
+    "total_seconds": 2.8748090267181396,
+    "error": null
+  },
+  {
+    "index": 94,
+    "asr_start_time": 4077.4,
+    "source_text": "I say",
+    "translation": "私としては",
+    "ttft_seconds": 1.8640751838684082,
+    "total_seconds": 1.8657341003417969,
+    "error": null
+  },
+  {
+    "index": 95,
+    "asr_start_time": 4077.4,
+    "source_text": "I think MOE is already spotty. Right? MOE is the",
+    "translation": "MoEはすでに不確定要素が多いと思いますよね？MoEは",
+    "ttft_seconds": 2.707623243331909,
+    "total_seconds": 2.7093169689178467,
+    "error": null
+  },
+  {
+    "index": 96,
+    "asr_start_time": 4081.4,
+    "source_text": "one kind of activation sparsity also and also this",
+    "translation": "活性化スパース性の一種でもあり、またこれも",
+    "ttft_seconds": 3.0398855209350586,
+    "total_seconds": 3.0420615673065186,
+    "error": null
+  },
+  {
+    "index": 97,
+    "asr_start_time": 4085.18,
+    "source_text": "is very important.",
+    "translation": "非常に重要です。",
+    "ttft_seconds": 2.886321544647217,
+    "total_seconds": 2.8930001258850098,
+    "error": null
+  },
+  {
+    "index": 98,
+    "asr_start_time": 4088.27,
+    "source_text": "I think",
+    "translation": "〜と思います",
+    "ttft_seconds": 2.525564193725586,
+    "total_seconds": 2.527631998062134,
+    "error": null
+  },
+  {
+    "index": 99,
+    "asr_start_time": 4088.27,
+    "source_text": "Think",
+    "translation": "考えてみてください",
+    "ttft_seconds": 2.5398449897766113,
+    "total_seconds": 2.5416245460510254,
+    "error": null
+  },
+  {
+    "index": 100,
+    "asr_start_time": 4089.78,
+    "source_text": "I think for all of your",
+    "translation": "皆様のすべての〜にとって、",
+    "ttft_seconds": 3.0532820224761963,
+    "total_seconds": 3.055279493331909,
+    "error": null
+  },
+  {
+    "index": 101,
+    "asr_start_time": 4092.56,
+    "source_text": "mention,",
+    "translation": "言及について、",
+    "ttft_seconds": 3.5832865238189697,
+    "total_seconds": 3.585373878479004,
+    "error": null
+  },
+  {
+    "index": 102,
+    "asr_start_time": 4092.56,
+    "source_text": "mentioned, these concepts are very, very",
+    "translation": "言及されたこれらの概念は非常に、とても",
+    "ttft_seconds": 1.9853849411010742,
+    "total_seconds": 1.9871103763580322,
+    "error": null
+  },
+  {
+    "index": 103,
+    "asr_start_time": 4096.12,
+    "source_text": "important for",
+    "translation": "〜にとって重要であり",
+    "ttft_seconds": 3.7453534603118896,
+    "total_seconds": 3.746950626373291,
+    "error": null
+  },
+  {
+    "index": 104,
+    "asr_start_time": 4098.3,
+    "source_text": "such as for quantization before we just do, like,",
+    "translation": "例えば量子化などにおいて、単に〜を行う前に、",
+    "ttft_seconds": 2.1798462867736816,
+    "total_seconds": 2.1817660331726074,
+    "error": null
+  },
+  {
+    "index": 105,
+    "asr_start_time": 4102.100293,
+    "source_text": "element wise",
+    "translation": "要素ごとの",
+    "ttft_seconds": 2.2201359272003174,
+    "total_seconds": 2.22175931930542,
+    "error": null
+  },
+  {
+    "index": 106,
+    "asr_start_time": 4103.18,
+    "source_text": "quantization, country, we have vector quantization.",
+    "translation": "量子化、あるいはベクトル量子化があります。",
+    "ttft_seconds": 4.0964672565460205,
+    "total_seconds": 4.098381757736206,
+    "error": null
+  },
+  {
+    "index": 107,
+    "asr_start_time": 4106.47,
+    "source_text": "It's a new new thing. Right? We still need to",
+    "translation": "〜しなければならず、」 or 「〜する必要があります。」\n    *   Wait, \"Right?\" is",
+    "ttft_seconds": 3.4772770404815674,
+    "total_seconds": 3.4789187908172607,
+    "error": null
+  },
+  {
+    "index": 108,
+    "asr_start_time": 4109.499785200001,
+    "source_text": "it further.",
+    "translation": "さらにそれを",
+    "ttft_seconds": 3.274940013885498,
+    "total_seconds": 3.2764229774475098,
+    "error": null
+  },
+  {
+    "index": 109,
+    "asr_start_time": 4110.54,
+    "source_text": "And for sparsity and the MOE and also",
+    "translation": "そして、スパース性やMoE、さらには",
+    "ttft_seconds": 3.322725534439087,
+    "total_seconds": 3.3251020908355713,
+    "error": null
+  },
+  {
+    "index": 110,
+    "asr_start_time": 4113.6000586,
+    "source_text": "also",
+    "translation": "さらに",
+    "ttft_seconds": 2.367614269256592,
+    "total_seconds": 2.3699307441711426,
+    "error": null
+  },
+  {
+    "index": 111,
+    "asr_start_time": 4114.64,
+    "source_text": "the",
+    "translation": "その",
+    "ttft_seconds": 3.9291446208953857,
+    "total_seconds": 3.931971788406372,
+    "error": null
+  },
+  {
+    "index": 112,
+    "asr_start_time": 4114.64,
+    "source_text": "there are still a lot of research paper about this kind of area.",
+    "translation": "この種の領域については、依然として多くの研究論文が存在します。",
+    "ttft_seconds": 2.388913631439209,
+    "total_seconds": 2.4311511516571045,
+    "error": null
+  },
+  {
+    "index": 113,
+    "asr_start_time": 4119.22,
+    "source_text": "I think all these things will be very important.",
+    "translation": "これらはすべて非常に重要になると思います。",
+    "ttft_seconds": 1.7137024402618408,
+    "total_seconds": 1.717104434967041,
+    "error": null
+  },
+  {
+    "index": 114,
+    "asr_start_time": 4122.93,
+    "source_text": "Even for KV also for KV catch, because the KV",
+    "translation": "KVにとっても、そしてKV cacheにとっても同様で、なぜならKVは",
+    "ttft_seconds": 2.4024910926818848,
+    "total_seconds": 2.405156135559082,
+    "error": null
+  },
+  {
+    "index": 115,
+    "asr_start_time": 4126.49,
+    "source_text": "k v catch will decide how many how large is the",
+    "translation": "KVキャッシュが、どれほど多く、どれほど大きな",
+    "ttft_seconds": 3.4793503284454346,
+    "total_seconds": 3.482560634613037,
+    "error": null
+  },
+  {
+    "index": 116,
+    "asr_start_time": 4130.41,
+    "source_text": "batch size. It will impact the throughput and also",
+    "translation": "バッチサイズが決まります。これはスループットにも影響を与えますし、",
+    "ttft_seconds": 3.438263177871704,
+    "total_seconds": 3.4411098957061768,
+    "error": null
+  },
+  {
+    "index": 117,
+    "asr_start_time": 4133.5999414,
+    "source_text": "IO training",
+    "translation": "IOトレーニング",
+    "ttft_seconds": 3.6217150688171387,
+    "total_seconds": 3.6243863105773926,
+    "error": null
+  },
+  {
+    "index": 118,
+    "asr_start_time": 4134.9,
+    "source_text": "throughput.",
+    "translation": "スループット。",
+    "ttft_seconds": 2.169502019882202,
+    "total_seconds": 2.173095464706421,
+    "error": null
+  },
+  {
+    "index": 119,
+    "asr_start_time": 4135.92,
+    "source_text": "For sewing. And it will be very, very important to",
+    "translation": "サービングにおいて。そして、〜にとって非常に、非常に重要になります",
+    "ttft_seconds": 3.4243574142456055,
+    "total_seconds": 3.428034543991089,
+    "error": null
+  },
+  {
+    "index": 120,
+    "asr_start_time": 4139.51,
+    "source_text": "It's like, you could say with Reasoning model, I'll generate",
+    "translation": "例えば、Reasoning modelを使って生成する、というように",
+    "ttft_seconds": 3.251744031906128,
+    "total_seconds": 3.2558326721191406,
+    "error": null
+  },
+  {
+    "index": 121,
+    "asr_start_time": 4143.19,
+    "source_text": "tokens are very, very long. So so so",
+    "translation": "トークンが非常に、非常に長いため、なので、なので、",
+    "ttft_seconds": 1.9947361946105957,
+    "total_seconds": 1.9973804950714111,
+    "error": null
+  }
+]

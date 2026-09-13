@@ -1,0 +1,47 @@
+{
+  "gpt-5.6-luna": {
+    "segments": 122,
+    "errors": 0,
+    "empty_translations": 0,
+    "avg_ttft_seconds": 1.372095700170173,
+    "max_ttft_seconds": 5.428851127624512,
+    "total_wall_seconds": 179.25612902641296,
+    "output_file": "experiments\\model_comparison\\gpt-5.6-luna.json"
+  },
+  "gpt-5.4-mini": {
+    "segments": 122,
+    "errors": 0,
+    "empty_translations": 0,
+    "avg_ttft_seconds": 0.5597121305153018,
+    "max_ttft_seconds": 2.007446527481079,
+    "total_wall_seconds": 80.32984519004822,
+    "output_file": "experiments\\model_comparison\\gpt-5.4-mini.json"
+  },
+  "gpt-5.4-nano": {
+    "segments": 122,
+    "errors": 0,
+    "empty_translations": 0,
+    "avg_ttft_seconds": 0.6759046746081994,
+    "max_ttft_seconds": 2.676330804824829,
+    "total_wall_seconds": 100.25165510177612,
+    "output_file": "experiments\\model_comparison\\gpt-5.4-nano.json"
+  },
+  "gemini-3.6-flash": {
+    "segments": 122,
+    "errors": 1,
+    "empty_translations": 0,
+    "avg_ttft_seconds": 2.699935936730755,
+    "max_ttft_seconds": 4.0964672565460205,
+    "total_wall_seconds": 332.8907506465912,
+    "output_file": "experiments\\model_comparison\\gemini-3.6-flash.json"
+  },
+  "gemini-3.5-flash-lite": {
+    "segments": 122,
+    "errors": 1,
+    "empty_translations": 0,
+    "avg_ttft_seconds": 0.9529787962101708,
+    "max_ttft_seconds": 1.3085222244262695,
+    "total_wall_seconds": 123.69015264511108,
+    "output_file": "experiments\\model_comparison\\gemini-3.5-flash-lite.json"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "date": "2026-04-15",
+  "experiment_name": "ep_sweep_1500ms",
+  "domain": null,
+  "input": {
+    "type": "youtube",
+    "url": "https://www.youtube.com/watch?v=wjZofJX0v4M",
+    "start_seconds": 600.0,
+    "end_seconds": 630.0
+  },
+  "models": {
+    "deepgram_model": "nova-3-general",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-3.1-pro-preview"
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "deepgram_endpointing": 1500,
+    "deepgram_utterance_end_ms": 1000
+  },
+  "results": {
+    "segment_count": 5,
+    "avg_confidence": 0.999218748,
+    "segments": [
+      {
+        "start_time": 0.0,
+        "end_time": 4.7,
+        "asr": "Into many distinct layers where again each layer is always structured as some kind",
+        "translation": "多くの異なる層に分かれており、そこでも各層は常に何らかの形で構成されています。",
+        "confidence": 0.9970703,
+        "kept_terms": []
+      },
+      {
+        "start_time": 4.7,
+        "end_time": 9.0100004,
+        "asr": "of array of real numbers until you get to a final layer which you consider the output.",
+        "translation": "実数の配列として構成されており、最終的に出力とみなされる最後の層に到達します。",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 9.01,
+        "end_time": 13.89,
+        "asr": "For example, the final layer in our text processing model is a list of numbers representing",
+        "translation": "例えば、私たちのテキスト処理モデルの最終層は、〜を表す数値のリストです。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 13.89,
+        "end_time": 17.3299996,
+        "asr": "the probability distribution for all possible next tokens.",
+        "translation": "考えられるすべての次のトークンの確率分布",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 17.33,
+        "end_time": 21.9699994,
+        "asr": "In deep learning, these model parameters are almost always referred to as weights.",
+        "translation": "ディープラーニングでは、これらのモデルパラメータはほぼ常に重みと呼ばれます。",
+        "confidence": 1.0,
+        "kept_terms": []
+      }
+    ],
+    "full_asr": "Into many distinct layers where again each layer is always structured as some kind\nof array of real numbers until you get to a final layer which you consider the output.\nFor example, the final layer in our text processing model is a list of numbers representing\nthe probability distribution for all possible next tokens.\nIn deep learning, these model parameters are almost always referred to as weights.",
+    "full_translation": "多くの異なる層に分かれており、そこでも各層は常に何らかの形で構成されています。\n実数の配列として構成されており、最終的に出力とみなされる最後の層に到達します。\n例えば、私たちのテキスト処理モデルの最終層は、〜を表す数値のリストです。\n考えられるすべての次のトークンの確率分布\nディープラーニングでは、これらのモデルパラメータはほぼ常に重みと呼ばれます。"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null
+  },
+  "notes": "",
+  "created_at_utc": "2026-04-15T20:59:53.757536+00:00",
+  "elapsed_seconds": 62.19
+}

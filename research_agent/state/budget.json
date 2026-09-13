@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-13",
+  "spent_today_usd": 0.0,
+  "daily_cap_usd": 7.0,
+  "per_batch_cap_usd": 3.0,
+  "total_spent_usd": 0.0,
+  "cost_log": [
+    {
+      "at": "2026-09-08T07:28:31.381613+00:00",
+      "amount_usd": 0.0,
+      "note": "h-flicker-metric: implemented flicker_metrics.py, ran over 47 existing experiment JSON files, zero new API spend"
+    },
+    {
+      "at": "2026-09-08T12:51:37.592696+00:00",
+      "amount_usd": 0.0,
+      "note": "h-cross-utterance-flicker: added group_translation_by_utterance() to flicker_metrics.py, reran over 47 existing experiment JSON files, zero new API spend"
+    },
+    {
+      "at": "2026-09-10T00:16:51.712335+00:00",
+      "amount_usd": 0.0,
+      "note": "h-utterance-batch-timing: extended flicker_metrics.py's group_translation_by_utterance() with first_batch_duration, reran over 47 existing experiment JSON files, zero new API spend"
+    },
+    {
+      "at": "2026-09-12T12:14:53.204105+00:00",
+      "amount_usd": 0.0,
+      "note": "h-endpointing-connection-verify: static code audit only (traced config.deepgram_endpointing through to deepgram-sdk's connect() query-string construction), zero new Deepgram/LLM API spend"
+    },
+    {
+      "at": "2026-09-13T00:16:58.811612+00:00",
+      "amount_usd": 0.0,
+      "note": "h-asr-final-emission-latency: implemented utterance_end_mix.py, ran over 47 existing experiment JSON files, zero new API spend"
+    }
+  ]
+}

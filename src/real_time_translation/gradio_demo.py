@@ -7,11 +7,14 @@ import contextlib
 import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
 from typing import Any
 
 import audioop
 import gradio as gr
 import numpy as np
+from fastapi import WebSocket, WebSocketDisconnect
+from fastapi.responses import FileResponse
 
 from real_time_translation.audio.capture import QueueAudioCapture
 from real_time_translation.config import Config
@@ -19,6 +22,26 @@ from real_time_translation.pipeline import TranslationPipeline, TranslationResul
 
 TARGET_SAMPLE_RATE = 16000
 MAX_DISPLAY_LINES = 50
+OVERLAY_HTML_PATH = Path(__file__).parent / "web" / "overlay.html"
+
+# WebSocket clients subscribed to the live caption overlay (see /overlay).
+# Module-level: the overlay is a broadcast of whatever session is running,
+# not tied to a single Gradio user session.
+_overlay_clients: set[WebSocket] = set()
+
+
+async def _broadcast_to_overlay(payload: dict[str, Any]) -> None:
+    """Push a caption update to every connected overlay client, best-effort."""
+    if not _overlay_clients:
+        return
+    dead: list[WebSocket] = []
+    for client in _overlay_clients:
+        try:
+            await client.send_json(payload)
+        except Exception:  # noqa: BLE001
+            dead.append(client)
+    for client in dead:
+        _overlay_clients.discard(client)
 
 
 @dataclass
@@ -32,11 +55,41 @@ class DemoSession:
     transcript_lines: list[str] = field(default_factory=list)
     translation_lines: list[str] = field(default_factory=list)
     interim_transcript: str = ""  # Current interim transcript
+    interim_translation: str = ""  # Currently-streaming (incomplete) translation
     cancel_requested: bool = False  # Flag to cancel file processing
 
 
 def _status(message: str) -> str:
     return f"Status: {message}"
+
+
+def _commit_or_hold(state: DemoSession, result: TranslationResult) -> None:
+    """Commit a finished translation to history, or hold a mid-utterance
+    chunk as the live/interim line instead of appending it as its own entry.
+
+    A soft-finalized fragment (`is_utterance_end=False`) is only part of an
+    utterance still being spoken -- committing it separately is what caused
+    one sentence to show up as multiple, confusingly duplicate-looking
+    caption lines. Only the true end of an utterance graduates to history.
+    """
+    if not result.is_utterance_end:
+        state.interim_transcript = result.original_text
+        state.interim_translation = result.translated_text
+        return
+    state.transcript_lines.append(result.original_text)
+    state.translation_lines.append(result.translated_text)
+    state.interim_transcript = ""
+    state.interim_translation = ""
+
+
+def _flush_interim(state: DemoSession) -> None:
+    """Commit a still-open interim line (utterance never reached its end)
+    as the final line, e.g. because the audio stream ended mid-utterance."""
+    if state.interim_translation:
+        state.transcript_lines.append(state.interim_transcript)
+        state.translation_lines.append(state.interim_translation)
+        state.interim_transcript = ""
+        state.interim_translation = ""
 
 
 def _timestamp() -> str:
@@ -137,6 +190,21 @@ async def start_session(
         with contextlib.suppress(asyncio.QueueFull):
             results_queue.put_nowait(result)
 
+        # Push straight to the overlay too -- decoupled from Gradio's own
+        # polling cadence, so the overlay reflects streaming updates as
+        # they actually arrive rather than on the next audio.stream() tick.
+        asyncio.create_task(
+            _broadcast_to_overlay(
+                {
+                    "original_text": result.original_text,
+                    "translated_text": result.translated_text,
+                    "is_final": result.is_final,
+                    "is_translation_complete": result.is_translation_complete,
+                    "is_utterance_end": result.is_utterance_end,
+                }
+            )
+        )
+
     pipeline.set_callback(on_result)
     try:
         await pipeline.start()
@@ -232,13 +300,17 @@ async def process_audio_file(
         while True:
             try:
                 result = state.results_queue.get_nowait()
-                if result.is_final and result.translated_text:
-                    state.transcript_lines.append(result.original_text)
-                    state.translation_lines.append(result.translated_text)
+                if (
+                    result.is_final
+                    and result.is_translation_complete
+                    and result.translated_text
+                ):
+                    _commit_or_hold(state, result)
             except asyncio.QueueEmpty:
                 break
 
     if state.cancel_requested:
+        _flush_interim(state)
         transcript = "\n".join(state.transcript_lines)
         translation = "\n".join(state.translation_lines)
         return state, _status("Cancelled"), transcript, translation
@@ -259,9 +331,12 @@ async def process_audio_file(
         while True:
             try:
                 result = state.results_queue.get_nowait()
-                if result.is_final and result.translated_text:
-                    state.transcript_lines.append(result.original_text)
-                    state.translation_lines.append(result.translated_text)
+                if (
+                    result.is_final
+                    and result.is_translation_complete
+                    and result.translated_text
+                ):
+                    _commit_or_hold(state, result)
             except asyncio.QueueEmpty:
                 break
 
@@ -275,6 +350,7 @@ async def process_audio_file(
             stable_count = 0
             last_count = current_count
 
+    _flush_interim(state)
     transcript = "\n".join(state.transcript_lines)
     translation = "\n".join(state.translation_lines)
 
@@ -306,10 +382,18 @@ async def handle_audio(chunk: Any, state: DemoSession | None) -> tuple[str, str,
             state.interim_transcript = result.original_text
             continue
 
-        # Final result - add to history and clear interim
-        state.transcript_lines.append(result.original_text)
-        state.translation_lines.append(result.translated_text)
-        state.interim_transcript = ""
+        if not result.is_translation_complete:
+            # Translation is still streaming in - show it growing, but
+            # don't commit to history yet.
+            state.interim_translation = result.translated_text
+            continue
+
+        # Commit to history if the utterance actually ended; otherwise this
+        # is a soft-finalized mid-utterance chunk (see
+        # `deepgram_max_interim_duration`) -- hold it as the live line so a
+        # single spoken sentence doesn't show up as multiple, confusingly
+        # duplicate-looking caption entries.
+        _commit_or_hold(state, result)
         if result.slide_window:
             latest_slide_window = result.slide_window
 
@@ -327,9 +411,15 @@ async def handle_audio(chunk: Any, state: DemoSession | None) -> tuple[str, str,
         transcript = finalized
 
     if latest_slide_window is not None:
-        translation = "\n".join(latest_slide_window)
+        finalized_translation = "\n".join(latest_slide_window)
     else:
-        translation = "\n".join(state.translation_lines[-state.window_size :])
+        finalized_translation = "\n".join(
+            state.translation_lines[-state.window_size :]
+        )
+    if state.interim_translation:
+        translation = f"{finalized_translation}\n[...] {state.interim_translation}"
+    else:
+        translation = finalized_translation
 
     return transcript, translation, _status("running")
 
@@ -338,7 +428,11 @@ def build_demo() -> gr.Blocks:
     with gr.Blocks(title="Real-time Translation Demo") as demo:
         gr.Markdown("# Real-time ASR + MT Demo")
         gr.Markdown(
-            "Stream microphone audio to Deepgram and translate with Gemini/OpenAI."
+            "Stream microphone audio to Deepgram and translate with Gemini/OpenAI.\n\n"
+            "**Live caption overlay** (for OBS browser-source or positioning over "
+            "a Zoom screen share): open `/overlay` in a browser once a session is "
+            "running. Add `?source=0` to hide the source-language line, or "
+            "`?debug=1` to keep the connection status visible."
         )
 
         state = gr.State(None)
@@ -413,6 +507,24 @@ def build_demo() -> gr.Blocks:
             inputs=[state],
             outputs=[state, status],
         )
+
+    @demo.app.get("/overlay")
+    async def overlay_page() -> FileResponse:
+        return FileResponse(OVERLAY_HTML_PATH)
+
+    @demo.app.websocket("/ws/overlay")
+    async def overlay_ws(websocket: WebSocket) -> None:
+        await websocket.accept()
+        _overlay_clients.add(websocket)
+        try:
+            while True:
+                # No client->server messages expected; this just blocks
+                # until the client disconnects.
+                await websocket.receive_text()
+        except WebSocketDisconnect:
+            pass
+        finally:
+            _overlay_clients.discard(websocket)
 
     return demo
 

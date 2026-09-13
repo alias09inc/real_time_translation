@@ -1,0 +1,37 @@
+{
+  "reference_glossary": "dictionaries\\sessions\\LLM2024_8_part1.csv",
+  "runs": {
+    "with_dictionary": {
+      "json_path": "experiments\\20260724_llm2024_8_part1_full.json",
+      "segment_count": 1811,
+      "avg_confidence": 0.9460161787023744,
+      "avg_end_to_end_latency_seconds": 3.8422112529946593,
+      "max_end_to_end_latency_seconds": 6.881513328552046,
+      "reference_glossary_expected_terms": 33,
+      "reference_glossary_matched_terms": 33,
+      "reference_glossary_adherence_rate": 1.0,
+      "reference_glossary_missed_terms": []
+    },
+    "without_dictionary": {
+      "json_path": "experiments\\20260724_llm2024_8_part1_full_baseline_no_dict.json",
+      "segment_count": 1810,
+      "avg_confidence": 0.9411785602099448,
+      "avg_end_to_end_latency_seconds": 3.866444162912582,
+      "max_end_to_end_latency_seconds": 16.466909627914447,
+      "reference_glossary_expected_terms": 29,
+      "reference_glossary_matched_terms": 27,
+      "reference_glossary_adherence_rate": 0.9310344827586207,
+      "reference_glossary_missed_terms": [
+        "Arena Score",
+        "Tokens Per Second"
+      ]
+    }
+  },
+  "comparison": {
+    "terms_fixed_by_dictionary": [
+      "Arena Score",
+      "Tokens Per Second"
+    ],
+    "terms_broken_by_dictionary": []
+  }
+}

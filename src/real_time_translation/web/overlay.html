@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Live Caption Overlay</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    overflow: hidden;
+    font-family: "Yu Gothic UI", "Segoe UI", "Hiragino Sans", Arial, sans-serif;
+  }
+
+  #stage {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 4vw 3vh 4vw;
+    box-sizing: border-box;
+  }
+
+  #source-line {
+    font-size: clamp(14px, 1.6vw, 24px);
+    color: rgba(255, 255, 255, 0.72);
+    background: rgba(0, 0, 0, 0.35);
+    padding: 0.2em 0.6em;
+    border-radius: 6px;
+    margin-bottom: 0.4em;
+    max-width: 90vw;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  #source-line.visible { opacity: 1; }
+
+  #translation-line {
+    font-size: clamp(22px, 3.1vw, 46px);
+    font-weight: 700;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 0.25em 0.7em;
+    border-radius: 10px;
+    max-width: 90vw;
+    text-align: center;
+    line-height: 1.35;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  #translation-line.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Newly streamed-in tail gets a brief highlight so growth reads as
+     motion rather than a jump cut, without literally animating each
+     character (we only know what text arrived, not sub-token timing). */
+  #translation-line .tail {
+    animation: fade-in-tail 0.35s ease;
+  }
+  @keyframes fade-in-tail {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
+  }
+
+  #status {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+  /* Hide the connection-status chip once we've confirmed a connection;
+     re-shown automatically on disconnect. Toggle with the `debug` query
+     param (?debug=1) to keep it visible for troubleshooting. */
+  #status.connected:not(.debug) { display: none; }
+</style>
+</head>
+<body>
+  <div id="status">connecting…</div>
+  <div id="stage">
+    <div id="source-line"></div>
+    <div id="translation-line"></div>
+  </div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const debug = params.get("debug") === "1";
+  const showSource = params.get("source") !== "0";
+
+  const statusEl = document.getElementById("status");
+  const sourceEl = document.getElementById("source-line");
+  const translationEl = document.getElementById("translation-line");
+  if (debug) statusEl.classList.add("debug");
+  if (!showSource) sourceEl.style.display = "none";
+
+  let hideTimer = null;
+  const HOLD_MS = 4000; // how long a finished line stays up before fading
+
+  function renderTranslation(text, { finalized }) {
+    if (!text) {
+      translationEl.classList.remove("visible");
+      return;
+    }
+    translationEl.textContent = text;
+    translationEl.classList.add("visible");
+
+    if (finalized) {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        translationEl.classList.remove("visible");
+      }, HOLD_MS);
+    } else {
+      clearTimeout(hideTimer);
+    }
+  }
+
+  function renderSource(text) {
+    if (!showSource) return;
+    if (!text) {
+      sourceEl.classList.remove("visible");
+      return;
+    }
+    sourceEl.textContent = text;
+    sourceEl.classList.add("visible");
+  }
+
+  function connect() {
+    const proto = location.protocol === "https:" ? "wss:" : "ws:";
+    const ws = new WebSocket(`${proto}//${location.host}/ws/overlay`);
+
+    ws.onopen = () => {
+      statusEl.textContent = "connected";
+      statusEl.classList.add("connected");
+    };
+    ws.onclose = () => {
+      statusEl.textContent = "disconnected — retrying…";
+      statusEl.classList.remove("connected");
+      setTimeout(connect, 1500);
+    };
+    ws.onerror = () => ws.close();
+
+    ws.onmessage = (event) => {
+      let msg;
+      try {
+        msg = JSON.parse(event.data);
+      } catch {
+        return;
+      }
+
+      if (!msg.is_final) {
+        // Interim source-language transcript, no translation yet.
+        renderSource(msg.original_text);
+        return;
+      }
+
+      renderSource(msg.original_text);
+      // "finalized" (hold then fade) only once the utterance itself is
+      // over, not just once this particular streaming call is done --
+      // otherwise a soft-finalized mid-sentence chunk (more of the same
+      // utterance still coming) would start the fade-out countdown early.
+      renderTranslation(msg.translated_text, {
+        finalized: msg.is_translation_complete && msg.is_utterance_end !== false,
+      });
+    };
+  }
+
+  connect();
+</script>
+</body>
+</html>

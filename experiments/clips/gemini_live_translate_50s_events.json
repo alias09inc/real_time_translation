@@ -1,0 +1,477 @@
+[
+  [
+    3.896045684814453,
+    "input_transcript",
+    "mentioned that these concepts"
+  ],
+  [
+    4.301041841506958,
+    "output_transcript",
+    "これらの概念"
+  ],
+  [
+    4.514825105667114,
+    "input_transcript",
+    " are very, very"
+  ],
+  [
+    4.7639241218566895,
+    "output_transcript",
+    "は非常に、"
+  ],
+  [
+    5.464031934738159,
+    "input_transcript",
+    " important."
+  ],
+  [
+    5.863845586776733,
+    "output_transcript",
+    "非常に重要です。"
+  ],
+  [
+    6.421332597732544,
+    "input_transcript",
+    " for"
+  ],
+  [
+    7.478440761566162,
+    "input_transcript",
+    " some"
+  ],
+  [
+    7.752461194992065,
+    "output_transcript",
+    "ある"
+  ],
+  [
+    8.52975583076477,
+    "input_transcript",
+    " such as for"
+  ],
+  [
+    8.755974769592285,
+    "output_transcript",
+    "例えば、"
+  ],
+  [
+    9.45327091217041,
+    "input_transcript",
+    " quantization"
+  ],
+  [
+    9.755176782608032,
+    "output_transcript",
+    "量子化など"
+  ],
+  [
+    10.492801189422607,
+    "input_transcript",
+    " before we just do"
+  ],
+  [
+    10.762555837631226,
+    "output_transcript",
+    "以前はただ"
+  ],
+  [
+    11.445082426071167,
+    "input_transcript",
+    " like element"
+  ],
+  [
+    11.771889448165894,
+    "output_transcript",
+    "要素ごとに"
+  ],
+  [
+    12.54951000213623,
+    "input_transcript",
+    " wise quantization"
+  ],
+  [
+    12.748587608337402,
+    "output_transcript",
+    "量子化を行ってい"
+  ],
+  [
+    13.496803283691406,
+    "input_transcript",
+    " currently we have vector"
+  ],
+  [
+    13.756993532180786,
+    "output_transcript",
+    "ましたが、現在は"
+  ],
+  [
+    14.503255605697632,
+    "input_transcript",
+    " quantization."
+  ],
+  [
+    14.76302695274353,
+    "output_transcript",
+    "ベクトル量子化"
+  ],
+  [
+    15.467179298400879,
+    "input_transcript",
+    " So"
+  ],
+  [
+    15.836674213409424,
+    "output_transcript",
+    "を行っています。"
+  ],
+  [
+    16.466315746307373,
+    "input_transcript",
+    " new new"
+  ],
+  [
+    16.762473821640015,
+    "output_transcript",
+    "だから新しい"
+  ],
+  [
+    17.50346350669861,
+    "input_transcript",
+    " thing, right? We"
+  ],
+  [
+    17.760324239730835,
+    "output_transcript",
+    "ことですよね？"
+  ],
+  [
+    18.504934787750244,
+    "input_transcript",
+    " still need to do it"
+  ],
+  [
+    18.760664701461792,
+    "output_transcript",
+    "まだそれを"
+  ],
+  [
+    19.496981382369995,
+    "input_transcript",
+    " further. and for"
+  ],
+  [
+    19.761486530303955,
+    "output_transcript",
+    "さらに進める必要"
+  ],
+  [
+    20.49114990234375,
+    "input_transcript",
+    " sparsity"
+  ],
+  [
+    20.862966537475586,
+    "output_transcript",
+    "があります。そして"
+  ],
+  [
+    21.54077696800232,
+    "input_transcript",
+    " and MOE"
+  ],
+  [
+    21.763877153396606,
+    "output_transcript",
+    "スパース性と"
+  ],
+  [
+    22.71839451789856,
+    "input_transcript",
+    " and also"
+  ],
+  [
+    22.782225370407104,
+    "output_transcript",
+    "MOE、そして"
+  ],
+  [
+    24.420351266860962,
+    "input_transcript",
+    " there are"
+  ],
+  [
+    24.790259838104248,
+    "output_transcript",
+    "まだ"
+  ],
+  [
+    25.461217164993286,
+    "input_transcript",
+    " still a lot of research"
+  ],
+  [
+    25.77113652229309,
+    "output_transcript",
+    "多くの研究"
+  ],
+  [
+    26.481189727783203,
+    "input_transcript",
+    " paper about this"
+  ],
+  [
+    26.76274847984314,
+    "output_transcript",
+    "論文がこれについて"
+  ],
+  [
+    27.593738079071045,
+    "input_transcript",
+    " kind of area."
+  ],
+  [
+    27.841687440872192,
+    "output_transcript",
+    "あります。"
+  ],
+  [
+    28.556107997894287,
+    "input_transcript",
+    " I think"
+  ],
+  [
+    28.77001976966858,
+    "output_transcript",
+    "私は、"
+  ],
+  [
+    29.52851390838623,
+    "input_transcript",
+    " all this"
+  ],
+  [
+    29.864382028579712,
+    "output_transcript",
+    "これらすべて"
+  ],
+  [
+    30.602852821350098,
+    "input_transcript",
+    " things will be"
+  ],
+  [
+    30.775653839111328,
+    "output_transcript",
+    "が非常に"
+  ],
+  [
+    31.59119749069214,
+    "input_transcript",
+    " very important."
+  ],
+  [
+    31.776227474212646,
+    "output_transcript",
+    "重要になると思います。"
+  ],
+  [
+    32.444026947021484,
+    "input_transcript",
+    " Even for"
+  ],
+  [
+    32.77728629112244,
+    "output_transcript",
+    " KVC"
+  ],
+  [
+    33.56004190444946,
+    "input_transcript",
+    " also for"
+  ],
+  [
+    33.76489520072937,
+    "output_transcript",
+    "についても、"
+  ],
+  [
+    34.475125312805176,
+    "input_transcript",
+    " KV cache,"
+  ],
+  [
+    34.762165546417236,
+    "output_transcript",
+    " KVキャッシュについても、"
+  ],
+  [
+    35.572537422180176,
+    "input_transcript",
+    " because the KV"
+  ],
+  [
+    35.86992788314819,
+    "output_transcript",
+    " KVキャッシュ"
+  ],
+  [
+    36.4745991230011,
+    "input_transcript",
+    " cache will decide"
+  ],
+  [
+    36.759857416152954,
+    "output_transcript",
+    "がどのように"
+  ],
+  [
+    37.51349115371704,
+    "input_transcript",
+    " how how"
+  ],
+  [
+    37.8531813621521,
+    "output_transcript",
+    "どれくらい"
+  ],
+  [
+    38.56343674659729,
+    "input_transcript",
+    " large is the"
+  ],
+  [
+    38.777018308639526,
+    "output_transcript",
+    "データが大きいか"
+  ],
+  [
+    39.48176288604736,
+    "input_transcript",
+    " batch"
+  ],
+  [
+    39.784451961517334,
+    "output_transcript",
+    "を決定するからです。"
+  ],
+  [
+    40.4734365940094,
+    "input_transcript",
+    " size. It will"
+  ],
+  [
+    40.77316856384277,
+    "output_transcript",
+    "それは"
+  ],
+  [
+    41.492894887924194,
+    "input_transcript",
+    " impact the throughput."
+  ],
+  [
+    41.76736044883728,
+    "output_transcript",
+    "スループットに影響"
+  ],
+  [
+    42.59960055351257,
+    "input_transcript",
+    " and also"
+  ],
+  [
+    42.76724553108215,
+    "output_transcript",
+    "します。また、"
+  ],
+  [
+    43.44827604293823,
+    "input_transcript",
+    " IO training"
+  ],
+  [
+    43.75682997703552,
+    "output_transcript",
+    " IOトレーニング"
+  ],
+  [
+    44.50042414665222,
+    "input_transcript",
+    " throughput."
+  ],
+  [
+    44.77139592170715,
+    "output_transcript",
+    "のスループットにも。"
+  ],
+  [
+    45.43486404418945,
+    "input_transcript",
+    " For serving,"
+  ],
+  [
+    45.86924171447754,
+    "output_transcript",
+    "サービング"
+  ],
+  [
+    46.477890968322754,
+    "input_transcript",
+    " and it will be"
+  ],
+  [
+    46.78105282783508,
+    "output_transcript",
+    "については、"
+  ],
+  [
+    47.46676731109619,
+    "input_transcript",
+    " very very important"
+  ],
+  [
+    47.83839654922485,
+    "output_transcript",
+    "非常に重要"
+  ],
+  [
+    48.5889458656311,
+    "input_transcript",
+    " to it's"
+  ],
+  [
+    48.76976490020752,
+    "output_transcript",
+    "です。それは"
+  ],
+  [
+    49.47440028190613,
+    "input_transcript",
+    " like you could"
+  ],
+  [
+    49.87625861167908,
+    "output_transcript",
+    "まるで、"
+  ],
+  [
+    50.45747399330139,
+    "input_transcript",
+    " say with"
+  ],
+  [
+    50.764140129089355,
+    "output_transcript",
+    "推論で"
+  ],
+  [
+    51.65010213851929,
+    "input_transcript",
+    " reasoning model"
+  ],
+  [
+    51.762747049331665,
+    "output_transcript",
+    "モデルが"
+  ]
+]

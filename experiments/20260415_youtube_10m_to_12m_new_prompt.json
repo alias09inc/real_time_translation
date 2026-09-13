@@ -1,0 +1,127 @@
+{
+  "date": "2026-04-15",
+  "experiment_name": "youtube_10m_to_12m_new_prompt",
+  "domain": null,
+  "input": {
+    "type": "youtube",
+    "url": "https://www.youtube.com/watch?v=wjZofJX0v4M",
+    "start_seconds": 600.0,
+    "end_seconds": 720.0
+  },
+  "models": {
+    "deepgram_model": "nova-3-general",
+    "llm_provider": "gemini",
+    "llm_model": "gemini-3.1-pro-preview"
+  },
+  "config": {
+    "source_language": "en",
+    "target_language": "ja",
+    "context_window_size": 3,
+    "translation_queue_size": 10,
+    "deepgram_endpointing": 800,
+    "deepgram_utterance_end_ms": 1000
+  },
+  "results": {
+    "segment_count": 11,
+    "avg_confidence": 0.9993785509090909,
+    "segments": [
+      {
+        "start_time": 0.0,
+        "end_time": 4.7,
+        "asr": "Into many distinct layers where again each layer is always structured as some kind",
+        "translation": "多くの異なる層に分かれており、そこでもまた各層が常に何らかの",
+        "confidence": 0.9970703,
+        "kept_terms": []
+      },
+      {
+        "start_time": 4.7,
+        "end_time": 9.0100004,
+        "asr": "of array of real numbers until you get to a final layer which you consider the output.",
+        "translation": "実数の配列として構成され、出力とみなされる最終層に到達するまで続きます。",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 9.01,
+        "end_time": 13.89,
+        "asr": "For example, the final layer in our text processing model is a list of numbers representing",
+        "translation": "例えば、私たちのテキスト処理モデルの最終層は数値のリストであり、それが表しているのは",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 13.89,
+        "end_time": 17.3299996,
+        "asr": "the probability distribution for all possible next tokens.",
+        "translation": "考えられるすべての次のトークンの確率分布",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 17.33,
+        "end_time": 21.9699994,
+        "asr": "In deep learning, these model parameters are almost always referred to as weights.",
+        "translation": "ディープラーニングでは、これらのモデルパラメータはほぼ常に「重み」と呼ばれます。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 21.97,
+        "end_time": 25.350001,
+        "asr": "And this is because a key feature of these models is that the only weight",
+        "translation": "そしてこれは、これらのモデルの重要な特徴が、唯一の重みが",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 25.35,
+        "end_time": 30.139999000000003,
+        "asr": "these parameters interact with the data being processed is through weighted sums.",
+        "translation": "これらのパラメータが処理中のデータと相互作用するのは、重み付き和によるものだからです。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 30.14,
+        "end_time": 34.840001,
+        "asr": "Also sprinkle some nonlinear functions throughout, but they won't depend on parameters.",
+        "translation": "また、非線形関数も全体にいくつか散りばめられていますが、それらはパラメータには依存しません。",
+        "confidence": 1.0,
+        "kept_terms": []
+      },
+      {
+        "start_time": 34.84,
+        "end_time": 39.41999800000001,
+        "asr": "Typically though, instead of seeing the weighted sums all naked and written out",
+        "translation": "しかし通常は、重み付き和がむき出しで書き出されているのを見るのではなく、",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 39.42,
+        "end_time": 42.440000500000004,
+        "asr": "you'll instead find them packaged together",
+        "translation": "代わりに、それらが一つにまとめられているのを",
+        "confidence": 0.99902344,
+        "kept_terms": []
+      },
+      {
+        "start_time": 42.44,
+        "end_time": 45.910001199999996,
+        "asr": "as various components in a matrix vector product.",
+        "translation": "行列ベクトル積の様々な構成要素として。",
+        "confidence": 1.0,
+        "kept_terms": []
+      }
+    ],
+    "full_asr": "Into many distinct layers where again each layer is always structured as some kind\nof array of real numbers until you get to a final layer which you consider the output.\nFor example, the final layer in our text processing model is a list of numbers representing\nthe probability distribution for all possible next tokens.\nIn deep learning, these model parameters are almost always referred to as weights.\nAnd this is because a key feature of these models is that the only weight\nthese parameters interact with the data being processed is through weighted sums.\nAlso sprinkle some nonlinear functions throughout, but they won't depend on parameters.\nTypically though, instead of seeing the weighted sums all naked and written out\nyou'll instead find them packaged together\nas various components in a matrix vector product.",
+    "full_translation": "多くの異なる層に分かれており、そこでもまた各層が常に何らかの\n実数の配列として構成され、出力とみなされる最終層に到達するまで続きます。\n例えば、私たちのテキスト処理モデルの最終層は数値のリストであり、それが表しているのは\n考えられるすべての次のトークンの確率分布\nディープラーニングでは、これらのモデルパラメータはほぼ常に「重み」と呼ばれます。\nそしてこれは、これらのモデルの重要な特徴が、唯一の重みが\nこれらのパラメータが処理中のデータと相互作用するのは、重み付き和によるものだからです。\nまた、非線形関数も全体にいくつか散りばめられていますが、それらはパラメータには依存しません。\nしかし通常は、重み付き和がむき出しで書き出されているのを見るのではなく、\n代わりに、それらが一つにまとめられているのを\n行列ベクトル積の様々な構成要素として。"
+  },
+  "metrics": {
+    "chrf_score": null,
+    "xcomet_score": null
+  },
+  "notes": "",
+  "created_at_utc": "2026-04-15T21:06:15.569258+00:00",
+  "elapsed_seconds": 142.985
+}

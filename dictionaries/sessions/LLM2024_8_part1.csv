@@ -1,0 +1,115 @@
+source_term,target_term,notes
+Matsuo-Iwasawa Lab,松尾・岩澤研究室,University of Tokyo research lab
+UTokyo,東京大学,University of Tokyo
+Jiaxian Guo,Jiaxian Guo,Speaker name
+Yanqi Zhou,Yanqi Zhou,Speaker name
+招待講演,招待講演,Invited lecture/talk
+LLM,大規模言語モデル,Large Language Model
+LeakGAN,LeakGAN,Generative Adversarial Network model
+RL,強化学習,Reinforcement Learning
+Multi-Modal LLM,マルチモーダルLLM,
+LLM Agents,LLMエージェント,
+3D Diffusion,3D拡散モデル,Generative AI technique
+Gemini,Gemini,Google's AI model
+Gemma,Gemma,Google's open model
+LLM Arch Design,LLMアーキテクチャ設計,
+Generalization,汎化,Machine learning performance
+Google Research Australia,Google Research Australia,"Proper noun, keep as is"
+Hearing Aid,補聴器,Medical device
+Multilingual,多言語,Technical context
+Efficiency,効率性,Computational context
+Inference,推論,AI model execution phase
+Scaling Laws,スケーリング則,"Relationship between compute, data, and model size"
+Parameters,パラメータ,Model weights
+Compute budget,計算予算,Resources allocated for training
+MMLU,MMLU,Massive Multitask Language Understanding benchmark
+GSM8K,GSM8K,Grade-school math benchmark
+AIME,AIME,American Invitational Mathematics Examination
+GPQA,GPQA,Graduate-level Google-Proof Q&A benchmark
+SWE-bench,SWE-bench,Software Engineering benchmark
+Semantic Parsing,意味解析,Converting natural language to formal representation
+Convergence,収束,Training reaching a stable state
+PF-days,ペタフロップス・デイ,Unit of compute (Petaflop-days)
+Non-embedding,非埋め込み,Excluding embedding layer parameters
+TriviaQA,TriviaQA,Reading comprehension benchmark
+Logical Inference Chains,論理推論チェーン,Reasoning process
+Common-sense Reasoning,常識推論,AI capability
+Suspicion-Agent,Suspicion-Agent,Specific AI agent name
+Theory of Mind,心の理論,Cognitive science concept
+RL algorithms,強化学習アルゴリズム,Reinforcement Learning
+GPT-4,GPT-4,LLM model
+Reflexion,Reflexion,AI reasoning framework
+Physics QA,物理QA,Question answering task
+First-Order Theory of Mind,一次心の理論,Cognitive science/AI concept
+Latency,レイテンシ,Response time
+TTFT,TTFT,Time to First Token
+TPOT,TPOT,Time Per Output Token
+Throughput,スループット,System processing capacity
+RPS,RPS,Requests Per Second
+QPS,QPS,Queries Per Second
+Pareto frontier,パレートフロンティア,Optimization trade-off curve
+Arena Score,Arenaスコア,LMSYS Chatbot Arena metric
+Tokens Per Second,トークン毎秒,Generation speed metric
+Inference Efficiency,推論効率,AI model performance metric
+LLM Inference Efficiency,LLM推論効率,LLM inference efficiency
+Time to First Token,TTFT,Initial response latency
+Time Per Output Token,TPOT,Token generation speed
+Requests Per Second,RPS,Request frequency
+Queries Per Second,QPS,Query frequency
+Sparsity,スパース性,Model parameter inactivity
+Feed Forward,フィードフォワード,Neural network layer type
+Multi-Head Attention,マルチヘッドアテンション,Transformer architecture component
+Model Distillation,モデル蒸留,Knowledge transfer technique
+Compute-Bound,計算バウンド,Limited by processing power
+Memory-Bound,メモリバウンド,Limited by memory bandwidth
+Positional Encoding,位置エンコーディング,Transformer input processing
+Softmax,ソフトマックス,Activation function
+Input Embedding,入力埋め込み,Vector representation of input
+Activation Sparsity,活性化スパース性,ニューロンの活性化の疎性
+Mixture of Experts,Mixture of Experts,MoE、専門家混合モデル
+Gemma 3n,Gemma 3n,モデル名
+LMArena,LMArena,LLMの評価プラットフォーム
+Elo Score,イロレーティング,評価スコア
+GeLU,GeLU,活性化関数
+Edge-devices,エッジデバイス,端末側デバイス
+Unstructured activation sparsity,非構造的活性化スパース性,スパース性の種類
+Weights Gathering,重み収集,スパース計算時の処理
+FFN,FFN,Feed-Forward Network
+Sparse Activation,スパース活性化,
+Speculative Decoding,推論デコーディング,推論高速化手法
+Cascading,カスケード,モデルの段階的利用
+Request Batching,リクエストバッチング,
+Dynamic batching,動的バッチング,
+Continuous batching,連続バッチング,
+GPU Utilization,GPU利用率,
+Positional embedding,位置エンコーディング,
+Co-design,協調設計,ハードウェアとソフトウェアの最適化
+KV Cache,KVキャッシュ,Key-Value cache in LLM inference
+Internal fragmentation,内部断片化,Memory management term
+External fragmentation,外部断片化,Memory management term
+PagedAttention,PagedAttention,Specific memory management algorithm
+vLLM,vLLM,LLM serving framework
+Orca,Orca,LLM serving system
+Operator Fusion,オペレーター融合,Optimization technique
+Model Parallelism,モデル並列化,Distributed computing technique
+Inference Engines,推論エンジン,Software for running models
+Serving Frameworks,サービングフレームワーク,Software for deploying models
+Optimized Kernels,最適化カーネル,Low-level computational routines
+Batch size,バッチサイズ,Number of requests processed together
+Token states,トークン状態,Data stored in KV cache
+o1,o1,OpenAI model series
+pass@1,pass@1,Evaluation metric for code/math generation
+MatFormer,MatFormer,Specific neural network architecture
+Elastic Inference,エラスティック推論,Dynamic scaling of inference resources
+Linear Attention,線形アテンション,Attention mechanism variant
+MoD,MoD,Mixture-of-Depths
+Groq,Groq,AI hardware company
+Cerebras,Cerebras,AI hardware company
+energy-bound,エネルギー制約,Hardware performance bottleneck
+test-time compute,テスト時計算量,Inference-stage processing
+Re-learning,再学習,Model training process
+Multilingualization,多言語化,Language support
+Distillation,蒸留,Knowledge distillation in AI
+MoE,MoE,Mixture of Experts architecture
+Kojima Takeshi,小島武,Speaker name
+講師_小島武,講師_小島武,Speaker name: Takeshi Kojima
